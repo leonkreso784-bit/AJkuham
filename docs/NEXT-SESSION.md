@@ -7,6 +7,33 @@ Rok: **18:48** (`.claude/deadline.json`, vidi se u statuslineu).
 
 ---
 
+## STANJE NA KRAJU SESIJE e9 (2026-10-08 16:00, rok 18:48)
+
+**Sve je live i u gitu.** Frontend https://kuhai-web-production.up.railway.app, backend
+https://kuhai-api-production.up.railway.app, oba na `main` (zadnji commit 8ee59c9 + ovaj docs).
+
+Napravljeno danas (po redu): frontend u `web/` · sken "živi" + shake/swap feedback · swipe kartice
+(`/biram`, API §14–15, planer poštuje izbor) · upis broja obroka · više dijeta + "Ostalo" (API §2 dodatak,
+kolone `profiles.diets/diet_note`) · frižider: galerija + brzi čipovi · naručivanje u appu · Profil (`/profil`)
+· PWA ikone · onboarding u 3 ekrana · 43 fotke jela s matchingom po naslovu/`imageHint`.
+
+Testovi: backend 116/116 (15:00), e2e kroz live s pravom fotkom frižidera prošao dvaput (188 s, 196 s).
+Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <fridge.jpg> <out-dir>`.
+
+**Otvoreno / rizici za demo:**
+1. Prolaz na pravom telefonu još nitko nije napravio (kamera, shake, flip na iOS-u, "dodaj na početni zaslon").
+2. Čekanja: kartice ~42 s, plan ~70–80 s. Pokriti pričom na sceni; telefon na mobilne podatke.
+3. Anthropic kredit danas jednom pao na nulu; provjeriti saldo prije scene. Preklopnik na Gemini u §4.
+4. Necommitane tuđe promjene u korijenu: `src/env.ts` (AI ključ neobavezan ako je Gemini) i
+   `scripts/compare-providers.mjs` (sesija kuhai-27, 15:37). Bezopasno, ali **ne deployati backend**
+   (`railway up` uploada radno stablo) dok se to ne commita ili vrati.
+5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
+
+**Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;
+jedna sesija dira kod, druga samo prezentaciju (sudar na Onboardingu u 15:15); zamrzavanje koda u 17:30.
+
+---
+
 ## KICKOFF — zalijepi ovo na početku sljedeće sesije (jedna sesija radi oboje)
 
 ```text
