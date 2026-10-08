@@ -1,6 +1,6 @@
 // KuhAI frontend happy path protiv produkcijskog backenda, headless Chromium.
 // Pokretanje: node scripts/e2e.mjs <app-url> <fridge.jpg> <out-dir>
-//   app-url: staticki build (cd KuhAI/app; VITE_API_URL=... npx vite build; npx vite preview --port 4174)
+//   app-url: staticki build (cd web; VITE_API_URL=... npx vite build; npx vite preview --port 4174)
 //   fridge.jpg: bilo koja fotka otvorenog frizidera (npr. Wikimedia Inside_of_double_sided_refrigerator.jpg)
 // Playwright se uzima iz KuhAI/video/node_modules (tamo je instaliran s Chromiumom).
 import { createRequire } from 'node:module'

@@ -110,8 +110,8 @@ usporedba s dostavom. Sve to radi.
 
 ## Treći krug (13:00–14:00): integracija, backend testovi, kreditni incident
 
-- **Frontend spojen na produkciju.** App je u `C:\Users\leonk\Documents\KuhAI\app`
-  (nije git). `app/.env.local` ima `VITE_API_URL`. Happy path u headless Chromiumu
+- **Frontend spojen na produkciju.** App je bio u `C:\Users\leonk\Documents\KuhAI\app`
+  (nije git); od ~14:10 je u ovom repou kao `web/`. `web/.env.local` ima `VITE_API_URL`. Happy path u headless Chromiumu
   protiv produkcije prošao u 133 s: questions 4,6 s, scan 10,6 s, generate 69 s,
   shake 21 s, swap 12 s, cart 0,2 s. U `client.ts` dodan `useFallback()` i oznaka
   "Demo podaci" u headeru kad klijent padne na mock; generate timeout 150 s.

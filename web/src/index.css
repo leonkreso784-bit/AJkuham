@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* KuhAI — mirni, čisti ekrani iz dizajna (inspiracija/01–04).
+   Krem pozadina, bijele kartice s tankim toplim rubom.
+   Clay je samo dašak: shadow-cta na glavnom gumbu, shadow-card na par ključnih kartica. */
+@theme {
+  --color-brand: #D0161B;
+  --color-brand-dark: #A91115;
+  --color-brand-soft: #F6B8A8;
+  --color-cream: #FFF4E6;
+  --color-bg: #FFFBF6;
+  --color-ink: #2B1D16;
+  --color-muted: #8A6F60;
+  --color-line: #F0E4D6;
+  --color-fresh: #2E7D32;
+  --color-fresh-bg: #E3F2E1;
+  --color-warn: #9A5B00;
+  --color-warn-bg: #FFEDCC;
+  --color-hot: #C2410C;
+  --color-hot-bg: #FFE9DF;
+
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-sans: "Nunito", "Segoe UI", system-ui, sans-serif;
+
+  /* mekana kartica: jedva vidljiva sjena ispod + tanki highlight gore */
+  --shadow-card:
+    0 1px 2px rgb(43 29 22 / 0.04),
+    0 10px 24px -14px rgb(43 29 22 / 0.22),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+  /* glavni gumb: malo napuhan — topla sjena + svijetli rub gore + tamniji dolje */
+  --shadow-cta:
+    0 8px 18px -8px rgb(208 22 27 / 0.55),
+    inset 0 2px 0 rgb(255 255 255 / 0.22),
+    inset 0 -3px 0 rgb(80 6 8 / 0.18);
+
+  --animate-wobble: wobble 0.6s ease-in-out;
+  --animate-scan: scan 1.4s ease-in-out infinite;
+  --animate-pop: pop 0.25s ease-out;
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(0) }
+    25% { transform: rotate(-4deg) }
+    50% { transform: rotate(3deg) }
+    75% { transform: rotate(-2deg) }
+  }
+  @keyframes scan {
+    0%, 100% { top: 4% }
+    50% { top: 94% }
+  }
+  @keyframes pop {
+    from { transform: translateY(4px); opacity: 0 }
+    to { transform: none; opacity: 1 }
+  }
+}
+
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    @apply bg-cream font-sans text-ink antialiased;
+  }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; opacity: .45; }
+}

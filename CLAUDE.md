@@ -15,8 +15,16 @@ koja odbija ono što već ima doma.
 
 ## Granice ovog repozitorija
 
-Ovaj repo je **backend**. API + baza + AI pipeline.
-Frontend radi drugi dio tima; on govori s nama samo preko REST-a iz `docs/API.md`.
+Repo ima dva dijela (odluka Leona, 2026-10-08 ~14:05):
+
+- **korijen** = backend: API + baza + AI pipeline. Deploy na Railway.
+- **`web/`** = frontend (Vite + React). Zaseban `package.json`, vlastiti
+  `node_modules`. Govori s backendom **samo** preko REST-a iz `docs/API.md`.
+  Nema dijeljenog koda između korijena i `web/`; tipovi u `web/src/api/types.ts`
+  se ručno drže usklađeni s API.md.
+
+Frontend pravila (dizajn, responzivnost, dev server) su u `docs/NEXT-SESSION.md`,
+dio FRONTEND (F0–F8).
 
 ## Stack
 
@@ -74,15 +82,30 @@ docs/
   PLAN.md           raspored po satima + podjela na agente
   DECISIONS.md      zašto je nešto odlučeno tako
   FRONTEND.md       što frontend tim treba znati
+web/                FRONTEND (Vite 8 + React 19 + Tailwind v4), vlastiti package.json
+  src/main.tsx      rute + Splash
+  src/pages/        Landing, Onboarding, Fridge, Plan, Meal, Cart
+  src/components/   ui.tsx (Shell, TopBar, Button…), MealImage, Splash
+  src/api/          client.ts (timeouti + mock fallback), types.ts, mock.ts
+  src/illustrations/  SVG ilustracije (bez emojija)
+  src/store.ts      profile/plan/pantry u localStorage
+  .env.local        VITE_API_URL (nije u gitu; vidi web/.env.example)
 ```
 
 ## Komande
 
 ```bash
-npm run dev        # lokalni API, watch
+# backend (korijen)
+npm run dev        # lokalni API, watch (PORT=3001, 3000 je zauzet)
 npm run db:push    # Drizzle shema → Postgres
 npm run db:seed    # napuni katalog
 npm run typecheck
+
+# frontend (web/)
+cd web
+npx vite --port 5180 --strictPort --host   # dev; --host da ga vidi mobitel
+npm run build                              # tsc -b + vite build, mora biti čist
+npm run lint                               # oxlint
 ```
 
 ## Env
@@ -91,5 +114,6 @@ Vidi `.env.example`. Bez `ANTHROPIC_API_KEY` i `DATABASE_URL` ništa ne radi.
 
 ## Prije nego kažeš "gotovo"
 
-Pokreni `npm run typecheck` i pozovi ruku rute koju si dirao. Nema "trebalo bi
-raditi" — ili si vidio odgovor, ili nije gotovo.
+Backend: pokreni `npm run typecheck` i pozovi ruku rute koju si dirao.
+Frontend: `npm run build` u `web/` čist, pa pogledaj ekran (1440 i 390 px).
+Nema "trebalo bi raditi" — ili si vidio odgovor, ili nije gotovo.

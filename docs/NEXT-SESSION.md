@@ -13,23 +13,20 @@ Rok: **18:48** (`.claude/deadline.json`, vidi se u statuslineu).
 Radimo KuhAI, hackathon SHAKER. Rok je u .claude/deadline.json i vidi se u statuslineu.
 Ova sesija radi i BACKEND i FRONTEND.
 
-Backend:  C:UsersleonkDocumentsSHAKER projekt  (git, main, live na Railwayu)
+Repo:     C:\Users\leonk\Documents\SHAKER projekt  (git, main)
+Backend:  korijen repoa, live na Railwayu
           https://kuhai-api-production.up.railway.app  (/health)
-Frontend: C:UsersleonkDocumentsKuhAIapp  (Vite 8 + React 19 + TS + Tailwind v4
-          + react-router 8 + gsap). NIJE u gitu, nema backupa.
+Frontend: web/ u istom repou  (Vite 8 + React 19 + TS + Tailwind v4
+          + react-router 8 + gsap). U gitu od 2026-10-08 ~14:10 (F7 riješeno).
 
 Pročitaj prvo, u ovom redu:
   docs/NEXT-SESSION.md      oba dijela: BACKEND (§0–7) i FRONTEND (F0–F8)
   docs/STATUS.md            stanje backenda, zamke, treći krug testova
   docs/API.md               ZAMRZNUTI kontrakt, 13 ruta
   docs/FRONTEND.md          4 demo trenutka koje UI mora prenijeti
-  KuhAI/app/src/api/client.ts   kako frontend zove backend (timeouti + mock fallback)
-  KuhAI/app/src/index.css       dizajn tokeni
-  KuhAI/app/src/components/ui.tsx  Shell, TopBar, TabBar, Button, Chip, CountUp
-
-PRVI KORAK: pitaj me za F7. Frontend treba u git: prijedlog je preseliti ga u ovaj
-repo kao web/ (bez node_modules, dist, .env.local) i commitati na main. To mijenja
-pravilo iz CLAUDE.md "repo je backend", zato traži moju potvrdu.
+  web/src/api/client.ts     kako frontend zove backend (timeouti + mock fallback)
+  web/src/index.css         dizajn tokeni
+  web/src/components/ui.tsx Shell, TopBar, TabBar, Button, Chip, CountUp
 
 BACKEND pravila:
 - docs/API.md se mijenja samo commitom koji počinje s api!: i uz moju potvrdu.
@@ -53,7 +50,7 @@ FRONTEND pravila:
 - Za veći Tailwind posao koristi tailwind agenta. Ilustracije su u src/illustrations,
   nove crtaj u istom stilu (F3).
 - Ne spremaj frontend fajlove dok traje demo prolaz (HMR prekida plan/generate).
-- Dev server: npx vite --port 5180 --strictPort --host u KuhAI/app (F0).
+- Dev server: npx vite --port 5180 --strictPort --host u web/ (F0).
 ```
 
 ---
@@ -63,8 +60,9 @@ FRONTEND pravila:
 ## 0. Što je istina u ovom trenutku
 
 - Backend je **live** na https://kuhai-api-production.up.railway.app, kod je na `main`.
-- Frontend app je u **`C:\Users\leonk\Documents\KuhAI\app`** (Vite + React), nije git repo.
-  Spojen je na produkciju preko `app/.env.local` (`VITE_API_URL=https://kuhai-api-production.up.railway.app`).
+- Frontend app je u **`web/`** u ovom repou (Vite + React), od ~14:10 u gitu.
+  Spojen je na produkciju preko `web/.env.local` (`VITE_API_URL=https://kuhai-api-production.up.railway.app`).
+  Stari folder `Documents\KuhAI\app` je preimenovan u `app-OLD-sad-je-u-SHAKER-web` i ne koristi se.
 - **Cijeli happy path prošao u browseru protiv produkcije** (onboarding → slikanje
   frižidera → plan → shake → swap → košarica) u 133 s, bez pada na mock.
 - **Jedini pravi incident danas: Anthropic API kredit je u ~13:20 pao na nulu.**
@@ -173,15 +171,17 @@ logika pakiranja, usporedba s dostavom. Sve to radi.
 
 ## F0. Gdje je i kako se pali
 
-- Kod: **`C:\Users\leonk\Documents\KuhAI\app`**. **Nije u gitu**, nema ni jednog
-  commita ni backupa (vidi F7, prva odluka).
+- Kod: **`web/`** u ovom repou (`C:\Users\leonk\Documents\SHAKER projekt\web`).
+  U gitu od 2026-10-08 ~14:10 (F7 riješeno). `node_modules`, `dist` i `.env.local`
+  su ignorirani; nakon svježeg clonea `cd web && npm ci` i napravi `.env.local`
+  po `.env.example`.
 - Stack: Vite 8 + React 19 + TypeScript + **Tailwind v4** (tokeni u `@theme`
   u `src/index.css`, nema `tailwind.config`), react-router 8, gsap (splash).
 - `.env.local`: `VITE_API_URL=https://kuhai-api-production.up.railway.app`.
   Bez te varijable sve ide na mock (`src/api/mock.ts`) i header pokazuje "Demo način".
 
 ```bash
-cd C:\Users\leonk\Documents\KuhAI\app
+cd "C:\Users\leonk\Documents\SHAKER projekt\web"
 npx vite --port 5180 --strictPort --host   # dev; --host da ga vidi mobitel
 npm run build                              # tsc -b + vite build, MORA biti čist
 npm run lint                               # oxlint: 0 errora (warningi su stari)
@@ -278,10 +278,9 @@ Responzivno provjereno na 375 / 390 / 768 / 1024 / 1440 px, bez horizontalnog sc
 
 ## F7. Otvorene odluke za Leona
 
-- **Frontend u git — PRVO.** Prijedlog: premjestiti `Documents/KuhAI/app` u ovaj
-  repo kao `web/` (bez `node_modules`, `dist`, `.env.local`), commit na `main`.
-  To mijenja pravilo iz CLAUDE.md "ovaj repo je backend", pa treba Leonova potvrda.
-  Alternativa: zaseban repo. Dok se ne odluči, nema povijesti ni backupa.
+- ~~Frontend u git~~ **Riješeno 2026-10-08 ~14:10:** Leon potvrdio, app je
+  premješten u `web/` u ovom repou, CLAUDE.md ažuriran ("repo = backend u
+  korijenu + frontend u web/").
 - Deploy frontenda (Vercel ili Railway static) nije napravljen. Za demo je dovoljan
   `vite --host` + mobitel na istoj mreži, ali hackathon Wi-Fi zna blokirati.
 
