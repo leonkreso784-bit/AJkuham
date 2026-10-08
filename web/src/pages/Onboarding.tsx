@@ -10,7 +10,8 @@ import { Art, type ArtName } from '../illustrations'
 //   1. Osnove  — koliko vas, obroci, kako kuhaš, budžet
 //   2. Ukus    — što ne jedeš (dijete + alergije + ostalo), što voliš
 //   3. Za tebe — najviše 2 AI pitanja, na jednom ekranu, sve preskočivo
-// Sve je unaprijed namješteno na najčešći odgovor: tko se slaže, samo tapne "Dalje".
+// Ništa nije unaprijed odabrano (Leon 16:10: "bez da se klikće već napravljeno"): korisnik bira što
+// hoće, a što preskoči dobije tihi default tek pri spremanju (3 obroka, meal prep, normalan budžet).
 // Oblik Profile (docs/API.md) se ne mijenja; ono što više ne pitamo dobije razuman default.
 
 // ---- opcije ----
@@ -54,7 +55,6 @@ const CUISINES: [Cuisine, string][] = [
   ['domaca', 'Domaća'], ['mediteranska', 'Mediteranska'], ['talijanska', 'Talijanska'], ['azijska', 'Azijska'],
   ['meksicka', 'Meksička'], ['bliskoistocna', 'Bliskoistočna'], ['indijska', 'Indijska'], ['comfort', 'Comfort'],
 ]
-const DEFAULT_CUISINES: Cuisine[] = ['domaca', 'mediteranska', 'talijanska']
 
 // Backend vraća 3–5 pitanja (QuestionsOutput min 3). Prikazujemo najviše 2:
 // prvo ona s ponuđenim odgovorima (tap je brži od tipkanja), tekstualno samo ako fali.
@@ -68,11 +68,12 @@ const filled = (v: string | string[]) => (Array.isArray(v) ? v.length > 0 : v.tr
 
 // ---- stanje forme <-> Profile ----
 
+// null = korisnik nije birao; default se primijeni u toProfile.
 interface Form {
   householdSize: number
-  mealsPerDay: Profile['mealsPerDay']
-  style: StyleKey
-  rate: number
+  mealsPerDay: Profile['mealsPerDay'] | null
+  style: StyleKey | null
+  rate: number | null
   diets: DietKey[]
   dietNote: string
   allergies: string[]
@@ -81,19 +82,21 @@ interface Form {
 }
 
 const DEFAULTS: Form = {
-  householdSize: 2, mealsPerDay: 3, style: 'prep', rate: 1.5,
-  diets: [], dietNote: '', allergies: [], cuisines: DEFAULT_CUISINES, surprise: false,
+  householdSize: 2, mealsPerDay: null, style: null, rate: null,
+  diets: [], dietNote: '', allergies: [], cuisines: [], surprise: false,
 }
 
-const portionsOf = (f: Form) => f.mealsPerDay * 7 * f.householdSize
-const budgetOf = (f: Form) => clampBudget(portionsOf(f) * f.rate)
+const mealsOf = (f: Form): Profile['mealsPerDay'] => f.mealsPerDay ?? 3
+const rateOf = (f: Form) => f.rate ?? 1.5
+const portionsOf = (f: Form) => mealsOf(f) * 7 * f.householdSize
+const budgetOf = (f: Form) => clampBudget(portionsOf(f) * rateOf(f))
 
 function toProfile(f: Form): Profile {
   const style = STYLES.find((s) => s.key === f.style) ?? STYLES[0]
   const diets = DIET_PRIORITY.filter((d) => f.diets.includes(d)) // najstroža prva
   const budget = budgetOf(f)
   return {
-    mealsPerDay: f.mealsPerDay,
+    mealsPerDay: mealsOf(f),
     householdSize: f.householdSize,
     cookingStyle: style.cookingStyle,
     minutesPerMeal: style.minutes,
@@ -120,13 +123,13 @@ function fromProfile(p: Profile | null): Form {
     diets,
     dietNote: p.dietNote ?? '',
     allergies: p.allergies,
-    cuisines: p.cuisines.length ? p.cuisines : DEFAULT_CUISINES,
+    cuisines: p.cuisines,
     surprise: p.adventurousness >= 4,
   }
 }
 
 const STEPS = [
-  { title: 'Osnove', sub: 'koliko vas, kako kuhaš, budžet', h1: 'Složimo tvoj tjedan', lead: 'Već sam namjestio ono što većina bira. Promijeni samo što ne štima.' },
+  { title: 'Osnove', sub: 'koliko vas, kako kuhaš, budžet', h1: 'Složimo tvoj tjedan', lead: 'Odaberi što ti paše. Što preskočiš, složim po najčešćem.' },
   { title: 'Ukus', sub: 'što ne jedeš, što voliš', h1: 'Što ti paše?', lead: 'Označi koliko god hoćeš. Ako sve jedeš, samo dalje.' },
   { title: 'Za tebe', sub: 'dva pitanja od KuhAI-ja', h1: 'Još dvije stvari', lead: 'Pitanja samo za tebe. Nije obavezno, ali plan bude bolji.' },
 ]
@@ -254,7 +257,7 @@ export default function Onboarding() {
             <div className="mt-6 hidden rounded-2xl bg-cream p-4 lg:block">
               <p className="text-sm text-muted">Tvoj tjedan</p>
               <p className="mt-0.5 font-display text-2xl font-bold tracking-tight tabular-nums">{portions} porcija</p>
-              <p className="text-sm text-muted">{people(f.householdSize)} · {f.mealsPerDay} obroka dnevno · {budget} €</p>
+              <p className="text-sm text-muted">{people(f.householdSize)} · {mealsOf(f)} obroka dnevno · {budget} €</p>
             </div>
             <div className="mt-4 hidden items-center justify-between lg:flex">
               <button onClick={() => nav('/')} className="text-sm font-bold text-muted hover:text-ink">← Početna</button>
@@ -280,7 +283,7 @@ export default function Onboarding() {
                   {/* Leon (14:40): broj se mora moći i upisati; granica je ona iz API.md, 2 do 5. */}
                   <div className="mt-2 flex items-center justify-between gap-3">
                     <label htmlFor="meals-typed" className="text-sm font-bold text-muted">Ili upiši broj (2 do 5)</label>
-                    <input id="meals-typed" type="number" inputMode="numeric" min={2} max={5} step={1} value={mealsTyped} placeholder={String(f.mealsPerDay)}
+                    <input id="meals-typed" type="number" inputMode="numeric" min={2} max={5} step={1} value={mealsTyped} placeholder={String(mealsOf(f))}
                       onChange={(e) => { const v = e.target.value; setMealsTyped(v); const n = Number(v); if (Number.isInteger(n) && n >= 2 && n <= 5) set({ mealsPerDay: n as Profile['mealsPerDay'] }) }}
                       className="w-16 rounded-xl border border-line bg-bg px-2 py-1.5 text-center text-lg font-black tabular-nums outline-none focus:border-ink" />
                   </div>
@@ -312,7 +315,7 @@ export default function Onboarding() {
                     <div>
                       <h2 className="font-extrabold">Tjedni budžet za hranu</h2>
                       <Segmented className="mt-2.5" label="Koliko paziš na novac"
-                        value={TIERS.find((t) => Math.abs(t.rate - f.rate) < 0.001)?.rate ?? -1}
+                        value={f.rate === null ? null : (TIERS.find((t) => Math.abs(t.rate - f.rate!) < 0.001)?.rate ?? -1)}
                         onChange={(rate) => set({ rate })}
                         options={TIERS.map((t) => ({ value: t.rate, label: t.label }))} />
                     </div>
@@ -358,7 +361,7 @@ export default function Onboarding() {
 
                 <Card>
                   <h2 className="font-extrabold">Što voliš jesti?</h2>
-                  <p className="text-sm text-muted">Najčešće sam već označio, makni ili dodaj.</p>
+                  <p className="text-sm text-muted">{f.cuisines.length ? 'Toga će biti najviše.' : 'Ništa označeno: biram po frižideru i akcijama.'}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {CUISINES.map(([c, l]) => (
                       <Chip key={c} on={f.cuisines.includes(c)} onClick={() => set({ cuisines: toggle(f.cuisines, c) })}>{l}</Chip>
@@ -480,7 +483,7 @@ function Stepper({ value, min, max, step = 1, label, hideValue, onChange }: { va
 }
 
 function Segmented<T extends number>({ options, value, onChange, label, className }: {
-  options: { value: T; label: string; sub?: string }[]; value: T; onChange: (v: T) => void; label: string; className?: string
+  options: { value: T; label: string; sub?: string }[]; value: T | null; onChange: (v: T) => void; label: string; className?: string
 }) {
   return (
     <div role="radiogroup" aria-label={label} className={cx('grid auto-cols-fr grid-flow-col gap-1 rounded-2xl bg-cream p-1', className)}>

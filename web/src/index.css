@@ -41,6 +41,10 @@
   /* "Što ti se jede?": kartica odlazi lijevo (X) ili desno (kvačica) i ostaje vani do unmounta */
   --animate-swipe-left: swipe-left 0.35s ease-in forwards;
   --animate-swipe-right: swipe-right 0.35s ease-in forwards;
+  /* košarica: "naručeno" — kvačica iskoči, prsten se širi, trakica broji do zatvaranja */
+  --animate-order-pop: order-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-order-ring: order-ring 1s ease-out 2;
+  --animate-order-bar: order-bar 2.6s linear forwards;
 
   @keyframes wobble {
     0%, 100% { transform: rotate(0) }
@@ -68,6 +72,18 @@
   }
   @keyframes swipe-right {
     to { transform: translateX(120%) rotate(12deg); opacity: 0 }
+  }
+  @keyframes order-pop {
+    from { transform: scale(0.2); opacity: 0 }
+    to { transform: scale(1); opacity: 1 }
+  }
+  @keyframes order-ring {
+    from { transform: scale(0.7); opacity: 0.8 }
+    to { transform: scale(1.9); opacity: 0 }
+  }
+  @keyframes order-bar {
+    from { width: 0 }
+    to { width: 100% }
   }
   @keyframes toast {
     from { transform: translateY(12px) scale(0.96); opacity: 0 }

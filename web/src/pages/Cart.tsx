@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { api } from '../api/client'
 import type { Cart as CartT } from '../api/types'
@@ -13,6 +13,7 @@ const SLOTS: Record<OrderMode, string[]> = {
   dostava: ['sutra 10–12 h', 'sutra 17–19 h', 'prekosutra 10–12 h'],
   preuzimanje: ['danas od 18 h', 'sutra od 9 h', 'sutra od 16 h'],
 }
+const CELEBRATE_MS = 2600
 const orderNo = (planId: string) => `KUH-${planId.replace(/^pl_/, '').slice(0, 6).toUpperCase()}`
 
 export default function Cart() {
@@ -24,6 +25,10 @@ export default function Cart() {
   const [mode, setMode] = useState<OrderMode>('dostava')
   const [slot, setSlot] = useState(0)
   const [order, setOrder] = useState<{ no: string; mode: OrderMode; slot: string } | null>(null)
+  // Leon (16:15): nakon potvrde "neka animacija kao da se naručilo" — kratki ekran s kvačicom, pa nestane sam.
+  const [celebrate, setCelebrate] = useState(false)
+  const celebrateTimer = useRef(0)
+  useEffect(() => () => clearTimeout(celebrateTimer.current), [])
   const [toast, showToast] = useToast()
 
   useEffect(() => {
@@ -73,7 +78,10 @@ export default function Cart() {
   const confirmOrder = () => {
     const o = { no: orderNo(planId), mode, slot: SLOTS[mode][slot]! }
     setOrder(o); buzz([40, 60, 40])
-    showToast(mode === 'dostava' ? `Narudžba ${o.no} primljena, dostava ${o.slot}.` : `Narudžba ${o.no} spremna za preuzimanje ${o.slot}.`)
+    setCelebrate(true)
+    clearTimeout(celebrateTimer.current)
+    celebrateTimer.current = window.setTimeout(() => setCelebrate(false), CELEBRATE_MS)
+    // bez toasta: animacija i zeleni blok ispod već kažu isto
   }
 
   const total = (
@@ -83,7 +91,7 @@ export default function Cart() {
         <span className="text-2xl font-black tracking-tight tabular-nums">{eur(cart.totalEur)}</span>
       </div>
       {order ? (
-        <div className="mt-5 rounded-2xl bg-fresh-bg p-4 text-fresh lg:mt-4">
+        <div className="mt-5 animate-pop rounded-2xl bg-fresh-bg p-4 text-fresh lg:mt-4">
           <p className="font-extrabold">Narudžba {order.no} primljena</p>
           <p className="mt-0.5 text-sm">{order.mode === 'dostava' ? 'Dostava' : 'Preuzimanje'} {order.slot} · {cart.lines.length} proizvoda · {eur(cart.totalEur)}</p>
           <button className="mt-2 text-sm font-bold underline" onClick={() => setOrderOpen(true)}>Promijeni</button>
@@ -172,6 +180,32 @@ export default function Cart() {
       </div>
 
       <Toast msg={toast} />
+
+      {celebrate && order && (
+        <div className="fixed inset-0 z-40 grid animate-pop place-items-center bg-ink/55 p-6" role="status" aria-live="polite"
+          onClick={() => { clearTimeout(celebrateTimer.current); setCelebrate(false) }}>
+          <div className="w-full max-w-xs rounded-3xl bg-white px-6 pt-8 pb-6 text-center shadow-card">
+            <div className="relative mx-auto size-24">
+              <span className="absolute inset-0 rounded-full bg-fresh/30 animate-order-ring" />
+              <span className="absolute inset-0 rounded-full bg-fresh/30 animate-order-ring [animation-delay:0.35s]" />
+              <span className="absolute inset-0 grid place-items-center rounded-full bg-fresh animate-order-pop">
+                <Art name="kvacica" className="size-12" />
+              </span>
+            </div>
+            <p className="mt-5 text-2xl leading-tight font-black tracking-tight animate-pop [animation-delay:0.3s] [animation-fill-mode:both]">Narudžba poslana</p>
+            <p className="mt-1.5 text-muted text-balance animate-pop [animation-delay:0.45s] [animation-fill-mode:both]">
+              {order.no} · {order.mode === 'dostava' ? 'dostava' : 'preuzimanje'} {order.slot}
+            </p>
+            <div className="mx-auto mt-5 flex items-center justify-center gap-3 animate-pop [animation-delay:0.6s] [animation-fill-mode:both]">
+              <Art name="kosarica" className="size-9 animate-wobble [animation-delay:0.6s]" />
+              <span className="text-sm font-bold text-muted">{cart.lines.length} proizvoda · {eur(cart.totalEur)}</span>
+            </div>
+            <div className="mt-5 h-1 overflow-hidden rounded-full bg-line">
+              <span className="block h-full rounded-full bg-fresh animate-order-bar" />
+            </div>
+          </div>
+        </div>
+      )}
 
       {orderOpen && (
         <div className="fixed inset-0 z-30 flex items-end justify-center bg-ink/40 lg:items-center lg:p-6" onClick={() => setOrderOpen(false)}>

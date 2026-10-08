@@ -51,7 +51,7 @@ try {
   await shot(page, '01-landing')
   await page.getByRole('button', { name: 'Kreni kuhati' }).click()
 
-  // 2. Onboarding: 3 ekrana, sve unaprijed namjesteno (2 osobe, 3 obroka, meal prep, Normalno)
+  // 2. Onboarding: 3 ekrana, nista unaprijed odabrano; "Dalje" bez biranja = tihi default (2 osobe, 3 obroka, meal prep, Normalno)
   await page.getByRole('radio', { name: /^3/ }).first().click()              // 3 obroka (default, provjera da radi)
   await shot(page, '02-onboarding-osnove')
   await page.getByRole('button', { name: 'Dalje' }).click()
