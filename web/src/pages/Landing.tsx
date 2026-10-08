@@ -36,6 +36,7 @@ function StackCard({ c }: { c: (typeof STACK)[number][number] }) {
 export default function Landing() {
   const nav = useNavigate()
   const hasPlan = useStore((s) => !!s.plan)
+  const hasProfile = useStore((s) => !!s.profile)
 
   return (
     <div className="flex min-h-dvh flex-col bg-bg">
@@ -71,9 +72,13 @@ export default function Landing() {
 
           <div className="mt-auto flex flex-col gap-3 pt-10 lg:mt-8 lg:flex-row lg:pt-0">
             <Button className="lg:px-10" onClick={() => nav('/onboarding')}>Kreni kuhati</Button>
-            {hasPlan && (
+            {hasPlan ? (
               <Button variant="soft" className="lg:px-8" onClick={() => nav('/plan')}>
                 Nastavi na moj tjedan
+              </Button>
+            ) : hasProfile && (
+              <Button variant="soft" className="lg:px-8" onClick={() => nav('/frizider')}>
+                Nastavi, odabiri su zapamćeni
               </Button>
             )}
           </div>

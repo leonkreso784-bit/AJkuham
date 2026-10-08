@@ -32,6 +32,10 @@ Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <
    košarica nakon "Potvrdi" pokaže animaciju "Narudžba poslana" (2,6 s, tap zatvara), bez toasta.
    "Kako ćeš do namirnica?" (16:40): način i termin nisu unaprijed odabrani, termin neobavezan;
    gumb "Naruči" bez odabira = dostava, "termin po dogovoru".
+   Jan (mail "Za promijenit", 16:51), oboje riješeno 17:05: (1) povratnik na naslovnici dobije
+   "Nastavi, odabiri su zapamćeni" (profil bez plana) i onboarding kaže "Ovo su tvoji prošli odabiri";
+   (2) termin dostave/preuzimanja: dan (danas/sutra/prekosutra ili bilo koji datum) + vrijeme
+   (prozori 8–20 h ili točan sat), sve neobavezno, sažetak ispod.
 5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
 
 **Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;

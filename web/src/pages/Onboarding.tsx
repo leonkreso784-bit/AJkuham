@@ -210,7 +210,9 @@ export default function Onboarding() {
   }
 
   const back = () => (step === 0 ? nav('/') : setStep(step - 1))
-  const S = STEPS[step]
+  // Povratnik (Jan, mail 16:51): odabiri su zapamćeni, reci mu to umjesto da misli da bira iznova.
+  const returning = useRef(getState().profile !== null).current
+  const S = step === 0 && returning ? { ...STEPS[0], lead: 'Ovo su tvoji prošli odabiri. Promijeni što hoćeš, ili samo dalje.' } : STEPS[step]
   const avoids = f.diets.length + f.allergies.length + (f.dietNote.trim() ? 1 : 0)
 
   return (

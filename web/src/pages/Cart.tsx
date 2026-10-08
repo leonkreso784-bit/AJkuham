@@ -9,9 +9,19 @@ import { Art, categoryArt, ingredientArt } from '../illustrations'
 // Naručivanje ostaje u aplikaciji (Leon, 15:15): dostava ili preuzimanje s potvrdom,
 // kopiranje i dijeljenje popisa. Konzum link je samo sporedna opcija, ne izlaz iz appa.
 type OrderMode = 'dostava' | 'preuzimanje'
-const SLOTS: Record<OrderMode, string[]> = {
-  dostava: ['sutra 10–12 h', 'sutra 17–19 h', 'prekosutra 10–12 h'],
-  preuzimanje: ['danas od 18 h', 'sutra od 9 h', 'sutra od 16 h'],
+// Termin: dan (danas/sutra/prekosutra ili bilo koji datum) + vrijeme (prozor ili točan sat). Jan (mail 16:51):
+// "3 opcije nisu dosta, želim jasno odabrati kad će mi namirnice biti dostavljene". Sve je neobavezno.
+const DAYS = ['danas', 'sutra', 'prekosutra']
+const WINDOWS = ['8–10 h', '10–12 h', '12–14 h', '14–16 h', '16–18 h', '18–20 h']
+const isoToday = (plus = 0) => { const d = new Date(); d.setDate(d.getDate() + plus); return d.toISOString().slice(0, 10) }
+const dateLabel = (iso: string) => { const d = new Date(iso + 'T12:00:00'); return `${['ned', 'pon', 'uto', 'sri', 'čet', 'pet', 'sub'][d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.` }
+function slotLabel(day: number | null, date: string, win: number | null, time: string): string {
+  const d = date ? dateLabel(date) : day !== null ? DAYS[day] : ''
+  const t = time ? `u ${time}` : win !== null ? WINDOWS[win] : ''
+  if (!d && !t) return NO_SLOT
+  if (!d) return `${t}, dan po dogovoru`
+  if (!t) return `${d}, vrijeme po dogovoru`
+  return `${d} ${t}`
 }
 const CELEBRATE_MS = 2600
 const NO_SLOT = 'termin po dogovoru'
@@ -25,7 +35,10 @@ export default function Cart() {
   const [orderOpen, setOrderOpen] = useState(false)
   // Leon (16:35): ništa unaprijed odabrano, termin neobavezan. Potvrda bez biranja = dostava, termin po dogovoru.
   const [mode, setMode] = useState<OrderMode | null>(null)
-  const [slot, setSlot] = useState<number | null>(null)
+  const [day, setDay] = useState<number | null>(null)
+  const [date, setDate] = useState('')
+  const [win, setWin] = useState<number | null>(null)
+  const [time, setTime] = useState('')
   const [order, setOrder] = useState<{ no: string; mode: OrderMode; slot: string } | null>(null)
   // Leon (16:15): nakon potvrde "neka animacija kao da se naručilo" — kratki ekran s kvačicom, pa nestane sam.
   const [celebrate, setCelebrate] = useState(false)
@@ -79,7 +92,7 @@ export default function Cart() {
   }
   const confirmOrder = () => {
     const m: OrderMode = mode ?? 'dostava'
-    const o = { no: orderNo(planId), mode: m, slot: slot === null ? NO_SLOT : SLOTS[m][slot]! }
+    const o = { no: orderNo(planId), mode: m, slot: slotLabel(day, date, win, time) }
     setOrder(o); buzz([40, 60, 40])
     setCelebrate(true)
     clearTimeout(celebrateTimer.current)
@@ -220,17 +233,34 @@ export default function Cart() {
 
             <div className="grid grid-cols-2 gap-2">
               {(['dostava', 'preuzimanje'] as OrderMode[]).map((m) => (
-                <button key={m} onClick={() => { setMode(mode === m ? null : m); setSlot(null) }} aria-pressed={mode === m}
+                <button key={m} onClick={() => setMode(mode === m ? null : m)} aria-pressed={mode === m}
                   className={cx('rounded-2xl border bg-white p-4 text-left transition-colors', mode === m ? 'border-ink ring-1 ring-ink' : 'border-line hover:border-[#E6D3BF]')}>
                   <span className="flex items-center gap-2"><Art name={m === 'dostava' ? 'kosarica' : 'vrecica'} className="size-7" /><b className="font-extrabold">{m === 'dostava' ? 'Dostava doma' : 'Preuzmi u trgovini'}</b></span>
                   <span className="mt-1 block text-sm text-muted">{m === 'dostava' ? 'Konzum dostava, sve iz košarice' : 'Spremno i spakirano'}</span>
                 </button>
               ))}
             </div>
-            <p className="mt-4 mb-2 text-sm font-bold text-muted">Kad? <span className="font-normal">Nije obavezno.</span></p>
-            <div className="flex flex-wrap gap-2">
-              {SLOTS[mode ?? 'dostava'].map((s, i) => <Chip key={s} on={slot === i} onClick={() => setSlot(slot === i ? null : i)}>{s}</Chip>)}
+            <p className="mt-4 mb-2 text-sm font-bold text-muted">Koji dan? <span className="font-normal">Nije obavezno.</span></p>
+            <div className="flex flex-wrap items-center gap-2">
+              {DAYS.map((d, i) => <Chip key={d} on={!date && day === i} onClick={() => { setDate(''); setDay(day === i ? null : i) }}>{d}</Chip>)}
+              <label className={cx('flex min-h-10 cursor-pointer items-center gap-2 rounded-full border px-3 text-sm font-bold transition-colors', date ? 'border-ink bg-ink text-white' : 'border-line bg-white')}>
+                <span>{date ? dateLabel(date) : 'drugi datum'}</span>
+                <input type="date" aria-label="Drugi datum" min={isoToday()} max={isoToday(30)} value={date}
+                  onChange={(e) => { setDate(e.target.value); if (e.target.value) setDay(null) }}
+                  className={cx('w-5 bg-transparent text-[16px] outline-none', date ? 'text-white' : 'text-ink')} />
+              </label>
             </div>
+            <p className="mt-3 mb-2 text-sm font-bold text-muted">U koje vrijeme?</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {WINDOWS.map((w, i) => <Chip key={w} on={!time && win === i} onClick={() => { setTime(''); setWin(win === i ? null : i) }}>{w}</Chip>)}
+              <label className={cx('flex min-h-10 cursor-pointer items-center gap-2 rounded-full border px-3 text-sm font-bold transition-colors', time ? 'border-ink bg-ink text-white' : 'border-line bg-white')}>
+                <span>{time ? `u ${time}` : 'točan sat'}</span>
+                <input type="time" aria-label="Točan sat" step={900} value={time}
+                  onChange={(e) => { setTime(e.target.value); if (e.target.value) setWin(null) }}
+                  className={cx('w-5 bg-transparent text-[16px] outline-none', time ? 'text-white' : 'text-ink')} />
+              </label>
+            </div>
+            <p className="mt-2 text-xs text-muted">{mode === 'preuzimanje' ? 'Preuzimanje' : 'Dostava'}: {slotLabel(day, date, win, time)}</p>
 
             <Button className="mt-5 w-full" onClick={() => { confirmOrder(); setOrderOpen(false) }}>
               {mode === null ? 'Naruči' : mode === 'dostava' ? 'Potvrdi dostavu' : 'Potvrdi preuzimanje'}
