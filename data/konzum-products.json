@@ -1,0 +1,4135 @@
+[
+  {
+    "id": "p_001",
+    "name": "Pileća prsa file",
+    "category": "meso",
+    "keywords": [
+      "pileća prsa",
+      "pileca prsa",
+      "pileći file",
+      "pileci file",
+      "piletina",
+      "pileće meso",
+      "prsa",
+      "file piletine"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 5.49,
+    "onSale": true
+  },
+  {
+    "id": "p_002",
+    "name": "Pileći batak i zabatak",
+    "category": "meso",
+    "keywords": [
+      "pileći batak",
+      "pileci batak",
+      "batak",
+      "zabatak",
+      "bataci",
+      "pileći zabatak",
+      "piletina s kostima"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 4.99,
+    "onSale": true
+  },
+  {
+    "id": "p_003",
+    "name": "Pileći zabatak bez kosti",
+    "category": "meso",
+    "keywords": [
+      "zabatak bez kosti",
+      "pileći zabatak",
+      "pileci zabatak",
+      "otkošteni batak",
+      "otkosteni batak",
+      "bataci bez kosti"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.49,
+    "onSale": false
+  },
+  {
+    "id": "p_004",
+    "name": "Pileća krila",
+    "category": "meso",
+    "keywords": [
+      "pileća krila",
+      "pileca krila",
+      "krilca",
+      "krila",
+      "pileća krilca"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 3.99,
+    "onSale": false
+  },
+  {
+    "id": "p_005",
+    "name": "Cijelo pile",
+    "category": "meso",
+    "keywords": [
+      "cijelo pile",
+      "pile",
+      "cijela piletina",
+      "pečeno pile",
+      "peceno pile"
+    ],
+    "packageSize": 1500,
+    "packageUnit": "g",
+    "priceEur": 6.49,
+    "onSale": false
+  },
+  {
+    "id": "p_006",
+    "name": "Mljeveno pileće meso",
+    "category": "meso",
+    "keywords": [
+      "mljevena piletina",
+      "mljeveno pileće meso",
+      "mljeveno pilece meso",
+      "pileće mljeveno",
+      "mljeveno piletina"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.29,
+    "onSale": false
+  },
+  {
+    "id": "p_007",
+    "name": "Pureća prsa file",
+    "category": "meso",
+    "keywords": [
+      "pureća prsa",
+      "pureca prsa",
+      "puretina",
+      "pureći file",
+      "pureci file",
+      "pureće meso",
+      "purece meso"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 6.99,
+    "onSale": true
+  },
+  {
+    "id": "p_008",
+    "name": "Mljeveno pureće meso",
+    "category": "meso",
+    "keywords": [
+      "mljevena puretina",
+      "mljeveno pureće meso",
+      "mljeveno purece meso",
+      "pureće mljeveno"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.99,
+    "onSale": false
+  },
+  {
+    "id": "p_009",
+    "name": "Svinjski vrat",
+    "category": "meso",
+    "keywords": [
+      "svinjski vrat",
+      "svinjetina",
+      "vratina",
+      "svinjski vrat bez kosti",
+      "svinjsko meso",
+      "vrat"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 7.49,
+    "onSale": true
+  },
+  {
+    "id": "p_010",
+    "name": "Svinjski kotlet",
+    "category": "meso",
+    "keywords": [
+      "svinjski kotlet",
+      "kotlet",
+      "kotleti",
+      "svinjski kotleti",
+      "svinjetina"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 6.99,
+    "onSale": true
+  },
+  {
+    "id": "p_011",
+    "name": "Svinjska lopatica",
+    "category": "meso",
+    "keywords": [
+      "svinjska lopatica",
+      "lopatica",
+      "svinjetina za gulaš",
+      "svinjetina za gulas",
+      "svinjetina"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 5.99,
+    "onSale": false
+  },
+  {
+    "id": "p_012",
+    "name": "Svinjski but",
+    "category": "meso",
+    "keywords": [
+      "svinjski but",
+      "but",
+      "svinjetina",
+      "svinjski but bez kosti"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 6.49,
+    "onSale": false
+  },
+  {
+    "id": "p_013",
+    "name": "Svinjski file (lungić)",
+    "category": "meso",
+    "keywords": [
+      "svinjski file",
+      "lungić",
+      "lungic",
+      "svinjska pisanica",
+      "pisanica",
+      "svinjski lungić"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 5.49,
+    "onSale": false
+  },
+  {
+    "id": "p_014",
+    "name": "Svinjska rebra",
+    "category": "meso",
+    "keywords": [
+      "svinjska rebra",
+      "rebra",
+      "rebarca",
+      "svinjska rebarca"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 6.99,
+    "onSale": false
+  },
+  {
+    "id": "p_015",
+    "name": "Juneće mljeveno meso",
+    "category": "meso",
+    "keywords": [
+      "mljeveno meso",
+      "juneće mljeveno",
+      "junece mljeveno",
+      "mljevena junetina",
+      "mljeveno junece meso",
+      "faširano",
+      "fasirano",
+      "mljeveno"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.99,
+    "onSale": true
+  },
+  {
+    "id": "p_016",
+    "name": "Miješano mljeveno meso",
+    "category": "meso",
+    "keywords": [
+      "miješano mljeveno meso",
+      "mijesano mljeveno meso",
+      "mljeveno meso miješano",
+      "mljeveno mijesano",
+      "mljeveno meso"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 3.99,
+    "onSale": false
+  },
+  {
+    "id": "p_017",
+    "name": "Juneći gulaš (kockice)",
+    "category": "meso",
+    "keywords": [
+      "junetina",
+      "juneći gulaš",
+      "juneci gulas",
+      "junetina na kocke",
+      "junetina za gulaš",
+      "govedina",
+      "goveđe meso",
+      "junece meso"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 6.49,
+    "onSale": false
+  },
+  {
+    "id": "p_018",
+    "name": "Juneći but",
+    "category": "meso",
+    "keywords": [
+      "juneći but",
+      "juneci but",
+      "junetina",
+      "goveđi but",
+      "govedi but",
+      "rozbif",
+      "junetina but"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 13.99,
+    "onSale": false
+  },
+  {
+    "id": "p_019",
+    "name": "Slanina dimljena",
+    "category": "meso",
+    "keywords": [
+      "slanina",
+      "dimljena slanina",
+      "špek",
+      "spek",
+      "slaninica",
+      "bacon"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": true
+  },
+  {
+    "id": "p_020",
+    "name": "Panceta narezana",
+    "category": "meso",
+    "keywords": [
+      "panceta",
+      "pancetta",
+      "slanina panceta",
+      "narezana panceta"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_021",
+    "name": "Kobasice za roštilj",
+    "category": "meso",
+    "keywords": [
+      "kobasice",
+      "kobasica",
+      "svježe kobasice",
+      "svjeze kobasice",
+      "roštilj kobasice",
+      "rostilj kobasice",
+      "bratwurst"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.49,
+    "onSale": true
+  },
+  {
+    "id": "p_022",
+    "name": "Kobasica kranjska",
+    "category": "meso",
+    "keywords": [
+      "kranjska kobasica",
+      "kranjska",
+      "kuhana kobasica",
+      "kobasica",
+      "kobasice"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 3.99,
+    "onSale": false
+  },
+  {
+    "id": "p_023",
+    "name": "Čevapi",
+    "category": "meso",
+    "keywords": [
+      "čevapi",
+      "cevapi",
+      "ćevapi",
+      "cevapcici",
+      "ćevapčići"
+    ],
+    "packageSize": 480,
+    "packageUnit": "g",
+    "priceEur": 4.99,
+    "onSale": false
+  },
+  {
+    "id": "p_024",
+    "name": "Hrenovke",
+    "category": "meso",
+    "keywords": [
+      "hrenovke",
+      "hrenovka",
+      "viršle",
+      "virsle",
+      "frankfurter"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_025",
+    "name": "Pileća šunka narezana",
+    "category": "meso",
+    "keywords": [
+      "šunka",
+      "sunka",
+      "pileća šunka",
+      "pileca sunka",
+      "narezak",
+      "šunka za sendvič",
+      "sunka za sendvic"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": false
+  },
+  {
+    "id": "p_026",
+    "name": "Pršut",
+    "category": "meso",
+    "keywords": [
+      "pršut",
+      "prsut",
+      "dalmatinski pršut",
+      "sušeno meso",
+      "suseno meso",
+      "prosciutto"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 4.49,
+    "onSale": false
+  },
+  {
+    "id": "p_027",
+    "name": "Losos file svježi",
+    "category": "meso",
+    "keywords": [
+      "losos",
+      "losos file",
+      "svježi losos",
+      "svjezi losos",
+      "riba losos",
+      "file lososa"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 8.99,
+    "onSale": false
+  },
+  {
+    "id": "p_028",
+    "name": "Dimljeni losos",
+    "category": "meso",
+    "keywords": [
+      "dimljeni losos",
+      "losos dimljeni",
+      "losos narezani",
+      "losos"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 3.49,
+    "onSale": false
+  },
+  {
+    "id": "p_029",
+    "name": "Trajno mlijeko 2,8% m.m.",
+    "category": "mlijecno",
+    "keywords": [
+      "mlijeko",
+      "trajno mlijeko",
+      "punomasno mlijeko",
+      "kravlje mlijeko",
+      "milk"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.09,
+    "onSale": true
+  },
+  {
+    "id": "p_030",
+    "name": "Svježe mlijeko 3,2% m.m.",
+    "category": "mlijecno",
+    "keywords": [
+      "svježe mlijeko",
+      "svjeze mlijeko",
+      "mlijeko",
+      "punomasno mlijeko"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.39,
+    "onSale": false
+  },
+  {
+    "id": "p_031",
+    "name": "Mlijeko bez laktoze",
+    "category": "mlijecno",
+    "keywords": [
+      "mlijeko bez laktoze",
+      "bezlaktozno mlijeko",
+      "laktoza free mlijeko",
+      "mlijeko"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_032",
+    "name": "Jogurt obični 2,8%",
+    "category": "mlijecno",
+    "keywords": [
+      "jogurt",
+      "obični jogurt",
+      "obicni jogurt",
+      "jogurt čaša",
+      "čvrsti jogurt",
+      "cvrsti jogurt"
+    ],
+    "packageSize": 180,
+    "packageUnit": "g",
+    "priceEur": 0.45,
+    "onSale": false
+  },
+  {
+    "id": "p_033",
+    "name": "Tekući jogurt",
+    "category": "mlijecno",
+    "keywords": [
+      "tekući jogurt",
+      "tekuci jogurt",
+      "jogurt",
+      "jogurt litra",
+      "jogurt za piće"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": true
+  },
+  {
+    "id": "p_034",
+    "name": "Grčki jogurt",
+    "category": "mlijecno",
+    "keywords": [
+      "grčki jogurt",
+      "grcki jogurt",
+      "grčki tip jogurta",
+      "gusti jogurt",
+      "greek yogurt"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_035",
+    "name": "Grčki jogurt veliki",
+    "category": "mlijecno",
+    "keywords": [
+      "grčki jogurt",
+      "grcki jogurt",
+      "jogurt grčki",
+      "gusti jogurt",
+      "jogurt za tzatziki"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_036",
+    "name": "Kefir",
+    "category": "mlijecno",
+    "keywords": [
+      "kefir",
+      "kefir napitak",
+      "fermentirano mlijeko"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_037",
+    "name": "Skyr",
+    "category": "mlijecno",
+    "keywords": [
+      "skyr",
+      "proteinski jogurt",
+      "islandski jogurt",
+      "skyr jogurt"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": false
+  },
+  {
+    "id": "p_038",
+    "name": "Kiselo vrhnje 20%",
+    "category": "mlijecno",
+    "keywords": [
+      "kiselo vrhnje",
+      "vrhnje",
+      "kiselo vrhnje 20%",
+      "mileram",
+      "sour cream"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": true
+  },
+  {
+    "id": "p_039",
+    "name": "Vrhnje za kuhanje 20%",
+    "category": "mlijecno",
+    "keywords": [
+      "vrhnje za kuhanje",
+      "slatko vrhnje",
+      "vrhnje",
+      "kuhinjsko vrhnje",
+      "cooking cream",
+      "vrhnje 20%"
+    ],
+    "packageSize": 500,
+    "packageUnit": "ml",
+    "priceEur": 1.59,
+    "onSale": true
+  },
+  {
+    "id": "p_040",
+    "name": "Vrhnje za šlag",
+    "category": "mlijecno",
+    "keywords": [
+      "vrhnje za šlag",
+      "vrhnje za slag",
+      "slatko vrhnje",
+      "šlag",
+      "slag",
+      "tučeno vrhnje",
+      "vrhnje 36%"
+    ],
+    "packageSize": 250,
+    "packageUnit": "ml",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_041",
+    "name": "Maslac",
+    "category": "mlijecno",
+    "keywords": [
+      "maslac",
+      "butter",
+      "putar",
+      "kravlji maslac"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 2.79,
+    "onSale": true
+  },
+  {
+    "id": "p_042",
+    "name": "Margarin",
+    "category": "mlijecno",
+    "keywords": [
+      "margarin",
+      "biljni margarin",
+      "margarin za kuhanje"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_043",
+    "name": "Svježi sir (posni)",
+    "category": "mlijecno",
+    "keywords": [
+      "svježi sir",
+      "svjezi sir",
+      "posni sir",
+      "kravlji sir",
+      "domaći sir",
+      "domaci sir",
+      "skuta",
+      "cottage"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": true
+  },
+  {
+    "id": "p_044",
+    "name": "Sirni namaz",
+    "category": "mlijecno",
+    "keywords": [
+      "sirni namaz",
+      "krem sir",
+      "cream cheese",
+      "sir za mazanje",
+      "mazivi sir",
+      "philadelphia"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 1.59,
+    "onSale": false
+  },
+  {
+    "id": "p_045",
+    "name": "Gauda narezana",
+    "category": "mlijecno",
+    "keywords": [
+      "gauda",
+      "gouda",
+      "sir gauda",
+      "narezani sir",
+      "sir za sendvič",
+      "sir za sendvic",
+      "sir"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_046",
+    "name": "Gauda komad",
+    "category": "mlijecno",
+    "keywords": [
+      "gauda",
+      "gouda",
+      "sir gauda",
+      "sir komad",
+      "polutvrdi sir",
+      "sir za ribanje",
+      "sir"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 4.49,
+    "onSale": true
+  },
+  {
+    "id": "p_047",
+    "name": "Edamer komad",
+    "category": "mlijecno",
+    "keywords": [
+      "edamer",
+      "edamac",
+      "sir edamer",
+      "polutvrdi sir",
+      "sir",
+      "sir za zapeći"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 3.99,
+    "onSale": true
+  },
+  {
+    "id": "p_048",
+    "name": "Mozzarella",
+    "category": "mlijecno",
+    "keywords": [
+      "mozzarella",
+      "mocarela",
+      "mozarela",
+      "sir mozzarella",
+      "svježa mozzarella",
+      "svjeza mozzarella"
+    ],
+    "packageSize": 125,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": true
+  },
+  {
+    "id": "p_049",
+    "name": "Mozzarella ribana",
+    "category": "mlijecno",
+    "keywords": [
+      "ribana mozzarella",
+      "mozzarella za pizzu",
+      "ribani sir",
+      "sir za pizzu",
+      "mozzarella"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_050",
+    "name": "Parmezan ribani",
+    "category": "mlijecno",
+    "keywords": [
+      "parmezan",
+      "parmesan",
+      "ribani parmezan",
+      "parmigiano",
+      "tvrdi sir"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_051",
+    "name": "Grana Padano komad",
+    "category": "mlijecno",
+    "keywords": [
+      "grana padano",
+      "parmezan",
+      "tvrdi sir",
+      "parmezan komad",
+      "parmigiano"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 4.49,
+    "onSale": false
+  },
+  {
+    "id": "p_052",
+    "name": "Feta sir",
+    "category": "mlijecno",
+    "keywords": [
+      "feta",
+      "feta sir",
+      "grčki sir",
+      "grcki sir",
+      "sir u salamuri",
+      "bijeli sir"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.19,
+    "onSale": true
+  },
+  {
+    "id": "p_053",
+    "name": "Cheddar narezani",
+    "category": "mlijecno",
+    "keywords": [
+      "cheddar",
+      "čedar",
+      "cedar",
+      "sir cheddar",
+      "sir za burger"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_054",
+    "name": "Halloumi",
+    "category": "mlijecno",
+    "keywords": [
+      "halloumi",
+      "halumi",
+      "sir za roštilj",
+      "sir za rostilj",
+      "sir za pečenje"
+    ],
+    "packageSize": 225,
+    "packageUnit": "g",
+    "priceEur": 3.49,
+    "onSale": false
+  },
+  {
+    "id": "p_055",
+    "name": "Mascarpone",
+    "category": "mlijecno",
+    "keywords": [
+      "mascarpone",
+      "maskarpone",
+      "sir mascarpone"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_056",
+    "name": "Ricotta",
+    "category": "mlijecno",
+    "keywords": [
+      "ricotta",
+      "rikota",
+      "sir ricotta"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_057",
+    "name": "Jaja M",
+    "category": "mlijecno",
+    "keywords": [
+      "jaja",
+      "jaje",
+      "kokošja jaja",
+      "kokosja jaja",
+      "jaja M",
+      "svježa jaja",
+      "svjeza jaja",
+      "eggs"
+    ],
+    "packageSize": 10,
+    "packageUnit": "kom",
+    "priceEur": 2.49,
+    "onSale": true
+  },
+  {
+    "id": "p_058",
+    "name": "Jaja slobodni uzgoj",
+    "category": "mlijecno",
+    "keywords": [
+      "jaja slobodni uzgoj",
+      "jaja",
+      "jaje",
+      "domaća jaja",
+      "domaca jaja",
+      "jaja iz slobodnog uzgoja"
+    ],
+    "packageSize": 6,
+    "packageUnit": "kom",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_059",
+    "name": "Riža dugo zrno",
+    "category": "suho",
+    "keywords": [
+      "riža",
+      "riza",
+      "bijela riža",
+      "bijela riza",
+      "riža dugo zrno",
+      "rice",
+      "parboiled riža"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_060",
+    "name": "Riža basmati",
+    "category": "suho",
+    "keywords": [
+      "basmati",
+      "basmati riža",
+      "basmati riza",
+      "riža",
+      "riza",
+      "riža za curry"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_061",
+    "name": "Riža za rižoto (arborio)",
+    "category": "suho",
+    "keywords": [
+      "arborio",
+      "riža za rižoto",
+      "riza za rizoto",
+      "rižoto riža",
+      "riža",
+      "riza",
+      "rizoto"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_062",
+    "name": "Riža integralna",
+    "category": "suho",
+    "keywords": [
+      "integralna riža",
+      "integralna riza",
+      "smeđa riža",
+      "smeda riza",
+      "riža",
+      "riza"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 2.19,
+    "onSale": false
+  },
+  {
+    "id": "p_063",
+    "name": "Špageti",
+    "category": "suho",
+    "keywords": [
+      "špageti",
+      "spageti",
+      "spaghetti",
+      "tjestenina",
+      "pasta",
+      "špagete"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": true
+  },
+  {
+    "id": "p_064",
+    "name": "Penne",
+    "category": "suho",
+    "keywords": [
+      "penne",
+      "pene",
+      "tjestenina",
+      "pasta",
+      "penne rigate",
+      "tjestenina penne"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": true
+  },
+  {
+    "id": "p_065",
+    "name": "Fusilli",
+    "category": "suho",
+    "keywords": [
+      "fusilli",
+      "fuzili",
+      "tjestenina",
+      "pasta",
+      "spirale",
+      "tjestenina spirale"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": false
+  },
+  {
+    "id": "p_066",
+    "name": "Tagliatelle",
+    "category": "suho",
+    "keywords": [
+      "tagliatelle",
+      "taljatele",
+      "rezanci",
+      "široki rezanci",
+      "siroki rezanci",
+      "tjestenina",
+      "pasta"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_067",
+    "name": "Listovi za lazanje",
+    "category": "suho",
+    "keywords": [
+      "lazanje",
+      "lasagne",
+      "listovi za lazanje",
+      "tjestenina za lazanje",
+      "lazanja"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_068",
+    "name": "Rižini rezanci",
+    "category": "suho",
+    "keywords": [
+      "rižini rezanci",
+      "rizini rezanci",
+      "rice noodles",
+      "azijski rezanci",
+      "rezanci",
+      "noodles"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_069",
+    "name": "Jaja rezanci (noodles)",
+    "category": "suho",
+    "keywords": [
+      "noodles",
+      "nudle",
+      "rezanci",
+      "jaja rezanci",
+      "azijski rezanci",
+      "wok rezanci",
+      "ramen rezanci"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_070",
+    "name": "Kuskus",
+    "category": "suho",
+    "keywords": [
+      "kuskus",
+      "couscous",
+      "cous cous",
+      "kus kus"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": true
+  },
+  {
+    "id": "p_071",
+    "name": "Bulgur",
+    "category": "suho",
+    "keywords": [
+      "bulgur",
+      "bulgur pšenica",
+      "bulgur psenica"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_072",
+    "name": "Zobene pahuljice",
+    "category": "suho",
+    "keywords": [
+      "zob",
+      "zobene pahuljice",
+      "zobena kaša",
+      "zobena kasa",
+      "oats",
+      "ovsene pahuljice",
+      "pahuljice",
+      "oatmeal"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_073",
+    "name": "Musli",
+    "category": "suho",
+    "keywords": [
+      "musli",
+      "müsli",
+      "muesli",
+      "granola",
+      "žitarice",
+      "zitarice"
+    ],
+    "packageSize": 750,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_074",
+    "name": "Brašno glatko T-550",
+    "category": "suho",
+    "keywords": [
+      "brašno",
+      "brasno",
+      "glatko brašno",
+      "glatko brasno",
+      "pšenično brašno",
+      "psenicno brasno",
+      "bijelo brašno",
+      "flour"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 0.89,
+    "onSale": false
+  },
+  {
+    "id": "p_075",
+    "name": "Brašno integralno",
+    "category": "suho",
+    "keywords": [
+      "integralno brašno",
+      "integralno brasno",
+      "brašno",
+      "brasno",
+      "crno brašno",
+      "punozrnato brašno"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_076",
+    "name": "Kukuruzno brašno (palenta)",
+    "category": "suho",
+    "keywords": [
+      "palenta",
+      "kukuruzno brašno",
+      "kukuruzno brasno",
+      "kukuruzna krupica",
+      "polenta",
+      "žganci",
+      "zganci"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_077",
+    "name": "Krušne mrvice",
+    "category": "suho",
+    "keywords": [
+      "krušne mrvice",
+      "krusne mrvice",
+      "mrvice",
+      "prezle",
+      "prezla",
+      "krušne mrvice za pohanje",
+      "panko"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_078",
+    "name": "Prašak za pecivo",
+    "category": "suho",
+    "keywords": [
+      "prašak za pecivo",
+      "prasak za pecivo",
+      "baking powder",
+      "pecivo prašak",
+      "prašak"
+    ],
+    "packageSize": 12,
+    "packageUnit": "g",
+    "priceEur": 0.25,
+    "onSale": false
+  },
+  {
+    "id": "p_079",
+    "name": "Suhi kvasac",
+    "category": "suho",
+    "keywords": [
+      "suhi kvasac",
+      "kvasac",
+      "kvasac suhi",
+      "instant kvasac",
+      "dry yeast",
+      "germa"
+    ],
+    "packageSize": 7,
+    "packageUnit": "g",
+    "priceEur": 0.35,
+    "onSale": false
+  },
+  {
+    "id": "p_080",
+    "name": "Šećer",
+    "category": "suho",
+    "keywords": [
+      "šećer",
+      "secer",
+      "bijeli šećer",
+      "kristal šećer",
+      "sugar"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": false
+  },
+  {
+    "id": "p_081",
+    "name": "Smeđi šećer",
+    "category": "suho",
+    "keywords": [
+      "smeđi šećer",
+      "smedi secer",
+      "šećer smeđi",
+      "brown sugar",
+      "trstni šećer"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_082",
+    "name": "Med cvjetni",
+    "category": "suho",
+    "keywords": [
+      "med",
+      "cvjetni med",
+      "honey",
+      "domaći med",
+      "domaci med",
+      "bagremov med"
+    ],
+    "packageSize": 450,
+    "packageUnit": "g",
+    "priceEur": 5.49,
+    "onSale": false
+  },
+  {
+    "id": "p_083",
+    "name": "Leća crvena",
+    "category": "suho",
+    "keywords": [
+      "leća",
+      "leca",
+      "crvena leća",
+      "crvena leca",
+      "lentils",
+      "leća crvena"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_084",
+    "name": "Leća smeđa",
+    "category": "suho",
+    "keywords": [
+      "leća",
+      "leca",
+      "smeđa leća",
+      "smeda leca",
+      "zelena leća",
+      "lentils"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": false
+  },
+  {
+    "id": "p_085",
+    "name": "Slanutak suhi",
+    "category": "suho",
+    "keywords": [
+      "slanutak",
+      "slanutak suhi",
+      "suhi slanutak",
+      "čičerka",
+      "cicerka",
+      "chickpeas",
+      "leblebija"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.59,
+    "onSale": false
+  },
+  {
+    "id": "p_086",
+    "name": "Slanutak konzerva",
+    "category": "suho",
+    "keywords": [
+      "slanutak",
+      "slanutak konzerva",
+      "slanutak iz konzerve",
+      "kuhani slanutak",
+      "chickpeas",
+      "slanutak za humus"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_087",
+    "name": "Grah suhi tetovac",
+    "category": "suho",
+    "keywords": [
+      "grah",
+      "suhi grah",
+      "tetovac",
+      "grah tetovac",
+      "bijeli grah",
+      "beans"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_088",
+    "name": "Grah konzerva",
+    "category": "suho",
+    "keywords": [
+      "grah",
+      "grah konzerva",
+      "kuhani grah",
+      "grah iz konzerve",
+      "bijeli grah",
+      "smeđi grah"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 0.89,
+    "onSale": true
+  },
+  {
+    "id": "p_089",
+    "name": "Crveni grah konzerva",
+    "category": "suho",
+    "keywords": [
+      "crveni grah",
+      "kidney grah",
+      "grah crveni",
+      "grah za chili",
+      "kidney beans",
+      "grah"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_090",
+    "name": "Kukuruz šećerac konzerva",
+    "category": "suho",
+    "keywords": [
+      "kukuruz",
+      "kukuruz šećerac",
+      "kukuruz secerac",
+      "kukuruz konzerva",
+      "kukuruz iz konzerve",
+      "corn"
+    ],
+    "packageSize": 340,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_091",
+    "name": "Pelati",
+    "category": "suho",
+    "keywords": [
+      "pelati",
+      "rajčica pelati",
+      "rajcica pelati",
+      "pelat",
+      "cijela rajčica konzerva",
+      "rajčica konzerva",
+      "rajcica konzerva"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 0.89,
+    "onSale": true
+  },
+  {
+    "id": "p_092",
+    "name": "Sjeckana rajčica konzerva",
+    "category": "suho",
+    "keywords": [
+      "sjeckana rajčica",
+      "sjeckana rajcica",
+      "rajčica konzerva",
+      "rajcica konzerva",
+      "rajčica u komadima",
+      "pelati sjeckani",
+      "rajčica iz konzerve"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 0.95,
+    "onSale": false
+  },
+  {
+    "id": "p_093",
+    "name": "Passata",
+    "category": "suho",
+    "keywords": [
+      "passata",
+      "pasata",
+      "pasirana rajčica",
+      "pasirana rajcica",
+      "umak od rajčice",
+      "umak od rajcice",
+      "rajčica pasirana",
+      "sos od rajčice"
+    ],
+    "packageSize": 700,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": true
+  },
+  {
+    "id": "p_094",
+    "name": "Koncentrat rajčice",
+    "category": "suho",
+    "keywords": [
+      "koncentrat rajčice",
+      "koncentrat rajcice",
+      "pelat koncentrat",
+      "rajčica koncentrat",
+      "tomato paste",
+      "pire od rajčice"
+    ],
+    "packageSize": 140,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_095",
+    "name": "Pesto genovese",
+    "category": "suho",
+    "keywords": [
+      "pesto",
+      "pesto genovese",
+      "pesto od bosiljka",
+      "zeleni pesto",
+      "pesto umak"
+    ],
+    "packageSize": 190,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_096",
+    "name": "Tuna u ulju",
+    "category": "suho",
+    "keywords": [
+      "tuna",
+      "tunjevina",
+      "tuna konzerva",
+      "tuna u ulju",
+      "tuna iz konzerve",
+      "tunj"
+    ],
+    "packageSize": 160,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_097",
+    "name": "Tuna u vlastitom soku",
+    "category": "suho",
+    "keywords": [
+      "tuna",
+      "tuna u vlastitom soku",
+      "tuna konzerva",
+      "tunjevina",
+      "tuna bez ulja"
+    ],
+    "packageSize": 160,
+    "packageUnit": "g",
+    "priceEur": 2.09,
+    "onSale": false
+  },
+  {
+    "id": "p_098",
+    "name": "Skuša u ulju konzerva",
+    "category": "suho",
+    "keywords": [
+      "skuša",
+      "skusa",
+      "skuša konzerva",
+      "skusa konzerva",
+      "skuša u ulju",
+      "fileti skuše"
+    ],
+    "packageSize": 125,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_099",
+    "name": "Kokosovo mlijeko",
+    "category": "suho",
+    "keywords": [
+      "kokosovo mlijeko",
+      "kokos mlijeko",
+      "coconut milk",
+      "kokosovo vrhnje",
+      "mlijeko od kokosa"
+    ],
+    "packageSize": 400,
+    "packageUnit": "ml",
+    "priceEur": 1.69,
+    "onSale": false
+  },
+  {
+    "id": "p_100",
+    "name": "Soja sos",
+    "category": "suho",
+    "keywords": [
+      "soja sos",
+      "sojin umak",
+      "soja umak",
+      "soy sauce",
+      "soja",
+      "umak od soje"
+    ],
+    "packageSize": 150,
+    "packageUnit": "ml",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_101",
+    "name": "Sriracha čili umak",
+    "category": "suho",
+    "keywords": [
+      "sriracha",
+      "čili umak",
+      "cili umak",
+      "ljuti umak",
+      "hot sauce",
+      "čili sos"
+    ],
+    "packageSize": 200,
+    "packageUnit": "ml",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_102",
+    "name": "Crvena curry pasta",
+    "category": "suho",
+    "keywords": [
+      "curry pasta",
+      "crvena curry pasta",
+      "kari pasta",
+      "red curry paste",
+      "thai curry"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 2.29,
+    "onSale": false
+  },
+  {
+    "id": "p_103",
+    "name": "Kečap",
+    "category": "suho",
+    "keywords": [
+      "kečap",
+      "kecap",
+      "ketchup",
+      "ketchap",
+      "kečap blagi"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": false
+  },
+  {
+    "id": "p_104",
+    "name": "Majoneza",
+    "category": "suho",
+    "keywords": [
+      "majoneza",
+      "majonez",
+      "mayonnaise",
+      "mayo"
+    ],
+    "packageSize": 300,
+    "packageUnit": "ml",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_105",
+    "name": "Senf",
+    "category": "suho",
+    "keywords": [
+      "senf",
+      "gorušica",
+      "gorusica",
+      "mustard",
+      "senf blagi",
+      "dijon senf"
+    ],
+    "packageSize": 180,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_106",
+    "name": "Tahini",
+    "category": "suho",
+    "keywords": [
+      "tahini",
+      "tahin",
+      "sezamova pasta",
+      "pasta od sezama"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 3.99,
+    "onSale": false
+  },
+  {
+    "id": "p_107",
+    "name": "Kikiriki maslac",
+    "category": "suho",
+    "keywords": [
+      "kikiriki maslac",
+      "maslac od kikirikija",
+      "peanut butter",
+      "kikiriki namaz"
+    ],
+    "packageSize": 350,
+    "packageUnit": "g",
+    "priceEur": 3.29,
+    "onSale": false
+  },
+  {
+    "id": "p_108",
+    "name": "Orasi",
+    "category": "suho",
+    "keywords": [
+      "orasi",
+      "orah",
+      "orasi jezgra",
+      "walnuts",
+      "mljeveni orasi"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_109",
+    "name": "Bademi",
+    "category": "suho",
+    "keywords": [
+      "bademi",
+      "badem",
+      "almonds",
+      "bademi jezgra",
+      "listići badema"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_110",
+    "name": "Lješnjaci",
+    "category": "suho",
+    "keywords": [
+      "lješnjaci",
+      "ljesnjaci",
+      "lješnjak",
+      "hazelnuts",
+      "mljeveni lješnjaci"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 3.49,
+    "onSale": false
+  },
+  {
+    "id": "p_111",
+    "name": "Kikiriki pečeni",
+    "category": "suho",
+    "keywords": [
+      "kikiriki",
+      "pečeni kikiriki",
+      "peceni kikiriki",
+      "peanuts",
+      "kikiriki slani"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_112",
+    "name": "Sjemenke suncokreta",
+    "category": "suho",
+    "keywords": [
+      "sjemenke suncokreta",
+      "suncokret",
+      "suncokretove sjemenke",
+      "sjemenke",
+      "sunflower seeds"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_113",
+    "name": "Sjemenke bundeve",
+    "category": "suho",
+    "keywords": [
+      "sjemenke bundeve",
+      "bučine sjemenke",
+      "bucine sjemenke",
+      "koštice bundeve",
+      "sjemenke",
+      "pumpkin seeds"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_114",
+    "name": "Sezam",
+    "category": "suho",
+    "keywords": [
+      "sezam",
+      "sezamove sjemenke",
+      "sjemenke sezama",
+      "sesame"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_115",
+    "name": "Chia sjemenke",
+    "category": "suho",
+    "keywords": [
+      "chia",
+      "chia sjemenke",
+      "čia",
+      "sjemenke chia"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_116",
+    "name": "Suncokretovo ulje",
+    "category": "suho",
+    "keywords": [
+      "ulje",
+      "suncokretovo ulje",
+      "biljno ulje",
+      "ulje za prženje",
+      "ulje za przenje",
+      "jestivo ulje",
+      "oil"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.79,
+    "onSale": false
+  },
+  {
+    "id": "p_117",
+    "name": "Maslinovo ulje ekstra djevičansko",
+    "category": "suho",
+    "keywords": [
+      "maslinovo ulje",
+      "ekstra djevičansko maslinovo ulje",
+      "ekstra djevicansko",
+      "olive oil",
+      "ulje masline",
+      "maslinovo"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 9.99,
+    "onSale": true
+  },
+  {
+    "id": "p_118",
+    "name": "Alkoholni ocat",
+    "category": "suho",
+    "keywords": [
+      "ocat",
+      "alkoholni ocat",
+      "bijeli ocat",
+      "kvasina",
+      "vinegar",
+      "ocat alkoholni"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_119",
+    "name": "Balzamični ocat",
+    "category": "suho",
+    "keywords": [
+      "balzamični ocat",
+      "balzamicni ocat",
+      "balzamiko",
+      "aceto balsamico",
+      "balsamic",
+      "ocat balzamični"
+    ],
+    "packageSize": 500,
+    "packageUnit": "ml",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_120",
+    "name": "Jabučni ocat",
+    "category": "suho",
+    "keywords": [
+      "jabučni ocat",
+      "jabucni ocat",
+      "ocat od jabuke",
+      "apple cider vinegar",
+      "ocat"
+    ],
+    "packageSize": 500,
+    "packageUnit": "ml",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_121",
+    "name": "Kocka za juhu goveđa",
+    "category": "suho",
+    "keywords": [
+      "kocka za juhu",
+      "juha kocka",
+      "goveđa kocka",
+      "goveda kocka",
+      "bujon",
+      "kocka"
+    ],
+    "packageSize": 6,
+    "packageUnit": "kom",
+    "priceEur": 0.89,
+    "onSale": false
+  },
+  {
+    "id": "p_122",
+    "name": "Kocka za juhu povrtna",
+    "category": "suho",
+    "keywords": [
+      "povrtna kocka",
+      "kocka za juhu",
+      "juha kocka",
+      "povrtni bujon",
+      "kocka"
+    ],
+    "packageSize": 6,
+    "packageUnit": "kom",
+    "priceEur": 0.89,
+    "onSale": false
+  },
+  {
+    "id": "p_123",
+    "name": "Pileći temeljac",
+    "category": "suho",
+    "keywords": [
+      "temeljac",
+      "pileći temeljac",
+      "pileci temeljac",
+      "juha temeljac",
+      "stock",
+      "pileća juha temeljac"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_124",
+    "name": "Zelene masline",
+    "category": "suho",
+    "keywords": [
+      "masline",
+      "zelene masline",
+      "masline bez koštice",
+      "olives"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_125",
+    "name": "Kiseli krastavci",
+    "category": "suho",
+    "keywords": [
+      "kiseli krastavci",
+      "krastavci kiseli",
+      "kornišoni",
+      "kornisoni",
+      "kiseli krastavac",
+      "pickles"
+    ],
+    "packageSize": 680,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_126",
+    "name": "Ajvar",
+    "category": "suho",
+    "keywords": [
+      "ajvar",
+      "ajvar blagi",
+      "namaz od paprike"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_127",
+    "name": "Tamna čokolada 70%",
+    "category": "suho",
+    "keywords": [
+      "čokolada",
+      "cokolada",
+      "tamna čokolada",
+      "crna čokolada",
+      "čokolada 70%"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_128",
+    "name": "Sol kuhinjska",
+    "category": "zacini",
+    "keywords": [
+      "sol",
+      "kuhinjska sol",
+      "morska sol",
+      "salt",
+      "sol fina"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 0.49,
+    "onSale": false
+  },
+  {
+    "id": "p_129",
+    "name": "Morska sol krupna",
+    "category": "zacini",
+    "keywords": [
+      "krupna sol",
+      "morska sol",
+      "sol krupna",
+      "sol za kuhanje",
+      "sol"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_130",
+    "name": "Papar crni mljeveni",
+    "category": "zacini",
+    "keywords": [
+      "papar",
+      "crni papar",
+      "mljeveni papar",
+      "pepper",
+      "papar mljeveni",
+      "biber"
+    ],
+    "packageSize": 50,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_131",
+    "name": "Slatka mljevena paprika",
+    "category": "zacini",
+    "keywords": [
+      "slatka paprika",
+      "mljevena paprika",
+      "crvena paprika začin",
+      "crvena paprika zacin",
+      "paprika u prahu",
+      "paprika začin",
+      "paprika zacin"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_132",
+    "name": "Dimljena paprika",
+    "category": "zacini",
+    "keywords": [
+      "dimljena paprika",
+      "smoked paprika",
+      "paprika dimljena",
+      "pimenton"
+    ],
+    "packageSize": 50,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_133",
+    "name": "Vegeta",
+    "category": "zacini",
+    "keywords": [
+      "vegeta",
+      "dodatak jelima",
+      "začin za jela",
+      "zacin za jela",
+      "univerzalni začin",
+      "mješavina začina"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_134",
+    "name": "Origano",
+    "category": "zacini",
+    "keywords": [
+      "origano",
+      "oregano",
+      "sušeni origano",
+      "suseni origano",
+      "mravinac"
+    ],
+    "packageSize": 10,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_135",
+    "name": "Bosiljak sušeni",
+    "category": "zacini",
+    "keywords": [
+      "bosiljak",
+      "sušeni bosiljak",
+      "suseni bosiljak",
+      "basil",
+      "bosiljak sušeni"
+    ],
+    "packageSize": 10,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_136",
+    "name": "Timijan",
+    "category": "zacini",
+    "keywords": [
+      "timijan",
+      "majčina dušica",
+      "majcina dusica",
+      "thyme",
+      "sušeni timijan"
+    ],
+    "packageSize": 10,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_137",
+    "name": "Ružmarin",
+    "category": "zacini",
+    "keywords": [
+      "ružmarin",
+      "ruzmarin",
+      "rosemary",
+      "sušeni ružmarin",
+      "suseni ruzmarin"
+    ],
+    "packageSize": 10,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_138",
+    "name": "Lovorov list",
+    "category": "zacini",
+    "keywords": [
+      "lovor",
+      "lovorov list",
+      "lovorov",
+      "lovorovo lišće",
+      "bay leaf",
+      "lovorika"
+    ],
+    "packageSize": 5,
+    "packageUnit": "g",
+    "priceEur": 0.69,
+    "onSale": false
+  },
+  {
+    "id": "p_139",
+    "name": "Curry u prahu",
+    "category": "zacini",
+    "keywords": [
+      "curry",
+      "kari",
+      "curry u prahu",
+      "curry prah",
+      "kari začin",
+      "kari zacin",
+      "curry začin"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_140",
+    "name": "Kurkuma",
+    "category": "zacini",
+    "keywords": [
+      "kurkuma",
+      "turmeric",
+      "kurkuma u prahu",
+      "kurkuma mljevena"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_141",
+    "name": "Kumin mljeveni",
+    "category": "zacini",
+    "keywords": [
+      "kumin",
+      "kim",
+      "kumin mljeveni",
+      "cumin",
+      "rimski kim",
+      "mljeveni kumin"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_142",
+    "name": "Korijander mljeveni",
+    "category": "zacini",
+    "keywords": [
+      "korijander",
+      "mljeveni korijander",
+      "coriander",
+      "korijander u prahu"
+    ],
+    "packageSize": 30,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_143",
+    "name": "Garam masala",
+    "category": "zacini",
+    "keywords": [
+      "garam masala",
+      "masala",
+      "indijski začini",
+      "indijski zacini",
+      "mješavina garam masala"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_144",
+    "name": "Cimet mljeveni",
+    "category": "zacini",
+    "keywords": [
+      "cimet",
+      "mljeveni cimet",
+      "cinnamon",
+      "cimet u prahu"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_145",
+    "name": "Muškatni oraščić",
+    "category": "zacini",
+    "keywords": [
+      "muškatni oraščić",
+      "muskatni orascic",
+      "muškat",
+      "muskat",
+      "nutmeg",
+      "oraščić"
+    ],
+    "packageSize": 15,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_146",
+    "name": "Čili pahuljice",
+    "category": "zacini",
+    "keywords": [
+      "čili",
+      "cili",
+      "čili pahuljice",
+      "cili pahuljice",
+      "chili flakes",
+      "ljute pahuljice",
+      "feferoni sušeni"
+    ],
+    "packageSize": 30,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": false
+  },
+  {
+    "id": "p_147",
+    "name": "Čili u prahu",
+    "category": "zacini",
+    "keywords": [
+      "čili u prahu",
+      "cili u prahu",
+      "čili prah",
+      "chili powder",
+      "čili",
+      "cili",
+      "kajenski papar",
+      "cayenne"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 1.09,
+    "onSale": false
+  },
+  {
+    "id": "p_148",
+    "name": "Češnjak granulirani",
+    "category": "zacini",
+    "keywords": [
+      "češnjak u prahu",
+      "cesnjak u prahu",
+      "granulirani češnjak",
+      "granulirani cesnjak",
+      "češnjak granule",
+      "garlic powder"
+    ],
+    "packageSize": 50,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_149",
+    "name": "Peršin sušeni",
+    "category": "zacini",
+    "keywords": [
+      "sušeni peršin",
+      "suseni persin",
+      "peršin",
+      "persin",
+      "peršin začin",
+      "parsley"
+    ],
+    "packageSize": 10,
+    "packageUnit": "g",
+    "priceEur": 0.69,
+    "onSale": false
+  },
+  {
+    "id": "p_150",
+    "name": "Mješavina začina za piletinu",
+    "category": "zacini",
+    "keywords": [
+      "začin za piletinu",
+      "zacin za piletinu",
+      "mješavina za piletinu",
+      "začini za piletinu",
+      "začin za meso"
+    ],
+    "packageSize": 30,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_151",
+    "name": "Mješavina talijanskih začina",
+    "category": "zacini",
+    "keywords": [
+      "talijanski začini",
+      "talijanski zacini",
+      "mediteranski začini",
+      "mediteranski zacini",
+      "začinsko bilje",
+      "zacinsko bilje",
+      "provansalsko bilje"
+    ],
+    "packageSize": 15,
+    "packageUnit": "g",
+    "priceEur": 0.89,
+    "onSale": false
+  },
+  {
+    "id": "p_152",
+    "name": "Luk žuti",
+    "category": "svjeze",
+    "keywords": [
+      "luk",
+      "žuti luk",
+      "zuti luk",
+      "glavica luka",
+      "kapula",
+      "onion",
+      "luk kapula"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_153",
+    "name": "Crveni luk",
+    "category": "svjeze",
+    "keywords": [
+      "crveni luk",
+      "ljubičasti luk",
+      "ljubicasti luk",
+      "luk crveni",
+      "red onion"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_154",
+    "name": "Mladi luk",
+    "category": "svjeze",
+    "keywords": [
+      "mladi luk",
+      "mladi luk vezica",
+      "vlasac",
+      "zeleni luk",
+      "spring onion",
+      "luk mladi"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_155",
+    "name": "Češnjak",
+    "category": "svjeze",
+    "keywords": [
+      "češnjak",
+      "cesnjak",
+      "češanj češnjaka",
+      "cesanj cesnjaka",
+      "češnjevi",
+      "bijeli luk",
+      "garlic",
+      "luk češnjak"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_156",
+    "name": "Mrkva",
+    "category": "svjeze",
+    "keywords": [
+      "mrkva",
+      "mrkve",
+      "carrot",
+      "mrkvica"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": true
+  },
+  {
+    "id": "p_157",
+    "name": "Krumpir",
+    "category": "svjeze",
+    "keywords": [
+      "krumpir",
+      "krumpiri",
+      "krompir",
+      "potato",
+      "krumpir bijeli",
+      "krumpir za pečenje"
+    ],
+    "packageSize": 2000,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_158",
+    "name": "Batat",
+    "category": "svjeze",
+    "keywords": [
+      "batat",
+      "slatki krumpir",
+      "sweet potato"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_159",
+    "name": "Paprika crvena",
+    "category": "svjeze",
+    "keywords": [
+      "paprika",
+      "crvena paprika",
+      "paprike",
+      "paprika svježa",
+      "paprika svjeza",
+      "babura",
+      "bell pepper",
+      "paprika crvena"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_160",
+    "name": "Paprika zelena",
+    "category": "svjeze",
+    "keywords": [
+      "zelena paprika",
+      "paprika zelena",
+      "paprika",
+      "paprike",
+      "babura zelena"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_161",
+    "name": "Tikvice",
+    "category": "svjeze",
+    "keywords": [
+      "tikvice",
+      "tikvica",
+      "bučice",
+      "bucice",
+      "zucchini",
+      "cukini"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_162",
+    "name": "Patlidžan",
+    "category": "svjeze",
+    "keywords": [
+      "patlidžan",
+      "patlidzan",
+      "patlidžani",
+      "melancana",
+      "eggplant",
+      "plavi patlidžan"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_163",
+    "name": "Brokula",
+    "category": "svjeze",
+    "keywords": [
+      "brokula",
+      "brokoli",
+      "broccoli",
+      "brokula svježa",
+      "brokula svjeza"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_164",
+    "name": "Cvjetača",
+    "category": "svjeze",
+    "keywords": [
+      "cvjetača",
+      "cvjetaca",
+      "karfiol",
+      "cauliflower",
+      "cvjetača svježa"
+    ],
+    "packageSize": 800,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_165",
+    "name": "Kupus bijeli",
+    "category": "svjeze",
+    "keywords": [
+      "kupus",
+      "bijeli kupus",
+      "glavica kupusa",
+      "zelje",
+      "cabbage",
+      "kupus svježi"
+    ],
+    "packageSize": 1500,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_166",
+    "name": "Špinat svježi",
+    "category": "svjeze",
+    "keywords": [
+      "špinat",
+      "spinat",
+      "svježi špinat",
+      "svjezi spinat",
+      "spinach",
+      "baby špinat",
+      "špinat listovi"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_167",
+    "name": "Rukola",
+    "category": "svjeze",
+    "keywords": [
+      "rukola",
+      "rikula",
+      "rucola",
+      "arugula",
+      "rukola salata"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_168",
+    "name": "Zelena salata",
+    "category": "svjeze",
+    "keywords": [
+      "zelena salata",
+      "salata",
+      "glavica salate",
+      "lettuce",
+      "salata zelena",
+      "maslenka"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_169",
+    "name": "Miješana salata (vrećica)",
+    "category": "svjeze",
+    "keywords": [
+      "miješana salata",
+      "mijesana salata",
+      "salata mix",
+      "salata u vrećici",
+      "salata"
+    ],
+    "packageSize": 150,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_170",
+    "name": "Krastavac",
+    "category": "svjeze",
+    "keywords": [
+      "krastavac",
+      "krastavci",
+      "svježi krastavac",
+      "svjezi krastavac",
+      "cucumber",
+      "salatni krastavac"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_171",
+    "name": "Rajčica",
+    "category": "svjeze",
+    "keywords": [
+      "rajčica",
+      "rajcica",
+      "rajčice",
+      "rajcice",
+      "paradajz",
+      "pomidor",
+      "tomato",
+      "svježa rajčica",
+      "svjeza rajcica"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_172",
+    "name": "Cherry rajčica",
+    "category": "svjeze",
+    "keywords": [
+      "cherry rajčica",
+      "cherry rajcica",
+      "cherry rajčice",
+      "koktel rajčica",
+      "male rajčice",
+      "cherry"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_173",
+    "name": "Poriluk",
+    "category": "svjeze",
+    "keywords": [
+      "poriluk",
+      "por",
+      "prasa",
+      "leek",
+      "poriluk svježi"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_174",
+    "name": "Celer korijen",
+    "category": "svjeze",
+    "keywords": [
+      "celer",
+      "korijen celera",
+      "celer korijen",
+      "celer gomolj",
+      "celeriac"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_175",
+    "name": "Celer stabljika",
+    "category": "svjeze",
+    "keywords": [
+      "celer stabljika",
+      "stabljika celera",
+      "celer rebra",
+      "celery",
+      "celer"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_176",
+    "name": "Peršin svježi (vezica)",
+    "category": "svjeze",
+    "keywords": [
+      "peršin",
+      "persin",
+      "svježi peršin",
+      "svjezi persin",
+      "peršin list",
+      "peršun",
+      "parsley",
+      "vezica peršina"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.59,
+    "onSale": false
+  },
+  {
+    "id": "p_177",
+    "name": "Blitva",
+    "category": "svjeze",
+    "keywords": [
+      "blitva",
+      "swiss chard",
+      "blitva svježa",
+      "blitva svjeza",
+      "mangold"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_178",
+    "name": "Šampinjoni",
+    "category": "svjeze",
+    "keywords": [
+      "gljive",
+      "šampinjoni",
+      "sampinjoni",
+      "šampinjon",
+      "mushrooms",
+      "gljive šampinjoni",
+      "gljive svježe"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": true
+  },
+  {
+    "id": "p_179",
+    "name": "Bukovače",
+    "category": "svjeze",
+    "keywords": [
+      "bukovače",
+      "bukovace",
+      "bukovača",
+      "gljive bukovače",
+      "oyster mushrooms",
+      "gljive"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_180",
+    "name": "Mahune svježe",
+    "category": "svjeze",
+    "keywords": [
+      "mahune",
+      "mahuna",
+      "svježe mahune",
+      "svjeze mahune",
+      "green beans",
+      "zelene mahune"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_181",
+    "name": "Bundeva hokkaido",
+    "category": "svjeze",
+    "keywords": [
+      "bundeva",
+      "buča",
+      "buca",
+      "hokkaido",
+      "tikva",
+      "pumpkin",
+      "bundeva hokaido",
+      "muškatna tikva"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_182",
+    "name": "Cikla",
+    "category": "svjeze",
+    "keywords": [
+      "cikla",
+      "cvekla",
+      "beetroot",
+      "cikla svježa"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_183",
+    "name": "Đumbir svježi",
+    "category": "svjeze",
+    "keywords": [
+      "đumbir",
+      "dumbir",
+      "svježi đumbir",
+      "svjezi dumbir",
+      "ginger",
+      "ingver",
+      "korijen đumbira"
+    ],
+    "packageSize": 100,
+    "packageUnit": "g",
+    "priceEur": 0.99,
+    "onSale": false
+  },
+  {
+    "id": "p_184",
+    "name": "Čili papričica svježa",
+    "category": "svjeze",
+    "keywords": [
+      "čili papričica",
+      "cili papricica",
+      "svježi čili",
+      "svjezi cili",
+      "feferon",
+      "ljuta papričica",
+      "ljuta papricica",
+      "chili"
+    ],
+    "packageSize": 50,
+    "packageUnit": "g",
+    "priceEur": 0.79,
+    "onSale": false
+  },
+  {
+    "id": "p_185",
+    "name": "Limun",
+    "category": "svjeze",
+    "keywords": [
+      "limun",
+      "limuni",
+      "lemon",
+      "sok limuna",
+      "limunov sok",
+      "korica limuna"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_186",
+    "name": "Limeta",
+    "category": "svjeze",
+    "keywords": [
+      "limeta",
+      "lime",
+      "limete",
+      "sok limete"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.39,
+    "onSale": false
+  },
+  {
+    "id": "p_187",
+    "name": "Naranče",
+    "category": "svjeze",
+    "keywords": [
+      "naranče",
+      "narance",
+      "naranča",
+      "naranca",
+      "orange",
+      "sok naranče"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_188",
+    "name": "Mandarine",
+    "category": "svjeze",
+    "keywords": [
+      "mandarine",
+      "mandarina",
+      "mandarinke",
+      "tangerine"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_189",
+    "name": "Banane",
+    "category": "svjeze",
+    "keywords": [
+      "banane",
+      "banana",
+      "bananas"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.39,
+    "onSale": true
+  },
+  {
+    "id": "p_190",
+    "name": "Jabuke",
+    "category": "svjeze",
+    "keywords": [
+      "jabuke",
+      "jabuka",
+      "apple",
+      "jabuke crvene",
+      "jabuke zelene"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": true
+  },
+  {
+    "id": "p_191",
+    "name": "Jagode",
+    "category": "svjeze",
+    "keywords": [
+      "jagode",
+      "jagoda",
+      "strawberries",
+      "svježe jagode"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_192",
+    "name": "Borovnice svježe",
+    "category": "svjeze",
+    "keywords": [
+      "borovnice",
+      "borovnica",
+      "blueberries",
+      "svježe borovnice",
+      "svjeze borovnice"
+    ],
+    "packageSize": 125,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_193",
+    "name": "Avokado",
+    "category": "svjeze",
+    "keywords": [
+      "avokado",
+      "avocado",
+      "avokado zreli",
+      "avokada"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.19,
+    "onSale": false
+  },
+  {
+    "id": "p_194",
+    "name": "Mango",
+    "category": "svjeze",
+    "keywords": [
+      "mango",
+      "svježi mango",
+      "mango zreli"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_195",
+    "name": "Tofu",
+    "category": "svjeze",
+    "keywords": [
+      "tofu",
+      "tofu natur",
+      "sojin sir",
+      "tofu čvrsti",
+      "tofu cvrsti",
+      "firm tofu"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_196",
+    "name": "Tempeh",
+    "category": "svjeze",
+    "keywords": [
+      "tempeh",
+      "tempe",
+      "sojin tempeh"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 3.49,
+    "onSale": false
+  },
+  {
+    "id": "p_197",
+    "name": "Hummus",
+    "category": "svjeze",
+    "keywords": [
+      "hummus",
+      "humus",
+      "namaz od slanutka",
+      "hummus klasični"
+    ],
+    "packageSize": 200,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_198",
+    "name": "Njoki",
+    "category": "svjeze",
+    "keywords": [
+      "njoki",
+      "gnocchi",
+      "njoke",
+      "krumpirovi njoki",
+      "valjušci"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_199",
+    "name": "Tortellini sa sirom",
+    "category": "svjeze",
+    "keywords": [
+      "tortellini",
+      "tortelini",
+      "svježa tjestenina",
+      "svjeza tjestenina",
+      "punjena tjestenina",
+      "ravioli"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_200",
+    "name": "Svježi kvasac",
+    "category": "svjeze",
+    "keywords": [
+      "svježi kvasac",
+      "svjezi kvasac",
+      "kvasac",
+      "kvasac svježi",
+      "germa",
+      "fresh yeast"
+    ],
+    "packageSize": 40,
+    "packageUnit": "g",
+    "priceEur": 0.29,
+    "onSale": false
+  },
+  {
+    "id": "p_201",
+    "name": "Bosiljak svježi (lončić)",
+    "category": "svjeze",
+    "keywords": [
+      "svježi bosiljak",
+      "svjezi bosiljak",
+      "bosiljak",
+      "bosiljak lončić",
+      "listići bosiljka",
+      "fresh basil"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_202",
+    "name": "Kopar svježi",
+    "category": "svjeze",
+    "keywords": [
+      "kopar",
+      "svježi kopar",
+      "svjezi kopar",
+      "dill",
+      "vezica kopra"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.59,
+    "onSale": false
+  },
+  {
+    "id": "p_203",
+    "name": "Menta svježa",
+    "category": "svjeze",
+    "keywords": [
+      "menta",
+      "metvica",
+      "svježa menta",
+      "svjeza menta",
+      "mint",
+      "listići mente"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_204",
+    "name": "Kiseli kupus",
+    "category": "svjeze",
+    "keywords": [
+      "kiseli kupus",
+      "kupus kiseli",
+      "sauerkraut",
+      "kiselo zelje"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_205",
+    "name": "Špinat smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "smrznuti špinat",
+      "smrznuti spinat",
+      "špinat",
+      "spinat",
+      "špinat sjeckani",
+      "špinat smrznuti",
+      "spinach"
+    ],
+    "packageSize": 450,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": true
+  },
+  {
+    "id": "p_206",
+    "name": "Grašak smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "grašak",
+      "grasak",
+      "smrznuti grašak",
+      "smrznuti grasak",
+      "zeleni grašak",
+      "peas",
+      "grašak smrznuti"
+    ],
+    "packageSize": 450,
+    "packageUnit": "g",
+    "priceEur": 1.19,
+    "onSale": true
+  },
+  {
+    "id": "p_207",
+    "name": "Miješano povrće smrznuto",
+    "category": "smrznuto",
+    "keywords": [
+      "miješano povrće",
+      "mijesano povrce",
+      "smrznuto povrće",
+      "smrznuto povrce",
+      "povrće za juhu",
+      "povrce za juhu",
+      "mix povrća",
+      "đuveč povrće"
+    ],
+    "packageSize": 450,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_208",
+    "name": "Brokula smrznuta",
+    "category": "smrznuto",
+    "keywords": [
+      "smrznuta brokula",
+      "brokula",
+      "brokula cvjetovi",
+      "brokoli smrznuti",
+      "brokula smrznuta"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_209",
+    "name": "Cvjetača smrznuta",
+    "category": "smrznuto",
+    "keywords": [
+      "smrznuta cvjetača",
+      "smrznuta cvjetaca",
+      "cvjetača",
+      "cvjetaca",
+      "karfiol smrznuti"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.39,
+    "onSale": false
+  },
+  {
+    "id": "p_210",
+    "name": "Mahune smrznute",
+    "category": "smrznuto",
+    "keywords": [
+      "smrznute mahune",
+      "mahune",
+      "mahune smrznute",
+      "green beans"
+    ],
+    "packageSize": 450,
+    "packageUnit": "g",
+    "priceEur": 1.39,
+    "onSale": false
+  },
+  {
+    "id": "p_211",
+    "name": "Edamame",
+    "category": "smrznuto",
+    "keywords": [
+      "edamame",
+      "soja u mahuni",
+      "zelena soja",
+      "edamame grah"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_212",
+    "name": "Mješavina povrća za wok",
+    "category": "smrznuto",
+    "keywords": [
+      "wok povrće",
+      "wok povrce",
+      "povrće za wok",
+      "azijska mješavina povrća",
+      "stir fry povrće",
+      "smrznuto povrće"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_213",
+    "name": "Bobičasto voće smrznuto",
+    "category": "smrznuto",
+    "keywords": [
+      "bobičasto voće",
+      "bobicasto voce",
+      "smrznuto voće",
+      "smrznuto voce",
+      "šumsko voće",
+      "sumsko voce",
+      "mix bobica",
+      "berries",
+      "voće za smoothie"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": true
+  },
+  {
+    "id": "p_214",
+    "name": "Maline smrznute",
+    "category": "smrznuto",
+    "keywords": [
+      "maline",
+      "smrznute maline",
+      "malina",
+      "raspberries"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_215",
+    "name": "Oslić file smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "oslić",
+      "oslic",
+      "oslić file",
+      "oslic file",
+      "bijela riba",
+      "riba",
+      "riblji file",
+      "hake",
+      "smrznuta riba"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 4.99,
+    "onSale": true
+  },
+  {
+    "id": "p_216",
+    "name": "Bakalar file smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "bakalar",
+      "bakalar file",
+      "polarni bakalar",
+      "cod",
+      "bijela riba",
+      "riba",
+      "riblji file"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 5.49,
+    "onSale": false
+  },
+  {
+    "id": "p_217",
+    "name": "Losos file smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "losos",
+      "losos file",
+      "smrznuti losos",
+      "losos smrznuti",
+      "salmon",
+      "riba"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 8.49,
+    "onSale": false
+  },
+  {
+    "id": "p_218",
+    "name": "Kozice smrznute",
+    "category": "smrznuto",
+    "keywords": [
+      "kozice",
+      "škampi",
+      "skampi",
+      "shrimp",
+      "gamberi",
+      "kozice očišćene",
+      "kozice smrznute"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 5.99,
+    "onSale": false
+  },
+  {
+    "id": "p_219",
+    "name": "Lignje očišćene smrznute",
+    "category": "smrznuto",
+    "keywords": [
+      "lignje",
+      "lignja",
+      "očišćene lignje",
+      "ociscene lignje",
+      "squid",
+      "kolutići lignje"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 5.49,
+    "onSale": false
+  },
+  {
+    "id": "p_220",
+    "name": "Riblji štapići",
+    "category": "smrznuto",
+    "keywords": [
+      "riblji štapići",
+      "riblji stapici",
+      "štapići",
+      "fish fingers",
+      "pohana riba"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.49,
+    "onSale": false
+  },
+  {
+    "id": "p_221",
+    "name": "Pileći nuggetsi",
+    "category": "smrznuto",
+    "keywords": [
+      "nuggetsi",
+      "pileći nuggetsi",
+      "pileci nuggetsi",
+      "chicken nuggets",
+      "pohani pileći komadići"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_222",
+    "name": "Pomfrit smrznuti",
+    "category": "smrznuto",
+    "keywords": [
+      "pomfrit",
+      "pomfri",
+      "krumpirići",
+      "krumpirici",
+      "french fries",
+      "smrznuti krumpir"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_223",
+    "name": "Lisnato tijesto",
+    "category": "smrznuto",
+    "keywords": [
+      "lisnato tijesto",
+      "lisnato",
+      "puff pastry",
+      "tijesto lisnato"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": false
+  },
+  {
+    "id": "p_224",
+    "name": "Kruh polubijeli",
+    "category": "pekara",
+    "keywords": [
+      "kruh",
+      "polubijeli kruh",
+      "bijeli kruh",
+      "kruh štruca",
+      "kruh struca",
+      "bread",
+      "kruh za sendvič"
+    ],
+    "packageSize": 700,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": true
+  },
+  {
+    "id": "p_225",
+    "name": "Kruh raženi",
+    "category": "pekara",
+    "keywords": [
+      "raženi kruh",
+      "razeni kruh",
+      "crni kruh",
+      "kruh",
+      "kruh raženi",
+      "rye bread"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.79,
+    "onSale": false
+  },
+  {
+    "id": "p_226",
+    "name": "Kruh integralni",
+    "category": "pekara",
+    "keywords": [
+      "integralni kruh",
+      "kruh integralni",
+      "kruh",
+      "punozrnati kruh",
+      "whole wheat bread"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": true
+  },
+  {
+    "id": "p_227",
+    "name": "Tost kruh",
+    "category": "pekara",
+    "keywords": [
+      "tost",
+      "tost kruh",
+      "kruh za tost",
+      "toast",
+      "tost bijeli",
+      "kruh"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_228",
+    "name": "Tost integralni",
+    "category": "pekara",
+    "keywords": [
+      "integralni tost",
+      "tost integralni",
+      "tost",
+      "kruh za tost integralni"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_229",
+    "name": "Kajzerica",
+    "category": "pekara",
+    "keywords": [
+      "kajzerica",
+      "pecivo",
+      "kajzerice",
+      "žemlja",
+      "zemlja",
+      "peciva"
+    ],
+    "packageSize": 1,
+    "packageUnit": "kom",
+    "priceEur": 0.35,
+    "onSale": false
+  },
+  {
+    "id": "p_230",
+    "name": "Pecivo za hamburger",
+    "category": "pekara",
+    "keywords": [
+      "pecivo za hamburger",
+      "burger pecivo",
+      "hamburger bun",
+      "burger buns",
+      "pecivo burger"
+    ],
+    "packageSize": 4,
+    "packageUnit": "kom",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_231",
+    "name": "Tortilje pšenične",
+    "category": "pekara",
+    "keywords": [
+      "tortilje",
+      "tortilja",
+      "tortilla",
+      "wrap",
+      "wrapovi",
+      "tortilje pšenične",
+      "tortilje psenicne",
+      "meksičke tortilje"
+    ],
+    "packageSize": 8,
+    "packageUnit": "kom",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_232",
+    "name": "Tortilje integralne",
+    "category": "pekara",
+    "keywords": [
+      "integralne tortilje",
+      "tortilje integralne",
+      "tortilje",
+      "wrap integralni",
+      "tortilla"
+    ],
+    "packageSize": 6,
+    "packageUnit": "kom",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_233",
+    "name": "Pita kruh",
+    "category": "pekara",
+    "keywords": [
+      "pita kruh",
+      "pita",
+      "pita bread",
+      "arapski kruh",
+      "pita džep",
+      "pita dzep"
+    ],
+    "packageSize": 6,
+    "packageUnit": "kom",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_234",
+    "name": "Lepinje",
+    "category": "pekara",
+    "keywords": [
+      "lepinje",
+      "lepinja",
+      "somun",
+      "lepinje za ćevape"
+    ],
+    "packageSize": 4,
+    "packageUnit": "kom",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_235",
+    "name": "Kore za pitu",
+    "category": "pekara",
+    "keywords": [
+      "kore za pitu",
+      "kore",
+      "tanke kore",
+      "kore za savijaču",
+      "kore za savijacu",
+      "filo",
+      "jufka"
+    ],
+    "packageSize": 500,
+    "packageUnit": "g",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_236",
+    "name": "Tijesto za pizzu svježe",
+    "category": "pekara",
+    "keywords": [
+      "tijesto za pizzu",
+      "pizza tijesto",
+      "gotovo tijesto",
+      "pizza dough",
+      "tijesto"
+    ],
+    "packageSize": 400,
+    "packageUnit": "g",
+    "priceEur": 1.69,
+    "onSale": false
+  },
+  {
+    "id": "p_237",
+    "name": "Mlinci",
+    "category": "pekara",
+    "keywords": [
+      "mlinci",
+      "mlinci suhi",
+      "mlinac"
+    ],
+    "packageSize": 300,
+    "packageUnit": "g",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_238",
+    "name": "Voda negazirana",
+    "category": "napitci",
+    "keywords": [
+      "voda",
+      "negazirana voda",
+      "prirodna voda",
+      "water",
+      "voda 1.5"
+    ],
+    "packageSize": 1500,
+    "packageUnit": "ml",
+    "priceEur": 0.49,
+    "onSale": false
+  },
+  {
+    "id": "p_239",
+    "name": "Mineralna voda gazirana",
+    "category": "napitci",
+    "keywords": [
+      "mineralna voda",
+      "gazirana voda",
+      "mineralna",
+      "kisela voda",
+      "sparkling water"
+    ],
+    "packageSize": 1500,
+    "packageUnit": "ml",
+    "priceEur": 0.59,
+    "onSale": false
+  },
+  {
+    "id": "p_240",
+    "name": "Zobeni napitak",
+    "category": "napitci",
+    "keywords": [
+      "zobeno mlijeko",
+      "zobeni napitak",
+      "oat milk",
+      "biljno mlijeko",
+      "mlijeko od zobi",
+      "oatly"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.79,
+    "onSale": true
+  },
+  {
+    "id": "p_241",
+    "name": "Bademov napitak",
+    "category": "napitci",
+    "keywords": [
+      "bademovo mlijeko",
+      "bademov napitak",
+      "almond milk",
+      "biljno mlijeko",
+      "mlijeko od badema"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.99,
+    "onSale": false
+  },
+  {
+    "id": "p_242",
+    "name": "Sojin napitak",
+    "category": "napitci",
+    "keywords": [
+      "sojino mlijeko",
+      "sojin napitak",
+      "soy milk",
+      "biljno mlijeko",
+      "mlijeko od soje"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_243",
+    "name": "Sok naranča 100%",
+    "category": "napitci",
+    "keywords": [
+      "sok od naranče",
+      "sok od narance",
+      "sok naranča",
+      "orange juice",
+      "sok",
+      "voćni sok"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.79,
+    "onSale": false
+  },
+  {
+    "id": "p_244",
+    "name": "Sok jabuka 100%",
+    "category": "napitci",
+    "keywords": [
+      "sok od jabuke",
+      "sok jabuka",
+      "apple juice",
+      "sok",
+      "voćni sok"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 1.59,
+    "onSale": false
+  },
+  {
+    "id": "p_245",
+    "name": "Kava mljevena",
+    "category": "napitci",
+    "keywords": [
+      "kava",
+      "mljevena kava",
+      "kafa",
+      "coffee",
+      "kava za džezvu",
+      "turska kava"
+    ],
+    "packageSize": 250,
+    "packageUnit": "g",
+    "priceEur": 3.49,
+    "onSale": true
+  },
+  {
+    "id": "p_246",
+    "name": "Čaj zeleni (vrećice)",
+    "category": "napitci",
+    "keywords": [
+      "zeleni čaj",
+      "zeleni caj",
+      "čaj",
+      "caj",
+      "green tea",
+      "čaj vrećice"
+    ],
+    "packageSize": 20,
+    "packageUnit": "kom",
+    "priceEur": 1.49,
+    "onSale": false
+  },
+  {
+    "id": "p_247",
+    "name": "Čaj kamilica (vrećice)",
+    "category": "napitci",
+    "keywords": [
+      "kamilica",
+      "čaj od kamilice",
+      "caj od kamilice",
+      "čaj",
+      "caj",
+      "biljni čaj"
+    ],
+    "packageSize": 20,
+    "packageUnit": "kom",
+    "priceEur": 1.29,
+    "onSale": false
+  },
+  {
+    "id": "p_248",
+    "name": "Bijelo vino stolno",
+    "category": "napitci",
+    "keywords": [
+      "bijelo vino",
+      "vino",
+      "vino za kuhanje",
+      "bijelo vino za kuhanje",
+      "white wine",
+      "graševina"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 2.99,
+    "onSale": false
+  },
+  {
+    "id": "p_249",
+    "name": "Crno vino stolno",
+    "category": "napitci",
+    "keywords": [
+      "crno vino",
+      "crveno vino",
+      "vino",
+      "red wine",
+      "vino za kuhanje"
+    ],
+    "packageSize": 1000,
+    "packageUnit": "ml",
+    "priceEur": 3.29,
+    "onSale": false
+  }
+]
