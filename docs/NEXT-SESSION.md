@@ -27,6 +27,9 @@ Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <
 4. Tuđe Gemini promjene (kuhai-27) commitane u 942e7b4; radno stablo čisto. Backend deployan 16:03
    (d51397b): onboarding više ne pita "kad imaš sat-dva za prep", nego koliko različitih jela i
    hladno/grijano iz posude (Leon 16:00). Produkcija provjerena.
+   Web deployan 16:25 (cc7ab0b): onboarding bez unaprijed odabranih opcija (obroci, stil, budžet,
+   kuhinje prazni; "Dalje" bez biranja = 3 obroka, meal prep, Normalno, kuhinje "nije rekao");
+   košarica nakon "Potvrdi" pokaže animaciju "Narudžba poslana" (2,6 s, tap zatvara), bez toasta.
 5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
 
 **Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;
