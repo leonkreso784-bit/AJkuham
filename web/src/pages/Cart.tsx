@@ -14,6 +14,7 @@ const SLOTS: Record<OrderMode, string[]> = {
   preuzimanje: ['danas od 18 h', 'sutra od 9 h', 'sutra od 16 h'],
 }
 const CELEBRATE_MS = 2600
+const NO_SLOT = 'termin po dogovoru'
 const orderNo = (planId: string) => `KUH-${planId.replace(/^pl_/, '').slice(0, 6).toUpperCase()}`
 
 export default function Cart() {
@@ -22,8 +23,9 @@ export default function Cart() {
   const [cart, setCart] = useState<CartT | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [orderOpen, setOrderOpen] = useState(false)
-  const [mode, setMode] = useState<OrderMode>('dostava')
-  const [slot, setSlot] = useState(0)
+  // Leon (16:35): ništa unaprijed odabrano, termin neobavezan. Potvrda bez biranja = dostava, termin po dogovoru.
+  const [mode, setMode] = useState<OrderMode | null>(null)
+  const [slot, setSlot] = useState<number | null>(null)
   const [order, setOrder] = useState<{ no: string; mode: OrderMode; slot: string } | null>(null)
   // Leon (16:15): nakon potvrde "neka animacija kao da se naručilo" — kratki ekran s kvačicom, pa nestane sam.
   const [celebrate, setCelebrate] = useState(false)
@@ -76,7 +78,8 @@ export default function Cart() {
     try { await navigator.share({ title: 'KuhAI popis', text: listText() }) } catch { /* korisnik odustao */ }
   }
   const confirmOrder = () => {
-    const o = { no: orderNo(planId), mode, slot: SLOTS[mode][slot]! }
+    const m: OrderMode = mode ?? 'dostava'
+    const o = { no: orderNo(planId), mode: m, slot: slot === null ? NO_SLOT : SLOTS[m][slot]! }
     setOrder(o); buzz([40, 60, 40])
     setCelebrate(true)
     clearTimeout(celebrateTimer.current)
@@ -93,7 +96,7 @@ export default function Cart() {
       {order ? (
         <div className="mt-5 animate-pop rounded-2xl bg-fresh-bg p-4 text-fresh lg:mt-4">
           <p className="font-extrabold">Narudžba {order.no} primljena</p>
-          <p className="mt-0.5 text-sm">{order.mode === 'dostava' ? 'Dostava' : 'Preuzimanje'} {order.slot} · {cart.lines.length} proizvoda · {eur(cart.totalEur)}</p>
+          <p className="mt-0.5 text-sm">{order.mode === 'dostava' ? 'Dostava' : 'Preuzimanje'} · {order.slot} · {cart.lines.length} proizvoda · {eur(cart.totalEur)}</p>
           <button className="mt-2 text-sm font-bold underline" onClick={() => setOrderOpen(true)}>Promijeni</button>
         </div>
       ) : (
@@ -194,7 +197,7 @@ export default function Cart() {
             </div>
             <p className="mt-5 text-2xl leading-tight font-black tracking-tight animate-pop [animation-delay:0.3s] [animation-fill-mode:both]">Narudžba poslana</p>
             <p className="mt-1.5 text-muted text-balance animate-pop [animation-delay:0.45s] [animation-fill-mode:both]">
-              {order.no} · {order.mode === 'dostava' ? 'dostava' : 'preuzimanje'} {order.slot}
+              {order.no} · {order.mode === 'dostava' ? 'dostava' : 'preuzimanje'} · {order.slot}
             </p>
             <div className="mx-auto mt-5 flex items-center justify-center gap-3 animate-pop [animation-delay:0.6s] [animation-fill-mode:both]">
               <Art name="kosarica" className="size-9 animate-wobble [animation-delay:0.6s]" />
@@ -217,21 +220,22 @@ export default function Cart() {
 
             <div className="grid grid-cols-2 gap-2">
               {(['dostava', 'preuzimanje'] as OrderMode[]).map((m) => (
-                <button key={m} onClick={() => { setMode(m); setSlot(0) }} aria-pressed={mode === m}
+                <button key={m} onClick={() => { setMode(mode === m ? null : m); setSlot(null) }} aria-pressed={mode === m}
                   className={cx('rounded-2xl border bg-white p-4 text-left transition-colors', mode === m ? 'border-ink ring-1 ring-ink' : 'border-line hover:border-[#E6D3BF]')}>
                   <span className="flex items-center gap-2"><Art name={m === 'dostava' ? 'kosarica' : 'vrecica'} className="size-7" /><b className="font-extrabold">{m === 'dostava' ? 'Dostava doma' : 'Preuzmi u trgovini'}</b></span>
                   <span className="mt-1 block text-sm text-muted">{m === 'dostava' ? 'Konzum dostava, sve iz košarice' : 'Spremno i spakirano'}</span>
                 </button>
               ))}
             </div>
-            <p className="mt-4 mb-2 text-sm font-bold text-muted">Kad?</p>
+            <p className="mt-4 mb-2 text-sm font-bold text-muted">Kad? <span className="font-normal">Nije obavezno.</span></p>
             <div className="flex flex-wrap gap-2">
-              {SLOTS[mode].map((s, i) => <Chip key={s} on={slot === i} onClick={() => setSlot(i)}>{s}</Chip>)}
+              {SLOTS[mode ?? 'dostava'].map((s, i) => <Chip key={s} on={slot === i} onClick={() => setSlot(slot === i ? null : i)}>{s}</Chip>)}
             </div>
 
             <Button className="mt-5 w-full" onClick={() => { confirmOrder(); setOrderOpen(false) }}>
-              {mode === 'dostava' ? 'Potvrdi dostavu' : 'Potvrdi preuzimanje'}
+              {mode === null ? 'Naruči' : mode === 'dostava' ? 'Potvrdi dostavu' : 'Potvrdi preuzimanje'}
             </Button>
+            {mode === null && <p className="mt-2 text-center text-xs text-muted">Bez odabira ide dostava, termin dogovorimo.</p>}
             <div className="mt-2 grid grid-cols-2 gap-2">
               <Button variant="soft" className="min-h-12 text-[15px]" onClick={copyList}>Kopiraj popis</Button>
               <Button variant="soft" className="min-h-12 text-[15px]" onClick={shareList}>Podijeli popis</Button>

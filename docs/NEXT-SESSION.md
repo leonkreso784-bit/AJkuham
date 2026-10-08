@@ -30,6 +30,8 @@ Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <
    Web deployan 16:25 (cc7ab0b): onboarding bez unaprijed odabranih opcija (obroci, stil, budžet,
    kuhinje prazni; "Dalje" bez biranja = 3 obroka, meal prep, Normalno, kuhinje "nije rekao");
    košarica nakon "Potvrdi" pokaže animaciju "Narudžba poslana" (2,6 s, tap zatvara), bez toasta.
+   "Kako ćeš do namirnica?" (16:40): način i termin nisu unaprijed odabrani, termin neobavezan;
+   gumb "Naruči" bez odabira = dostava, "termin po dogovoru".
 5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
 
 **Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;
