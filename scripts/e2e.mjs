@@ -51,41 +51,28 @@ try {
   await shot(page, '01-landing')
   await page.getByRole('button', { name: 'Kreni kuhati' }).click()
 
-  // 2. Onboarding (8 tapova)
-  await page.getByRole('button', { name: /^3\s/ }).first().click()          // 3 obroka
-  await page.getByRole('button', { name: '2', exact: true }).click()          // 2 osobe
-  await page.getByRole('button', { name: /Meal prep/ }).click()
-  await page.getByRole('button', { name: '30 min' }).click()
-  await page.getByRole('button', { name: 'Jedem sve' }).click()
-  await page.getByRole('button', { name: 'Nemam alergija' }).click()
-  await page.getByRole('button', { name: 'Domaća' }).click()
-  await page.getByRole('button', { name: 'Talijanska' }).click()
+  // 2. Onboarding: 3 ekrana, sve unaprijed namjesteno (2 osobe, 3 obroka, meal prep, Normalno)
+  await page.getByRole('radio', { name: /^3/ }).first().click()              // 3 obroka (default, provjera da radi)
+  await shot(page, '02-onboarding-osnove')
   await page.getByRole('button', { name: 'Dalje' }).click()
-  await shot(page, '02-onboarding-budget')
-  await page.getByRole('button', { name: 'To je to' }).click()
+  await page.getByRole('button', { name: 'Domaća' }).waitFor()
+  await shot(page, '02b-onboarding-ukus')
+  await page.getByRole('button', { name: 'Dalje' }).click()
   log('profil poslan, cekam AI pitanja')
 
-  // 3. AI pitanja: cekaj da se pojavi prvo pitanje (Preskoči) ili odmah summary
-  await page.getByRole('button', { name: /Preskoči|Slikaj frižider/ }).first().waitFor({ timeout: 45_000 })
+  // 3. AI pitanja: najvise 2, na jednom ekranu; skeleton nestane kad stignu
+  await page.getByText(/Ovo bi mi još pomoglo|imam sve što trebam/).waitFor({ timeout: 45_000 })
   await fallbackBadge('nakon pitanja')
-  let qCount = 0
-  while (await page.getByRole('button', { name: 'Preskoči' }).count()) {
-    if (qCount === 0) await shot(page, '03-ai-question')
-    const q = await page.locator('main').innerText().then((t) => t.split('\n').filter(Boolean).at(-3))
-    log(`pitanje ${++qCount}: ${q?.slice(0, 90)}`)
-    await page.getByRole('button', { name: 'Preskoči' }).click()
-    await page.waitForTimeout(300)
-    if (qCount > 8) break
-  }
-  log(`AI pitanja: ${qCount}`)
-  await shot(page, '04-summary')
+  const qCount = await page.locator('main section h2').count()
+  log(`AI pitanja na ekranu: ${qCount}`)
+  await shot(page, '03-ai-questions')
   await page.getByRole('button', { name: 'Slikaj frižider' }).click()
   await page.waitForURL(/\/frizider/, { timeout: 20_000 })
 
   // 4. Frižider: fotka -> vision
   await shot(page, '05-fridge-pick')
   if (PHOTO) {
-    await page.locator('input[type=file]').setInputFiles(PHOTO)
+    await page.locator('input[type=file]').first().setInputFiles(PHOTO)
     log('fotka poslana, cekam vision')
     await page.getByRole('button', { name: 'Složi mi tjedan' }).waitFor({ timeout: 60_000 })
     await fallbackBadge('nakon scana')

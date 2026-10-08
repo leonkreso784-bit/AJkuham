@@ -169,3 +169,9 @@ usporedba s dostavom. Sve to radi.
   `profiles.diet_note` dodane `drizzle-kit push` na produkcijsku bazu 15:35. Tvrda provjera
   sastojaka (swap, kandidati) i prompt gledaju uniju svih dijeta; `dietNote` ide planeru doslovno.
   Testovi A5/A6. Frontend: čipovi s više izbora, "Ostalo" otvara tekst, "Dalje".
+- **15:30 Onboarding u 3 ekrana** (Leonov prompt "anketa je preduga" izvršila sesija kuhai-27, preuzela ga e9 uz Leonovu
+  potvrdu): Osnove (koliko vas, obroci s upisom broja 2–5, kako kuhaš, budžet po porciji) → Ukus (više dijeta + Ostalo,
+  alergije, kuhinje, "Iznenadi me") → Za tebe (najviše 2 AI pitanja, prefetch na koraku 2). Sve preskočivo.
+  Dizajn bilješke i snimke: `docs/onboarding-redesign/`. E2E skripta prilagođena.
+- **Profil ekran** (`/profil`, 4. tab): pregled i izmjena svega odabranog, jela s kartica, "Kreni ispočetka". Bez nove baze.
+- **PWA:** `manifest.webmanifest`, ikone iz logoa (192/512/maskable/apple-touch), "Dodaj na početni zaslon" bez trake preglednika.
