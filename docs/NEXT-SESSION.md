@@ -4,34 +4,27 @@ Copy-paste materijal. Ne treba ništa prepričavati ni iznova objašnjavati.
 
 ---
 
-## 0. Prije svega — odblokiraj bazu
+## 0. Baza je spremna — samo provjeri
 
-Ovo je **jedina** stvar koja blokira kod. Dok nema `DATABASE_URL`, ostalo nema smisla.
+Railway projekt `ajkuham` + Postgres 18 (EU West) postoji, shema je
+primijenjena, `.env` ima connection string preko javnog TCP proxyja
+(`maglev.proxy.rlwy.net:36534`). Interni `postgres.railway.internal` ne radi s
+laptopa — zato proxy.
 
-**Put A — Railway** (ono što dokumentacija pretpostavlja)
-Plaćeno je, ali CLI javlja istekao trial. Provjeri na railway.com da je plan na
-**workspaceu `LeonKreso's Projects`**, ne samo na osobnom accountu. Pa:
-
-```bash
-railway init --name ajkuham --workspace "7f104d7d-91e5-402a-ae58-e1cc7bb7d96b" --json
-railway add --database postgres --json
-railway variables          # kopiraj DATABASE_URL u .env
-```
-
-**Put B — Neon preko Vercela** (besplatno, radi odmah)
-Prihvati uvjete u browseru:
-https://vercel.com/leon-kresos-projects/~/integrations/accept-terms/neon?source=cli
+Provjera u 10 sekundi:
 
 ```bash
-vercel --non-interactive integration add neon --no-claim --name ajkuham-db
-vercel env pull --yes      # upise DATABASE_URL
+npm run db:push      # mora reći "No changes detected" ili primijeniti razliku
 ```
 
-Pa u oba slučaja:
+Ako `.env` fali ili je pokvaren, string se sastavlja iz:
 
 ```bash
-npm run db:push
+railway variables --service Postgres --json     # PGUSER, POSTGRES_PASSWORD, PGDATABASE
+railway tcp-proxy list --service Postgres       # host i port
 ```
+
+→ `postgresql://<PGUSER>:<POSTGRES_PASSWORD>@<proxy-host>:<proxy-port>/<PGDATABASE>`
 
 ---
 
@@ -119,9 +112,13 @@ Oblik: { id, name, category, keywords[], packageSize, packageUnit, priceEur, onS
 - ispis: ukupno + broj po kategoriji + broj na akciji
 - validacija padne -> ispiši KOJI red i zašto, process.exit(1)
 
-Na kraju OBAVEZNO: npx tsc --noEmit mora biti exit 0.
-Ako DATABASE_URL radi, pokreni i npm run db:seed. Ako ne radi, preskoči.
-Ne commitaj, ne pushaj.
+NE TRAŽI PRAVE CIJENE. Postoji crawler za službene hrvatske cjenike
+(cijene-api) i svjesno ga ne koristimo — odluka D20. Cijene izmišljaš, ali
+realno. Ono što MORA biti točno je packageSize, ne cijena do centa: publika ne
+provjerava cijene, provjerava izgleda li košarica razumno.
+
+Na kraju OBAVEZNO: npx tsc --noEmit mora biti exit 0, i pokreni npm run db:seed
+(baza radi, Railway Postgres preko proxyja je u .env). Ne commitaj, ne pushaj.
 
 Javi: broj proizvoda, broj po kategoriji, broj na akciji, je li tsc čist.
 ```

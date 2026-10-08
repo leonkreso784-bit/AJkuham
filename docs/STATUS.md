@@ -11,9 +11,9 @@ akcija.
 
 ## TL;DR
 
-Sve je napisano i temelj stoji, `tsc --noEmit` je čist. Fali **jedna stvar**:
-radna `DATABASE_URL`. Jedan klik je rješava. Nakon toga se ide ravno na
-`docs/PLAN.md` korak S1, s 4 agenta paralelno.
+**Nema blokada.** Sve je napisano, temelj stoji, `tsc --noEmit` je čist, baza
+radi i shema je primijenjena. Sljedeća sesija ide ravno na `docs/PLAN.md` korak
+S1, s 4 agenta paralelno.
 
 ---
 
@@ -64,26 +64,32 @@ vrijedi odmah i u svakoj novoj sesiji. Zeleno >3 h, žuto 1–3 h, crveno <1 h.
 
 ---
 
-## Blokada — jedna
+## Baza — riješeno
 
-### Baza
+Railway projekt **`ajkuham`** (`381157da-303a-4bad-92f3-2e43043ac9af`),
+workspace `LeonKreso's Projects`, environment `production`.
+Postgres 18, EU West, volume 4.9 GB.
 
-**Railway je plaćen ali ne radi.** CLI i dalje odbija kreiranje projekta s
-`Your trial has expired. Please select a plan to continue.` Provjereno tri puta
-nakon uplate. Token je u keyringu pa se stanje naplate ne može provjeriti iz
-koda — vidi se samo da Railway odbija.
+**Shema je primijenjena** (`npm run db:push`, svih 7 tablica + foreign keyevi).
 
-Najvjerojatniji uzrok: plan je vezan na osobni account, a ne na **workspace
-`LeonKreso's Projects`** (`7f104d7d-91e5-402a-ae58-e1cc7bb7d96b`). Na Railwayu
-su to dvije odvojene stvari. Provjeriti: railway.com → prebaci na taj workspace
-→ Settings → Plans, i Settings → Billing je li kartica naplaćena.
+Jedna zamka za sljedeću sesiju: Railwayev `DATABASE_URL` pokazuje na
+`postgres.railway.internal`, što **ne radi izvan Railwayeve mreže**. Zato je
+kreiran javni TCP proxy:
 
-**Preporuka: ne čekati Railway.** Neon je besplatan i jedan klik:
-https://vercel.com/leon-kresos-projects/~/integrations/accept-terms/neon?source=cli
+```
+maglev.proxy.rlwy.net:36534  ->  Postgres:5432
+```
 
-Točne komande za oba puta su u `docs/NEXT-SESSION.md`, sekcija 0.
-`postgres.js` je izabran upravo zato da se putevi mogu mijenjati — jedina
-razlika je `DATABASE_URL`.
+`.env` već sadrži connection string preko tog proxyja. Ako ga treba ponovno
+izvući:
+
+```bash
+railway variables --service Postgres --json     # PGUSER, POSTGRES_PASSWORD, PGDATABASE
+railway tcp-proxy list --service Postgres       # host i port proxyja
+```
+
+Kad backend bude deployan **na Railway**, tamo treba koristiti interni
+`DATABASE_URL` (brže i bez prolaza kroz proxy); lokalno ide proxy verzija.
 
 ### Dizajn i logo
 Ekipa radi, nije gotovo. **Ne blokira backend.** Kad dođe, ide u repo i README.

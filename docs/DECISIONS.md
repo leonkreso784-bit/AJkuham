@@ -107,6 +107,25 @@ marketing, brojka s pretpostavkom je argument, i ako se netko ne slaže, neka se
 ne slaže s pretpostavkom. Brojka je množenje u `cart.ts`, nikad procjena modela —
 vrijedi D6.
 
+### D20 — Katalog ostaje izmišljen, iako postoji pravi izvor
+Pronađen je `cijene-api` (github.com/senko/cijene-api): Python crawler za
+**službene cjenike** hrvatskih lanaca, koje su trgovci obvezni javno
+objavljivati po Odluci NN 75/2025. Podržava Konzum, Lidl, Plodine, Spar, Tommy,
+Kaufland, Studenac, dm i još ~20 lanaca. Nema hostani API — crawler se vrti
+lokalno i ispljune CSV.
+
+**Svjesno ga ne koristimo za demo.** Prave cijene bi bile jači argument od
+realnih, i otvorile bi usporedbu Konzum vs Lidl skoro besplatno. Ali: output
+treba prevesti u naš format, a veličine pakiranja su u cjenicima zapisane
+unutar naziva proizvoda, pa traže parsiranje s nepredvidivim rubnim
+slučajevima. To je 30–50 minuta s neizvjesnošću, a publika ne provjerava
+cijene — provjerava izgleda li košarica razumno, a to rješava `packageSize`,
+ne tačnost cijene do centa.
+
+Ako ostane vremena nakon S6, ovo je prva stvar koju vrijedi dodati: crawler se
+vrti **jednom, offline**, rezultat se commita kao `data/konzum-products.json`.
+Na demu nikad nema Pythona ni mrežnog poziva prema trgovinama.
+
 ### D19 — Shake ostaje, ali je prvi na rezu
 Natjecanje se zove SHAKER; `POST /api/plan/:id/shake` je ~10 linija koje zovu
 istu swap funkciju, pa ga nema smisla ne imati. Ali nije nosiv: ako kasnimo, pada
