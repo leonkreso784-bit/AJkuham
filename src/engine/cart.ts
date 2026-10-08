@@ -82,7 +82,7 @@ function round2(n: number): number {
 // --- 1) Normalizacija + agregacija ---
 
 /** Sastojci koje model navede a ne idu u kosaricu: voda iz slavine, led. */
-const IGNORED_INGREDIENT = /(^|s)(voda|led)(s|$)|^voda za /
+const IGNORED_INGREDIENT = /(^|\s)(voda|led)(\s|$)|^voda za /
 
 function aggregateIngredients(meals: MealForCart[]): AggregatedIngredient[] {
   const byKey = new Map<string, AggregatedIngredient>()
