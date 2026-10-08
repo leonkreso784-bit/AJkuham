@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { api } from '../api/client'
 import type { MealDetail, Plan as PlanT, PlanMeal, PrepBlock, Track } from '../api/types'
-import { Button, CountUp, SLOT_LABEL, Shell, Spinner, cx, eur } from '../components/ui'
+import { Button, CountUp, SLOT_LABEL, Shell, Spinner, Toast, buzz, cx, eur, useToast } from '../components/ui'
 import { MealImage } from '../components/MealImage'
 import { getState, setState, useStore } from '../store'
 
@@ -54,6 +54,7 @@ export default function Plan() {
   const [flash, setFlash] = useState<string | null>(null)
   const [shaking, setShaking] = useState(false)
   const [genBudget, setGenBudget] = useState<number | undefined>(undefined)
+  const [toast, showToast] = useToast()
 
   const generate = useCallback(async (b?: number) => {
     setLoading(true); setErr(null); setGenBudget(b)
@@ -80,16 +81,27 @@ export default function Plan() {
     setShaking(true)
     try {
       const { replacedMealId, meal } = await api.shake(p.planId)
+      if (meal.swapFailed) {
+        // backend nije našao zamjenu i vratio je stari obrok; bez ovoga shake izgleda kao da ništa nije napravio
+        buzz([40, 60, 40])
+        showToast('Nisam uspio naći zamjenu, protresi još jednom.', 'hot')
+        return
+      }
+      const old = p.days.flatMap((d) => d.meals).find((m) => m.id === replacedMealId)
       const next = replaceMeal(p, replacedMealId, meal)
       setState({ plan: next })
       const idx = next.days.findIndex((d) => d.meals.some((m) => m.id === meal.id))
       if (idx >= 0) setDay(idx)
+      buzz(80)
+      showToast(old ? `Zamijenio sam ${old.title} za ${meal.title}.` : `Novo jelo: ${meal.title}.`)
       setFlash(meal.id)
+      // na mobitelu je nova kartica često ispod ruba ekrana, dovedi je u kadar dok se okreće
+      setTimeout(() => document.getElementById(`meal-${meal.id}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 60)
       setTimeout(() => setFlash(null), 1600)
     } catch (e) {
       setErr((e as Error).message)
     } finally { setShaking(false) }
-  }, [shaking])
+  }, [shaking, showToast])
 
   useShake(shake)
 
@@ -204,6 +216,7 @@ export default function Plan() {
           <div className="mt-8 lg:hidden"><Button className="w-full" onClick={() => nav('/kosarica')}>Pogledaj košaricu</Button></div>
         </div>
       </div>
+      <Toast msg={toast} />
     </Shell>
   )
 }
@@ -302,9 +315,9 @@ function PrepCard({ b }: { b: PrepBlock }) {
 
 function MealCard({ m, flash }: { m: PlanMeal; flash: boolean }) {
   return (
-    <Link to={`/obrok/${m.id}`}
+    <Link to={`/obrok/${m.id}`} id={`meal-${m.id}`}
       className={cx('flex items-center gap-3.5 rounded-2xl border border-line bg-white p-3 transition-colors hover:border-[#E6D3BF] active:translate-y-px lg:flex-col lg:items-stretch lg:gap-0 lg:overflow-hidden lg:p-0',
-        flash && 'animate-wobble ring-2 ring-brand/40')}>
+        flash && 'animate-flip ring-2 ring-brand/40')}>
       <MealImage title={m.title} className="size-16 shrink-0 rounded-xl lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-none" artClassName="size-3/4 lg:size-1/2" />
       <span className="min-w-0 flex-1 lg:px-4 lg:pt-3 lg:pb-4">
         <span className="block text-sm text-muted">{SLOT_LABEL[m.slot]}</span>

@@ -16,6 +16,9 @@ interface Row {
 }
 
 const urgencyOf = (d?: number): Urgency => (d == null ? 'ok' : d <= 2 ? 'umire' : d <= 7 ? 'skoro' : 'ok')
+const daysLabel = (d?: number) => (d == null ? 'bez roka' : d === 0 ? 'danas' : `${d} ${d === 1 ? 'dan' : 'dana'}`)
+const URGENCY_TEXT: Record<Urgency, string> = { umire: 'text-hot', skoro: 'text-warn', ok: 'text-muted' }
+const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 
 const GROUPS: { u: Urgency; title: string; sub: string }[] = [
   { u: 'umire', title: 'Treba potrošiti odmah', sub: 'ide prvo u plan' },
@@ -34,16 +37,28 @@ export default function Fridge() {
   const [followUps, setFollowUps] = useState<string[]>([])
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
+  // sken "živi": odgovor stigne odjednom, a mi ga otkrivamo namirnicu po namirnicu prije reviewa
+  const [found, setFound] = useState<Row[]>([])
+  const [revealed, setRevealed] = useState(0)
 
   async function onFile(f: File | undefined) {
     if (!f) return
     setErr(null)
     setPhoto(URL.createObjectURL(f))
     setPhase('scan')
+    setFound([]); setRevealed(0)
     try {
       const res = await api.scan(f)
-      setRows((prev) => [...prev, ...res.items.map((i) => ({ ...i, key: ++k }))])
+      const fresh: Row[] = res.items.map((i) => ({ ...i, key: ++k }))
       setFollowUps(res.followUpQuestions)
+      setFound(fresh)
+      for (let i = 1; i <= fresh.length; i++) {
+        await wait(i === 1 ? 350 : 230)
+        setRevealed(i)
+      }
+      if (fresh.length) await wait(750)
+      setRows((prev) => [...prev, ...fresh])
+      setFound([]); setRevealed(0)
       setPhase('review')
     } catch (e) {
       setErr((e as Error).message)
@@ -98,18 +113,28 @@ export default function Fridge() {
       {phase === 'scan' && (
         <div className="mx-auto max-w-xl lg:grid lg:max-w-none lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-10">
           <div>
-            <Title sub="Čitam namirnice i rokove.">Prepoznajem…</Title>
+            {found.length
+              ? <Title sub="Čitam rokove i slažem po hitnosti.">Našao sam {found.length} {found.length === 1 ? 'namirnicu' : found.length < 5 ? 'namirnice' : 'namirnica'}</Title>
+              : <Title sub="Čitam namirnice i rokove.">Prepoznajem…</Title>}
             <div className="relative overflow-hidden rounded-2xl bg-ink">
               {photo && <img src={photo} alt="" className="block max-h-80 w-full object-cover opacity-80 lg:max-h-[28rem]" />}
-              <div className="absolute inset-x-0 h-0.5 animate-scan bg-white shadow-[0_0_16px_4px_rgb(255_255_255/0.7)]" />
-              <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-ink/75 px-3 py-1.5 text-sm font-bold text-white">
-                <Spinner className="size-4 border-2" /> čitam rokove…
+              {!found.length && <div className="absolute inset-x-0 h-0.5 animate-scan bg-white shadow-[0_0_16px_4px_rgb(255_255_255/0.7)]" />}
+              <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-ink/75 px-3 py-1.5 text-sm font-bold text-white tabular-nums">
+                {found.length ? <>{revealed} / {found.length}</> : <><Spinner className="size-4 border-2" /> čitam rokove…</>}
               </div>
             </div>
+            {/* mobitel: nađene namirnice iskaču ispod fotke */}
+            <ul className="mt-3 flex flex-col gap-2 lg:hidden">
+              {found.slice(0, revealed).map((r) => <FoundRow key={r.key} r={r} />)}
+            </ul>
           </div>
-          <div className="hidden flex-col gap-2 pt-[5.5rem] lg:flex" aria-hidden>
-            {[0, 1, 2, 3, 4].map((i) => <div key={i} className="h-[5.5rem] animate-pulse rounded-2xl border border-line bg-white" style={{ animationDelay: `${i * 120}ms` }} />)}
-          </div>
+          {/* desktop: desni stupac, nađene iskaču u prazna mjesta */}
+          <ul className="hidden flex-col gap-2 pt-[5.5rem] lg:flex">
+            {found.slice(0, revealed).map((r) => <FoundRow key={r.key} r={r} />)}
+            {Array.from({ length: Math.max(0, (found.length || 5) - revealed) }).map((_, i) => (
+              <li key={`s${i}`} aria-hidden className="h-14 animate-pulse rounded-2xl border border-line bg-white" style={{ animationDelay: `${i * 120}ms` }} />
+            ))}
+          </ul>
         </div>
       )}
 
@@ -177,6 +202,20 @@ function Actions({ onPhoto, onAdd, onSave, busy }: { onPhoto: () => void; onAdd:
   )
 }
 
+// Jedna nađena namirnica dok sken "živi": ilustracija, ime, rok. Bez uređivanja, to dolazi u reviewu.
+function FoundRow({ r }: { r: Row }) {
+  const u = urgencyOf(r.expiresInDays)
+  return (
+    <li className={cx('flex h-14 animate-pop items-center gap-3 rounded-2xl border px-3',
+      u === 'umire' ? 'border-[#F7C9B4] bg-hot-bg' : 'border-line bg-white')}>
+      <Art name={ingredientArt(r.name)} className="size-8 shrink-0" />
+      <b className="min-w-0 flex-1 truncate font-extrabold first-letter:uppercase">{r.name}</b>
+      {r.confidence < 0.6 && <Pill tone="warn">nisam siguran</Pill>}
+      <span className={cx('shrink-0 text-sm font-extrabold tabular-nums', URGENCY_TEXT[u])}>{daysLabel(r.expiresInDays)}</span>
+    </li>
+  )
+}
+
 const DAY_BTN = 'grid size-8 place-items-center rounded-full bg-cream font-bold transition-colors hover:bg-[#FFE9CF]'
 
 function ItemRow({ r, onChange, onRemove }: { r: Row; onChange: (p: Partial<Row>) => void; onRemove: () => void }) {
@@ -205,8 +244,8 @@ function ItemRow({ r, onChange, onRemove }: { r: Row; onChange: (p: Partial<Row>
         </div>
         <div className="ml-auto flex items-center gap-1">
           <button className={DAY_BTN} onClick={() => onChange({ expiresInDays: Math.max(0, (r.expiresInDays ?? 7) - 1) })} aria-label="Dan manje">−</button>
-          <span className={cx('min-w-[4.25rem] text-center text-sm font-extrabold tabular-nums', u === 'umire' ? 'text-hot' : u === 'skoro' ? 'text-warn' : 'text-muted')}>
-            {r.expiresInDays == null ? 'bez roka' : r.expiresInDays === 0 ? 'danas' : `${r.expiresInDays} ${r.expiresInDays === 1 ? 'dan' : 'dana'}`}
+          <span className={cx('min-w-[4.25rem] text-center text-sm font-extrabold tabular-nums', URGENCY_TEXT[u])}>
+            {daysLabel(r.expiresInDays)}
           </span>
           <button className={DAY_BTN} onClick={() => onChange({ expiresInDays: (r.expiresInDays ?? 6) + 1 })} aria-label="Dan više">+</button>
         </div>

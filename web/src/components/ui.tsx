@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { NavLink } from 'react-router'
 import { useFallback, usingMock } from '../api/client'
 import { Art, type ArtName } from '../illustrations'
@@ -185,6 +185,38 @@ export function CountUp({ value, format = eur, ms = 1100 }: { value: number; for
 }
 
 export const eur = (n: number) => n.toLocaleString('hr-HR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'
+
+// Kratka poruka pri dnu (iznad donje trake na mobitelu). Nestaje sama; roditelj drži stanje preko useToast().
+export interface ToastMsg { text: string; tone?: 'ink' | 'hot' }
+export function useToast(ms = 2800) {
+  const [toast, setToast] = useState<ToastMsg | null>(null)
+  const timer = useRef(0)
+  const show = useCallback((text: string, tone: ToastMsg['tone'] = 'ink') => {
+    clearTimeout(timer.current)
+    setToast({ text, tone })
+    timer.current = window.setTimeout(() => setToast(null), ms)
+  }, [ms])
+  useEffect(() => () => clearTimeout(timer.current), [])
+  return [toast, show] as const
+}
+
+export function Toast({ msg }: { msg: ToastMsg | null }) {
+  if (!msg) return null
+  return (
+    <div role="status" aria-live="polite"
+      className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+5.25rem)] z-40 flex justify-center px-5 lg:bottom-8">
+      <div className={cx('animate-toast max-w-xl rounded-2xl px-4 py-3 text-[15px] leading-snug font-bold text-white shadow-card',
+        msg.tone === 'hot' ? 'bg-hot' : 'bg-ink')}>
+        {msg.text}
+      </div>
+    </div>
+  )
+}
+
+// Kratka vibracija gdje je podržana (Android Chrome). iOS Safari nema navigator.vibrate pa tiho preskače.
+export function buzz(pattern: number | number[] = 80) {
+  try { navigator.vibrate?.(pattern) } catch { /* nije podržano */ }
+}
 
 export const SLOT_LABEL: Record<string, string> = {
   dorucak: 'Doručak', rucak: 'Ručak', vecera: 'Večera', snack1: 'Užina', snack2: 'Užina',

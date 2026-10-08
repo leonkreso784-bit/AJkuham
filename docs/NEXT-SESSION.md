@@ -262,11 +262,14 @@ Responzivno provjereno na 375 / 390 / 768 / 1024 / 1440 px, bez horizontalnog sc
 
 ## F6. Sljedeće, po vrijednosti za demo / vremenu
 
-1. **Sken "živi":** dok traje scan, namirnice iskaču jedna po jedna s ilustracijom
-   i rokom (`Fridge.tsx`, faza `scan`). ~30 min
-2. **Shake feedback:** `navigator.vibrate(80)`, kartica se okrene, toast
-   "Zamijenio sam X za Y". Na `swapFailed` toast "Nisam uspio, probaj opet"
-   (`Plan.tsx` `shake`, `Meal.tsx` `swap`). ~20 min
+0. **NOVO (Leon, 14:25): swipe kartice kvačica / X s flipom na recept.** Spec, odluke
+   i plan za frontend + backend u **`docs/SWIPE.md`**. Čeka Leonov odgovor na
+   odluke 1–2 (gdje u toku, odakle kartice); Faza 2 traži `api!:` commit.
+1. ~~Sken "živi"~~ **Gotovo 14:45:** odgovor se otkriva namirnicu po namirnicu
+   (230 ms) s ilustracijom i rokom, brojač "3 / 7" na fotki, pa review (`Fridge.tsx`, `FoundRow`).
+2. ~~Shake feedback~~ **Gotovo 14:45:** `buzz()` (vibrate), kartica `animate-flip`,
+   toast "Zamijenio sam X za Y", scroll do kartice; na `swapFailed` crveni toast
+   "Nisam uspio naći zamjenu" (`Plan.tsx`, `Meal.tsx`; `Toast`/`useToast`/`buzz` u `ui.tsx`).
 3. **Prijelazi** između ruta (View Transitions API) + fotka iz kartice "naraste"
    u hero recepta. ~20 min
 4. **PWA manifest** + ikona lonca: dodaj na početni zaslon, bez trake preglednika

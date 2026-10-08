@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { api } from '../api/client'
 import type { MealDetail } from '../api/types'
-import { Button, Pill, SLOT_LABEL, Spinner, TopBar, cx, foodTint } from '../components/ui'
+import { Button, Pill, SLOT_LABEL, Spinner, Toast, TopBar, buzz, cx, foodTint, useToast } from '../components/ui'
 import { Art, ingredientArt, mealArt } from '../illustrations'
 import { mealPhoto } from '../food'
 import { getState, setState } from '../store'
@@ -19,6 +19,7 @@ export default function Meal() {
   const [swapping, setSwapping] = useState(false)
   const [done, setDone] = useState<Set<number>>(new Set())
   const [photoFailed, setPhotoFailed] = useState(false)
+  const [toast, showToast] = useToast()
 
   useEffect(() => {
     let live = true
@@ -32,9 +33,17 @@ export default function Meal() {
     setSwapping(true); setErr(null)
     try {
       const m = await api.swap(id, reason)
+      setSwapOpen(false)
+      if (m.swapFailed) {
+        // backend je vratio isti obrok; reci to umjesto da sheet samo nestane
+        buzz([40, 60, 40])
+        showToast('Nisam uspio naći zamjenu, probaj opet.', 'hot')
+        return
+      }
       const plan = getState().plan
       if (plan) setState({ plan: replaceMeal(plan, id, m) })
-      setSwapOpen(false)
+      buzz(80)
+      showToast(`Zamijenio sam ${meal?.title ?? 'jelo'} za ${m.title}.`)
       nav(`/obrok/${m.id}`, { replace: true })
     } catch (e) {
       setErr((e as Error).message)
@@ -149,6 +158,8 @@ export default function Meal() {
           <Button variant="soft" className="w-full" onClick={() => setSwapOpen(true)}>Ne jede mi se ovo</Button>
         </div>
       </div>
+
+      <Toast msg={toast} />
 
       {swapOpen && (
         <div className="fixed inset-0 z-30 flex items-end justify-center bg-ink/40 lg:items-center lg:p-6" onClick={() => !swapping && setSwapOpen(false)}>

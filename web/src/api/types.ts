@@ -86,6 +86,8 @@ export interface MealDetail {
   why: string
   usesExpiring: string[]
   nutrition: { kcal: number; protein: number; carbs: number; fat: number } | null
+  // Samo iz /swap i /shake: backend nije uspio naći zamjenu pa je vratio STARI obrok (nije u API.md, dodatno polje).
+  swapFailed?: boolean
 }
 
 export interface CartLine {

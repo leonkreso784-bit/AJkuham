@@ -82,6 +82,7 @@ docs/
   PLAN.md           raspored po satima + podjela na agente
   DECISIONS.md      zašto je nešto odlučeno tako
   FRONTEND.md       što frontend tim treba znati
+  SWIPE.md          spec za swipe kartice (kvačica / X, flip = recept), čeka odluke
 web/                FRONTEND (Vite 8 + React 19 + Tailwind v4), vlastiti package.json
   src/main.tsx      rute + Splash
   src/pages/        Landing, Onboarding, Fridge, Plan, Meal, Cart
