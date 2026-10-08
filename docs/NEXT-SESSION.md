@@ -1,9 +1,60 @@
-# KuhAI — brief za sesiju spajanja frontenda i backenda
+# KuhAI — brief za sljedeću sesiju (backend + frontend)
 
-Dva dijela. **Backend dio** piše backend sesija (ovo ispod). **Frontend dio** dopisuje
-frontend sesija na dnu, pod svojim naslovom. Stanje backenda u detalje: `docs/STATUS.md`.
+Jedan fajl, tri dijela: **KICKOFF** (zalijepi), **BACKEND DIO** (§0–7, backend sesija),
+**FRONTEND DIO** (F0–F8, frontend sesija). Stanje backenda u detalje: `docs/STATUS.md`.
 
 Rok: **18:48** (`.claude/deadline.json`, vidi se u statuslineu).
+
+---
+
+## KICKOFF — zalijepi ovo na početku sljedeće sesije (jedna sesija radi oboje)
+
+```text
+Radimo KuhAI, hackathon SHAKER. Rok je u .claude/deadline.json i vidi se u statuslineu.
+Ova sesija radi i BACKEND i FRONTEND.
+
+Backend:  C:UsersleonkDocumentsSHAKER projekt  (git, main, live na Railwayu)
+          https://kuhai-api-production.up.railway.app  (/health)
+Frontend: C:UsersleonkDocumentsKuhAIapp  (Vite 8 + React 19 + TS + Tailwind v4
+          + react-router 8 + gsap). NIJE u gitu, nema backupa.
+
+Pročitaj prvo, u ovom redu:
+  docs/NEXT-SESSION.md      oba dijela: BACKEND (§0–7) i FRONTEND (F0–F8)
+  docs/STATUS.md            stanje backenda, zamke, treći krug testova
+  docs/API.md               ZAMRZNUTI kontrakt, 13 ruta
+  docs/FRONTEND.md          4 demo trenutka koje UI mora prenijeti
+  KuhAI/app/src/api/client.ts   kako frontend zove backend (timeouti + mock fallback)
+  KuhAI/app/src/index.css       dizajn tokeni
+  KuhAI/app/src/components/ui.tsx  Shell, TopBar, TabBar, Button, Chip, CountUp
+
+PRVI KORAK: pitaj me za F7. Frontend treba u git: prijedlog je preseliti ga u ovaj
+repo kao web/ (bez node_modules, dist, .env.local) i commitati na main. To mijenja
+pravilo iz CLAUDE.md "repo je backend", zato traži moju potvrdu.
+
+BACKEND pravila:
+- docs/API.md se mijenja samo commitom koji počinje s api!: i uz moju potvrdu.
+- Deploy samo uz najavu: railway up zamijeni kontejner, pa je API ~30 s na 502.
+- Redoslijed za svaku promjenu: npm run typecheck → pozovi rutu → commit na main
+  → push → railway up --service kuhai-api -d → javi kad je gore.
+- Kad "nešto ne radi": prvo curl /health, pa railway logs --service kuhai-api,
+  tek onda kod (checklista u §2). "credit balance is too low" = Anthropic kredit,
+  nije bug (preklopnik na Gemini u §4).
+- Lokalno: PORT=3001 npm run dev (3000 je zauzet).
+- Testovi: node scripts/backend-tests.mjs [baseUrl] (99 provjera, ~3 min).
+
+FRONTEND pravila:
+- Vizualne promjene i promjene logike rade se odvojeno; API/state/rute ne dirati usput.
+- Dizajn je dogovoren (F3): bez emojija, bez uppercase "kicker" labela, jedan crveni
+  CTA po ekranu, Tailwind klase u markupu (ne custom CSS), clay samo kao dašak.
+- Responzivno: < 1024 px mobilni layout, >= 1024 px desktop. Svaku promjenu
+  pogledaj na 1440 i 390 px (Playwright screenshot u
+  "C:UsersleonkDocumentsSHAKER projekt.playwright-mcp\", jedini dopušten folder).
+- Nakon svake promjene: npm run build čist, pa pogledaj ekran. "Trebalo bi raditi" ne vrijedi.
+- Za veći Tailwind posao koristi tailwind agenta. Ilustracije su u src/illustrations,
+  nove crtaj u istom stilu (F3).
+- Ne spremaj frontend fajlove dok traje demo prolaz (HMR prekida plan/generate).
+- Dev server: npx vite --port 5180 --strictPort --host u KuhAI/app (F0).
+```
 
 ---
 
@@ -32,32 +83,9 @@ Rok: **18:48** (`.claude/deadline.json`, vidi se u statuslineu).
 Skripta: `node scripts/backend-tests.mjs` (99 provjera, ~3 min, 4 generatea od kojih 2 paralelno).
 Detalji u `docs/STATUS.md`, sekcija "Treći krug".
 
-## 1. Kickoff prompt za sesiju spajanja — zalijepi na početku
+## 1. Kickoff prompt
 
-```text
-Radimo KuhAI, hackathon SHAKER, rok u .claude/deadline.json.
-Backend: C:\Users\leonk\Documents\SHAKER projekt (ovaj repo, live na Railwayu).
-Frontend: C:\Users\leonk\Documents\KuhAI\app (Vite + React, nije git).
-
-Pročitaj prvo, u ovom redu:
-  docs/NEXT-SESSION.md   oba dijela, backend i frontend
-  docs/STATUS.md         stanje backenda, zamke, treći krug testova
-  docs/API.md            ZAMRZNUTI kontrakt, 13 ruta
-  C:\Users\leonk\Documents\KuhAI\app\src\api\client.ts   kako frontend zove backend
-
-Pravila:
-- docs/API.md se mijenja samo commitom koji počinje s api!: i uz Leonovu potvrdu
-- backend deploy samo uz najavu: railway up zamijeni kontejner i API je ~30 s na 502
-- redoslijed za svaku backend promjenu: npm run typecheck, pozovi rutu, commit na main,
-  push, railway up --service kuhai-api -d, javi kad je gore
-- ako nešto "ne radi", prvo curl /health, pa railway logs --service kuhai-api,
-  pa tek onda dirati kod (checklista u sekciji 2)
-- frontend fajlove ne spremaj dok traje demo prolaz: Vite HMR reloada stranicu i
-  prekida fetch koji traje (plan/generate 60-90 s)
-
-Lokalno: PORT=3001 npm run dev za backend (3000 je zauzet drugim projektom),
-frontend npx vite --port 5174 u KuhAI/app.
-```
+Spojen s frontend dijelom u jedan **KICKOFF** na vrhu ovog fajla. Ovdje više nema zasebnog.
 
 ## 2. Ako "backend ne radi" — checklista
 
@@ -141,6 +169,125 @@ logika pakiranja, usporedba s dostavom. Sve to radi.
 
 ---
 
-# FRONTEND DIO
+# FRONTEND DIO (napisala frontend sesija, 2026-10-08 ~14:05)
 
-_(dopisuje frontend sesija)_
+## F0. Gdje je i kako se pali
+
+- Kod: **`C:\Users\leonk\Documents\KuhAI\app`**. **Nije u gitu**, nema ni jednog
+  commita ni backupa (vidi F7, prva odluka).
+- Stack: Vite 8 + React 19 + TypeScript + **Tailwind v4** (tokeni u `@theme`
+  u `src/index.css`, nema `tailwind.config`), react-router 8, gsap (splash).
+- `.env.local`: `VITE_API_URL=https://kuhai-api-production.up.railway.app`.
+  Bez te varijable sve ide na mock (`src/api/mock.ts`) i header pokazuje "Demo način".
+
+```bash
+cd C:\Users\leonk\Documents\KuhAI\app
+npx vite --port 5180 --strictPort --host   # dev; --host da ga vidi mobitel
+npm run build                              # tsc -b + vite build, MORA biti čist
+npm run lint                               # oxlint: 0 errora (warningi su stari)
+```
+
+Dev server iz frontend sesije vrti na **5180** (backend kickoff gore spominje 5174,
+oba porta rade, samo da se ne pokrene dvaput). Mobitel na istom Wi-Fi-ju:
+`http://<IP računala>:5180/`. Kamera i shake rade samo na pravom mobitelu.
+
+## F1. Kickoff prompt
+
+Spojen s backend dijelom u jedan **KICKOFF** na vrhu ovog fajla.
+
+## F2. Struktura
+
+| | |
+|---|---|
+| rute | `src/main.tsx` (6 ruta + `<Splash />`) |
+| ekrani | `src/pages/{Landing,Onboarding,Fridge,Plan,Meal,Cart}.tsx` |
+| zajedničko | `src/components/ui.tsx` (Shell, TopBar, TabBar, Button, Chip, Stepper, Pill, Title, CountUp, eur) |
+| fotke jela | `src/food.ts` + `src/components/MealImage.tsx`, slike `public/food/*.jpg` |
+| splash | `src/components/Splash.tsx` |
+| ilustracije | `src/illustrations/*` (43 SVG), galerija `http://localhost:5180/illustrations.html` (samo dev, ne ide u build) |
+| API | `src/api/client.ts`, `src/api/types.ts`, `src/api/mock.ts` |
+| state | `src/store.ts` (profile, plan, pantry u `localStorage kuhai.state`) |
+
+## F3. Dizajn — dogovoreno, ne mijenjati bez Leona
+
+- **Referenca:** Janovi ekrani `C:\Users\leonk\Documents\KuhAI\inspiracija\01–04.png`.
+  Mirno: krem pozadina (`bg-cream`/`bg-bg`), bijele kartice s tankim toplim rubom
+  (`border-line`), tamnosmeđi pill za odabrano (`bg-ink`), jedan crveni CTA.
+- **Boje** (`@theme`): brand `#D0161B`, brand-dark `#A91115`, cream `#FFF4E6`,
+  bg `#FFFBF6`, ink `#2B1D16`, muted `#8A6F60`, line `#F0E4D6`, fresh (zelena),
+  hot (narančasta za "umire"), warn (žuta za nesigurno).
+- **Clay je samo dašak:** `shadow-cta` na crvenom gumbu, `shadow-card` na 2–3
+  ključne kartice (rescue €, usporedba s dostavom). Sve ostalo ravne kartice s rubom.
+- **Fontovi:** Nunito svuda (bold/black za naslove). Unbounded samo wordmark
+  "KuhAI" + jedna hero brojka (rescue €).
+- **Nema emojija nigdje.** Leon ih je izričito odbio kao "AI-generirano".
+  - Ilustracije: `<Art name="..." className="size-10" />`, `mealArt(title)`,
+    `ingredientArt(name)`, `categoryArt(category)`. Stil: debeli zaobljeni oblici,
+    obrub 2.5 u ink boji, jedan sloj sjene dolje-desno, highlight gore-lijevo,
+    viewBox 64. Fallback: `tanjur` (jelo), `vrecica` (namirnica).
+  - Fotke jela: TheMealDB, 11 kategorija (ključ = `mealArt` ime). Bez fotke ili
+    ako se ne učita → ilustracija u pastelnoj pločici.
+- **Splash** je dizajnerova animacija iz `Documents/KuhAI/splash/index.html`
+  prenesena 1:1 u React (lonac zakuha → "Kuh" izleti → Kuh[AI] + para). Na
+  mobitelu 107vw kao u dizajnerovom render modu.
+
+## F4. Što postoji (build čist, sve viđeno u browseru)
+
+| ekran | što radi |
+|---|---|
+| splash | jednom po sesiji (`sessionStorage kuhai.splashSeen`), tap preskače, font čeka max 0,7 s, tvrdi stop 5,5 s |
+| `/` | landing. Desktop: hero u dva stupca s nagnutim karticama fotki i "Spašeno 11,20 €" |
+| `/onboarding` | **chat**: KuhAI pita u oblačićima (avatar = logo), odgovori ostaju kao poruke, klik na odgovor = promijeni. Tap = dalje kod single izbora. 8 pitanja → `PUT /profile` → "tipka…" → AI pitanja (`POST /questions`) → sažetak "Evo što sam skužio o tebi" s "Promijeni" → `POST /questions/answers` → `/frizider`. "Što znam o tebi" raste: traka na mobitelu, bočna kartica na desktopu. Budžet pokazuje € po porciji vs ~14,76 € dostava |
+| `/frizider` | kamera/upload → scan animacija → lista po urgency (Treba potrošiti odmah / Ovaj tjedan / Ima vremena), svaka namirnica s ilustracijom, confidence < 0.6 = isprekidani rub + "Nisam siguran", sve editabilno (ime, količina, jedinica, ± dani, briši), ručni unos, followUp pitanja → `PUT /pantry`. Preskoči → `items: []` |
+| `/plan` | generate s **personaliziranim porukama** iz profila i pantry-ja ("Vidim da ti jogurt i špinat umiru…") + 7 dana koji se pune. Rescue € (count-up) prvi, sale poruka, budžet slider + "Pregradi tjedan za X €", dani, kartice s fotkama, prep timeline (trake po uređaju + "Ti:" legenda + "blok traje X, ti stojiš Y, ostalo radi <uređaj>"), shake (devicemotion + gumb "Protresi"). Desktop: sticky lijevi stupac + mreža fotki |
+| `/obrok/:id` | velika fotka + naljepnica-ilustracija, why, nutrition (null-safe), sastojci s ilustracijama i stanjima (imaš doma / ističe / kupiti), koraci (tap = gotovo), swap s razlogom (bottom sheet / dijalog na desktopu) |
+| `/kosarica` | "Jeftinije od dostave" (count-up) + assumption ispisan, 3 brojke (po obroku / već imaš doma / spašeno od bacanja), withinBudget s razlikom, linije s ilustracijama i "akcija", unmatched "Dokupi sam", ukupno, Konzum CTA. Desktop: sticky sažetak desno |
+
+Responzivno provjereno na 375 / 390 / 768 / 1024 / 1440 px, bez horizontalnog scrolla.
+
+## F5. Integracija s backendom — zamke
+
+- **Fallback:** svaka greška ili timeout u `client.ts` → mock. Vidljivo kao
+  narančasta oznaka **"Demo podaci"** u headeru (`useFallback()`), uz
+  `[KuhAI] backend nije odgovorio` u konzoli. Siva "Demo način" = nema `VITE_API_URL`.
+- **Timeouti** (`client.ts`, usklađeni s backendom): generate **150 s**,
+  questions/scan/swap/shake **60 s**, ostalo 20 s. Ako backend postane sporiji,
+  digni ovdje. Inače pozornica dobije mock plan umjesto pravog.
+- **Plan loading tempo** (`Plan.tsx`, `Generating`): poruka svakih 7 s, napredak
+  asimptotski s tau 40 s. Usklađeno na 60–90 s generate.
+- **Stari mock plan u `localStorage`** → backend vrati 404 za mock id (`m_101`) →
+  fallback. Za čist demo: obriši `kuhai.state` i `kuhai.sessionId` (Clear site data).
+- **`swapFailed: true`** (kredit na nuli) frontend trenutno ne pokazuje, shake
+  izgleda kao da ništa nije napravio. Kandidat za mali popravak (F6, točka 2).
+
+## F6. Sljedeće, po vrijednosti za demo / vremenu
+
+1. **Sken "živi":** dok traje scan, namirnice iskaču jedna po jedna s ilustracijom
+   i rokom (`Fridge.tsx`, faza `scan`). ~30 min
+2. **Shake feedback:** `navigator.vibrate(80)`, kartica se okrene, toast
+   "Zamijenio sam X za Y". Na `swapFailed` toast "Nisam uspio, probaj opet"
+   (`Plan.tsx` `shake`, `Meal.tsx` `swap`). ~20 min
+3. **Prijelazi** između ruta (View Transitions API) + fotka iz kartice "naraste"
+   u hero recepta. ~20 min
+4. **PWA manifest** + ikona lonca: dodaj na početni zaslon, bez trake preglednika
+   na sceni. ~15 min
+5. Skeletoni umjesto spinnera (Meal, Cart). Mobilni landing dobije fotke kao
+   desktop. Brojač na košarici u navigaciji. "Poništi" kod brisanja namirnice.
+6. Slabije ilustracije: `peceni-krumpir`, `kupus`, `frizider` (tab ikona).
+7. Fotke su generičke po kategoriji ("Kajgana" dobije omlet). Za demo ok.
+
+## F7. Otvorene odluke za Leona
+
+- **Frontend u git — PRVO.** Prijedlog: premjestiti `Documents/KuhAI/app` u ovaj
+  repo kao `web/` (bez `node_modules`, `dist`, `.env.local`), commit na `main`.
+  To mijenja pravilo iz CLAUDE.md "ovaj repo je backend", pa treba Leonova potvrda.
+  Alternativa: zaseban repo. Dok se ne odluči, nema povijesti ni backupa.
+- Deploy frontenda (Vercel ili Railway static) nije napravljen. Za demo je dovoljan
+  `vite --host` + mobitel na istoj mreži, ali hackathon Wi-Fi zna blokirati.
+
+## F8. Ostalo u `C:\Users\leonk\Documents\KuhAI\`
+
+- `splash/`: izvor splash animacije (`index.html`, GSAP) + `out/kuhai-loading*.mp4` (video verzija)
+- `video/`: promo video po Klarinom scenariju (doomscroll → STOP. KUHAJ. → app). Nije dio aplikacije
+- `inspiracija/`: Janovi ekrani, referenca dizajna
+- `splash/assets/logo-original.png`, `app/public/logo.png`: logo
