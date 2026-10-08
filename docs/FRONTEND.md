@@ -1,4 +1,4 @@
-# AJkuham — za frontend tim
+# KuhAI — za frontend tim
 
 Ovo je sve što trebate od nas. Ne morate čekati da backend bude gotov.
 

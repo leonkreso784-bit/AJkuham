@@ -1,11 +1,11 @@
-# AJkuham — Odluke
+# KuhAI — Odluke
 
 Kratki zapis **zašto** je nešto odlučeno, da se ne vraćamo na isto u 5. satu.
 
 ---
 
-### D1 — Ime: AJkuham
-Čita se "aj kuham" i "AI kuham" u istoj riječi. Hrvatski, mladalački,
+### D1 — Ime: KuhAI (bivši AJkuham)
+Preimenovano 2026-10-08 iz AJkuham u KuhAI: "kuhaj" + AI, kraće i čitljivije. Hrvatski, mladalački,
 objašnjava se sam u dvije sekunde. Odbačeni: Klopa, Gusto, Spiza, Nana.
 
 ### D2 — Nije fitness aplikacija

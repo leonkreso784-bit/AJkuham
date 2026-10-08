@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Statusline wrapper za AJkuham.
+ * Statusline wrapper za KuhAI.
  *
  * Doda SHAKER countdown na pocetak, pa proslijedi stdin postojecem
  * claude-manager statuslineu i prilijepi njegov izlaz. Tako timer radi

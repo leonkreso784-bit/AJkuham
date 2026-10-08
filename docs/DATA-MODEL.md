@@ -1,4 +1,4 @@
-# AJkuham — Data model
+# KuhAI — Data model
 
 Postgres na Railwayu, Drizzle ORM. Sheme žive u `src/db/schema.ts`.
 

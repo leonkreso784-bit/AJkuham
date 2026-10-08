@@ -1,4 +1,4 @@
-# AJkuham — brief za sljedeću sesiju
+# KuhAI — brief za sljedeću sesiju
 
 Copy-paste materijal. Ne treba ništa prepričavati ni iznova objašnjavati.
 
@@ -31,7 +31,7 @@ railway tcp-proxy list --service Postgres       # host i port
 ## 1. Kickoff prompt — zalijepi na početku sesije
 
 ```text
-Radimo AJkuham: backend u C:\Users\leonk\Documents\SHAKER projekt.
+Radimo KuhAI: backend u C:\Users\leonk\Documents\SHAKER projekt.
 Hackathon SHAKER, rok je u .claude/deadline.json i vidi se u statuslineu.
 
 Pročitaj prvo, cijele i u ovom redu:
@@ -64,7 +64,7 @@ Svi dijele isti uvod, pa ga ne ponavljaj u glavi — zalijepi cijeli blok.
 ### Track A — katalog i seed
 
 ```text
-Radiš na AJkuham backendu: C:\Users\leonk\Documents\SHAKER projekt.
+Radiš na KuhAI backendu: C:\Users\leonk\Documents\SHAKER projekt.
 Hackathon, vrijeme kritično. Komentari hrvatski, kod engleski.
 Pročitaj prvo: CLAUDE.md, docs/DATA-MODEL.md, docs/SPEC.md sekcija 8,
 src/db/schema.ts, src/schemas/index.ts.
@@ -126,7 +126,7 @@ Javi: broj proizvoda, broj po kategoriji, broj na akciji, je li tsc čist.
 ### Track B — vision
 
 ```text
-Radiš na AJkuham backendu: C:\Users\leonk\Documents\SHAKER projekt.
+Radiš na KuhAI backendu: C:\Users\leonk\Documents\SHAKER projekt.
 Hackathon, vrijeme kritično. Komentari hrvatski, kod engleski.
 Pročitaj prvo: CLAUDE.md, docs/API.md sekcija 5, docs/PROMPTS.md sekcija 2
 (prompt je GOTOV, koristi ga, ne izmišljaj svoj), docs/SPEC.md sekcija 5,
@@ -165,7 +165,7 @@ Javi: potpis, je li tsc čist, koje si fallbackove ugradio.
 ### Track C — planer
 
 ```text
-Radiš na AJkuham backendu: C:\Users\leonk\Documents\SHAKER projekt.
+Radiš na KuhAI backendu: C:\Users\leonk\Documents\SHAKER projekt.
 Hackathon, vrijeme kritično. Komentari hrvatski, kod engleski.
 Pročitaj prvo, CIJELE: CLAUDE.md, docs/API.md sekcija 8, docs/PROMPTS.md
 sekcija 3 (prompt je GOTOV i nosi cijelu filozofiju proizvoda — koristi ga
@@ -203,7 +203,7 @@ Javi: potpise, kako si riješio fallback, je li tsc čist.
 ### Track D — engine
 
 ```text
-Radiš na AJkuham backendu: C:\Users\leonk\Documents\SHAKER projekt.
+Radiš na KuhAI backendu: C:\Users\leonk\Documents\SHAKER projekt.
 Hackathon, vrijeme kritično. Komentari hrvatski, kod engleski.
 Pročitaj prvo: CLAUDE.md, docs/API.md sekcija 12, docs/DATA-MODEL.md
 (kanonske jedinice i tablica pretvorbi), docs/SPEC.md sekcija 8,

@@ -1,9 +1,9 @@
-# AJkuham — CLAUDE.md
+# KuhAI — CLAUDE.md
 
 AI koji te upozna i složi ti **cijeli tjedan hrane** — plan, meal prep blokove i
 košaricu u Konzumu. Hackathon projekt (SHAKER, 2026-10-08).
 
-Ime se čita "aj kuham" i "AI kuham". U kodu i tekstu: **AJkuham**.
+Ime: **KuhAI** ("kuhaj" + AI). U kodu i tekstu: **KuhAI**. Staro ime AJkuham je napušteno 2026-10-08.
 
 ## Što je ovo, u jednoj rečenici
 

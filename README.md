@@ -1,8 +1,8 @@
-# AJkuham
+# KuhAI
 
 > AI koji te upozna i složi ti cijeli tjedan hrane — plan, meal prep i košaricu.
 
-Ime se čita **"aj kuham"** i **"AI kuham"**.
+Ime: **KuhAI** — "kuhaj" + AI u jednoj riječi.
 
 Hackathon projekt, SHAKER 2026.
 

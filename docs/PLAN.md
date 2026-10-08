@@ -1,4 +1,4 @@
-# AJkuham — Plan izvedbe
+# KuhAI — Plan izvedbe
 
 Backend: ~5 h. Frontend: drugi dio tima, paralelno, ne blokira nas.
 

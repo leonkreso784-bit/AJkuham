@@ -1,4 +1,4 @@
-# AJkuham — Spec
+# KuhAI — Spec
 
 Datum: 2026-10-08 · Status: radni · Rok: SHAKER demo, ~5 h backend
 
@@ -42,7 +42,7 @@ modul, znači da smo pogrešno razumjeli zadatak.
 
 ## 3. Rješenje
 
-AJkuham prvo **upozna korisnika** (kratki tap onboarding + par AI pitanja +
+KuhAI prvo **upozna korisnika** (kratki tap onboarding + par AI pitanja +
 fotka frižidera s procjenom rokova), pa iz **budžeta, onoga što umire i onoga
 što je na akciji** složi **cijeli tjedan** organiziran kao meal prep, pa iz
 toga napravi **košaricu u Konzumu** koja odbija ono što korisnik već ima — i

@@ -1,4 +1,4 @@
-# AJkuham — Stanje i handoff
+# KuhAI — Stanje i handoff
 
 Zadnje ažurirano: **2026-10-08**, kraj pripremne sesije.
 Gradnja **nije** počela. Priprema je zaključena.
@@ -54,7 +54,7 @@ vrijedi odmah i u svakoj novoj sesiji. Zeleno >3 h, žuto 1–3 h, crveno <1 h.
 ### Računi i servisi
 | | stanje |
 |---|---|
-| GitHub repo | `leonkreso784-bit/AJkuham`, public, sve na `main` |
+| GitHub repo | `leonkreso784-bit/AJkuham` (GitHub repo ostaje pod starim imenom), public, sve na `main` |
 | Klara610 | **pozvana** s write pristupom — mora prihvatiti invite |
 | `ANTHROPIC_API_KEY` | **radi**, testirano pravim pozivom (HTTP 200, `claude-sonnet-5-5`). U `.env`, gitignoran |
 | Railway CLI | instaliran, prijavljen kao LeonKreso |

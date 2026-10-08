@@ -1,4 +1,4 @@
-# AJkuham — API kontrakt
+# KuhAI — API kontrakt
 
 **ZAMRZNUTO.** Frontend radi protiv ovoga. Promjena samo uz Leonovu potvrdu i commit čiji naslov počinje s `api!:`.
 
