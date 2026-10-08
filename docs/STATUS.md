@@ -1,119 +1,109 @@
 # AJkuham — Stanje i handoff
 
 Zadnje ažurirano: **2026-10-08**, kraj pripremne sesije.
-Gradnja **nije** počela. Ovo je ulazna točka za sljedeću sesiju.
+Gradnja **nije** počela. Priprema je zaključena.
+
+**Sljedeća sesija kreće iz `docs/NEXT-SESSION.md`** — tamo je gotov kickoff
+prompt i gotovi briefovi za sva 4 agent tracka. Ovaj dokument je stanje; onaj je
+akcija.
 
 ---
 
-## TL;DR za sljedeću sesiju
+## TL;DR
 
-Temelj je postavljen i `tsc --noEmit` je čist. Fali **jedno**: radna
-`DATABASE_URL`. Dva klika to rješavaju (vidi *Blokade*). Nakon toga se ide
-ravno na `docs/PLAN.md`, korak S1.
+Sve je napisano i temelj stoji, `tsc --noEmit` je čist. Fali **jedna stvar**:
+radna `DATABASE_URL`. Jedan klik je rješava. Nakon toga se ide ravno na
+`docs/PLAN.md` korak S1, s 4 agenta paralelno.
 
 ---
 
 ## Što je gotovo
 
-### Dokumentacija (commitana, na `main`)
+### Dokumentacija
 | file | sadržaj |
 |---|---|
+| `docs/NEXT-SESSION.md` | **copy-paste** kickoff prompt + 4 agent briefa |
 | `CLAUDE.md` | pravila rada, stack, struktura, što se ne smije dirati |
-| `docs/SPEC.md` | scope, IN/OUT za demo, rizici |
-| `docs/API.md` | **zamrznuti kontrakt**, 12 ruta s točnim JSON-ima |
+| `docs/SPEC.md` | 12 sekcija; §2 objašnjava zašto očiti tok nije dovoljan |
+| `docs/API.md` | **zamrznuti kontrakt**, 13 ruta s točnim JSON-ima |
+| `docs/PROMPTS.md` | **gotovi produkcijski promptovi** za sva 4 AI poziva |
 | `docs/DATA-MODEL.md` | 7 tablica, kanonske jedinice, pretvorbe |
-| `docs/PLAN.md` | raspored po satima, 4 agent tracka, što režemo |
-| `docs/DECISIONS.md` | 12 odluka s obrazloženjem |
-| `docs/FRONTEND.md` | sve za frontend tim |
+| `docs/PLAN.md` | raspored po satima, agent trackovi, što se reže |
+| `docs/DECISIONS.md` | 19 odluka s obrazloženjem |
+| `docs/FRONTEND.md` | sve za frontend tim, uključujući nove ekrane |
 
-### Kod (temelj, typecheck čist)
+### Kod — temelj, typecheck čist
 | file | sadržaj |
 |---|---|
-| `package.json` | Hono, Drizzle, postgres.js, Zod, AI SDK, fuse.js, tsx — **instalirano** |
-| `tsconfig.json` | strict, ESM, `@/*` alias na `src/*` |
-| `src/env.ts` | Zod validacija env-a, pada s jasnom porukom |
-| `src/db/schema.ts` | svih 7 tablica iz `DATA-MODEL.md` |
+| `package.json` | Hono, Drizzle, postgres.js, Zod, AI SDK, fuse.js — **instalirano** |
+| `src/db/schema.ts` | 7 tablica, uključujući `urgency`, `why`, `rescue`, `budget_eur` |
 | `src/db/client.ts` | postgres.js + Drizzle; radi i na Railwayu i na Neonu |
-| `src/schemas/index.ts` | **sve Zod sheme** — API input i AI structured output |
-| `drizzle.config.ts` | `db:push` spreman |
-| `vercel.json` | pripremljen, koristi se samo ako hosting ostane Vercel |
+| `src/schemas/index.ts` | sve Zod sheme; AI-strane razdvojene od API-strana |
+| `src/env.ts` | validacija env-a, pada s jasnom porukom |
+| `tsconfig.json`, `drizzle.config.ts`, `vercel.json` | |
 
-### Računi i vanjski servisi
+**Nije napisano, i to je namjerno:** `src/app.ts`, `src/server.ts`,
+`src/ai/*`, `src/engine/*`, `data/konzum-products.json`. To je posao sljedeće
+sesije i raspodijeljeno je na trackove.
+
+### Alat
+`.claude/statusline.js` dodaje SHAKER countdown ispred postojećeg statuslinea.
+Rok je u `.claude/deadline.json` (trenutno **2026-10-08 18:48**) — promjena
+vrijedi odmah i u svakoj novoj sesiji. Zeleno >3 h, žuto 1–3 h, crveno <1 h.
+
+### Računi i servisi
 | | stanje |
 |---|---|
 | GitHub repo | `leonkreso784-bit/AJkuham`, public, sve na `main` |
 | Klara610 | **pozvana** s write pristupom — mora prihvatiti invite |
-| `ANTHROPIC_API_KEY` | **radi**, testirano (HTTP 200, `claude-sonnet-5-5`). U `.env`, gitignoran |
-| Railway CLI | instaliran (v5.63.4), prijavljen kao LeonKreso |
-| Railway projekti | 4 stara (MOBIX ×2, tourism-geo, +1) **zakazana za brisanje 2026-10-10** |
-| Vercel CLI | instaliran (v63.1.0), prijavljen kao `leonkreso784-bit` |
-| Vercel projekt | `leon-kresos-projects/ajkuham` kreiran i povezan s GitHub repom |
+| `ANTHROPIC_API_KEY` | **radi**, testirano pravim pozivom (HTTP 200, `claude-sonnet-5-5`). U `.env`, gitignoran |
+| Railway CLI | instaliran, prijavljen kao LeonKreso |
+| Railway projekti | 4 stara zakazana za brisanje 2026-10-10 |
+| Vercel CLI | instaliran, prijavljen kao `leonkreso784-bit` |
+| Vercel projekt | `leon-kresos-projects/ajkuham`, povezan s GitHub repom |
 
 ---
 
-## Blokade — riješiti prije koda
+## Blokada — jedna
 
-### 1. Baza (OBAVEZNO, blokira sve)
+### Baza
 
-Hosting nije razriješen. Dva puta, oba trebaju jedan klik:
+**Railway je plaćen ali ne radi.** CLI i dalje odbija kreiranje projekta s
+`Your trial has expired. Please select a plan to continue.` Provjereno tri puta
+nakon uplate. Token je u keyringu pa se stanje naplate ne može provjeriti iz
+koda — vidi se samo da Railway odbija.
 
-**Put A — Railway** (ono što dokumentacija pretpostavlja)
-Leon je platio plan, ali CLI i dalje javlja
-`Your trial has expired. Please select a plan to continue.`
-Vjerojatni uzrok: plan je vezan na osobni account, a ne na **workspace
-"LeonKreso's Projects"** (`7f104d7d-91e5-402a-ae58-e1cc7bb7d96b`). To su na
-Railwayu dvije odvojene stvari.
-→ Provjeriti na railway.com da je workspace na plaćenom planu, pa:
-```bash
-railway init --name ajkuham --workspace "7f104d7d-91e5-402a-ae58-e1cc7bb7d96b" --json
-railway add --database postgres --json
-railway variables   # izvuci DATABASE_URL
-```
+Najvjerojatniji uzrok: plan je vezan na osobni account, a ne na **workspace
+`LeonKreso's Projects`** (`7f104d7d-91e5-402a-ae58-e1cc7bb7d96b`). Na Railwayu
+su to dvije odvojene stvari. Provjeriti: railway.com → prebaci na taj workspace
+→ Settings → Plans, i Settings → Billing je li kartica naplaćena.
 
-**Put B — Neon preko Vercela** (besplatno, radi odmah)
-Zaustavljeno na prihvaćanju uvjeta u browseru:
+**Preporuka: ne čekati Railway.** Neon je besplatan i jedan klik:
 https://vercel.com/leon-kresos-projects/~/integrations/accept-terms/neon?source=cli
-→ Nakon klika:
-```bash
-vercel --non-interactive integration add neon --no-claim --name ajkuham-db
-vercel env pull --yes
-```
 
-Kod je isti u oba slučaja — mijenja se samo `DATABASE_URL` u `.env`.
-`postgres.js` je izabran upravo zato što radi s oba.
+Točne komande za oba puta su u `docs/NEXT-SESSION.md`, sekcija 0.
+`postgres.js` je izabran upravo zato da se putevi mogu mijenjati — jedina
+razlika je `DATABASE_URL`.
 
-### 2. Dizajn i logo
+### Dizajn i logo
 Ekipa radi, nije gotovo. **Ne blokira backend.** Kad dođe, ide u repo i README.
 
 ---
 
-## Prvi koraci sljedeće sesije
+## Što se dogodilo u pripremnoj sesiji, ukratko
 
-```bash
-# 1. baza (vidi Blokade gore), pa:
-npm run db:push        # shema -> Postgres
-# 2. onda S1 iz docs/PLAN.md: seed kataloga
-```
+Proizvod je prošao kreativni preokret. Prva verzija koncepta bila je fitness
+planer s makroima; druga je bila "AI meal planner" (profil → plan → košarica).
+Ni jedno nije dovoljno — očiti tok stavlja sva prava ograničenja na kraj.
 
-Zatim po `docs/PLAN.md`: S1 katalog → S2 sesija/profil/pitanja → S3 vision →
-S4 planer → S5 engine/košarica → S6 swap/polish/deploy.
+Zaključano je šest preokreta (`docs/DECISIONS.md` D13–D19): budžet kao ulaz,
+frižider kao protagonist s rokovima, rescue-first planiranje, planiranje iz
+akcija, prep blok kao paralelni timeline, i jedna brojka na kraju (usporedba s
+dostavom). Plus shake kao gimmick koji dijeli kod sa swapom.
 
-## Agent trackovi — spremni za paralelno
-
-Kontrakt (`docs/API.md`) i Zod sheme (`src/schemas/index.ts`) postoje, pa su
-moduli neovisni i mogu ići paralelno. Nijedan agent ne smije dirati tuđe
-datoteke ni `src/schemas/index.ts` / `src/db/schema.ts`.
-
-| track | datoteke | što radi |
-|---|---|---|
-| **A** | `data/konzum-products.json`, `src/db/seed.ts` | 220–250 proizvoda s PRAVIM veličinama pakiranja i cijenama + seed skripta |
-| **B** | `src/ai/vision.ts` | `scanFridge(images) -> FridgeScanOutput`, Sonnet 5.5 multimodal, fallback na prazan `items` |
-| **C** | `src/ai/planner.ts` | `generateObject` sa `PlannerOutput`, u prompt ide profil + `tasteNotes` + pantry + **kategorije iz kataloga** |
-| **D** | `src/engine/units.ts`, `packaging.ts`, `matcher.ts`, `cart.ts` | normalizacija jedinica, pakiranja (deterministički), fuse.js matching, cijena |
-| **Leon** | `src/app.ts`, `src/server.ts`, `src/ai/questions.ts` | Hono rute, sesija/profil/pantry, integracija, deploy |
-
-U pripremnoj sesiji su trackovi A i B bili pokrenuti pa zaustavljeni prije nego
-su dirali ikakav file. Ništa nedovršeno nije ostalo u repou.
+Ključno: **ništa od toga nije novi podsustav.** Sve je promjena prompta i
+izlazne sheme, zato raspored ostaje 5 sati. Ako u sljedećoj sesiji netko otvori
+novi modul zbog novog smjera, zadatak je pogrešno shvaćen.
 
 ---
 
@@ -121,14 +111,15 @@ su dirali ikakav file. Ništa nedovršeno nije ostalo u repou.
 
 - **Tajne idu samo u `.env`.** `ANTHROPIC_API_KEY` je u jednom trenutku bio
   upisan u `.env.example` (tracked file, javni repo) — izvučen je prije nego je
-  ikad commitan. Ključ nije procurio, ali `.gitignore` sad ima `!.env.example`
-  da placeholder ostane tracked a stvarni `.env` nikad ne bude.
+  ikad commitan. Nije procurio. `.gitignore` ima `!.env.example` da placeholder
+  ostane tracked a pravi `.env` nikad ne bude.
 - `docs/API.md` se mijenja **samo** commitom čiji naslov počinje s `api!:`.
 - Logika pakiranja i cijene **nije AI** — deterministički kod u `src/engine/`.
-  Inače demo pokaže 10 litara ulja za jedan tjedan.
-- Planer dobiva **samo kategorije koje postoje u katalogu**. Bez tog
-  ograničenja izmisli sastojak koji se ne može kupiti.
-- Fotke frižidera se **ne čuvaju** — upload, vision, spremi listu, baci fotku.
-  Zato nam ne treba object storage.
-- Svi importi moraju imati `.js` ekstenziju (ESM projekt, `"type": "module"`).
-- `fridge scan` je IN za demo i uvodni je hook, ne bonus na kraju.
+  Model ne računa eure (D6). AI vraća `PlannedRescue` (imena + poruka), brojke
+  dopisuje engine.
+- `urgency` izvodi **kod**, ne model (D14). Model vraća samo `expiresInDays`.
+- Planer dobiva **samo kategorije koje postoje u katalogu** (D7).
+- Red gradnje plana je fiksan: `umire` → `skoro` → `onSale` → ostatak (D15).
+- Fotke frižidera se **ne čuvaju** — zato nam ne treba object storage.
+- Svi importi s `.js` ekstenzijom (ESM projekt).
+- `deliveryComparison.assumption` je obavezan i ide na ekran (D18).

@@ -25,16 +25,18 @@ Frontend radi drugi dio tima i govori s nama samo preko `docs/API.md`.
 
 ## Stack
 
-TypeScript · Node 24 · Hono · Postgres (Railway) · Drizzle · Zod · AI SDK + Claude Sonnet 5.5
+TypeScript · Node 24 · Hono · Postgres · Drizzle · Zod · AI SDK + Claude Sonnet 5.5
 
 ## Dokumentacija
 
 | file | što je unutra |
 |---|---|
-| [`docs/STATUS.md`](docs/STATUS.md) | **počni ovdje** — gdje smo, što je blokirano, prvi koraci |
+| [`docs/NEXT-SESSION.md`](docs/NEXT-SESSION.md) | **počni ovdje** — kickoff prompt i briefovi za agente |
+| [`docs/STATUS.md`](docs/STATUS.md) | stanje: što je gotovo, što je blokirano |
+| [`docs/PROMPTS.md`](docs/PROMPTS.md) | gotovi produkcijski promptovi za sve AI pozive |
 | [`CLAUDE.md`](CLAUDE.md) | pravila rada u repou, struktura, što se ne smije |
 | [`docs/SPEC.md`](docs/SPEC.md) | što gradimo, što je IN/OUT za demo, rizici |
-| [`docs/API.md`](docs/API.md) | **zamrznuti kontrakt** — 12 ruta |
+| [`docs/API.md`](docs/API.md) | **zamrznuti kontrakt** — 13 ruta |
 | [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) | tablice, kanonske jedinice, pretvorbe |
 | [`docs/PLAN.md`](docs/PLAN.md) | raspored po satima, podjela na agente |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | zašto je nešto odlučeno tako |

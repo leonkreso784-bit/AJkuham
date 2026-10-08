@@ -65,7 +65,9 @@ src/
 data/
   konzum-products.json
 docs/
-  STATUS.md         POČNI OVDJE — stanje, blokade, prvi koraci
+  NEXT-SESSION.md   POČNI OVDJE — kickoff prompt i briefovi za agente
+  STATUS.md         stanje, blokade
+  PROMPTS.md        gotovi promptovi za sve AI pozive
   SPEC.md           što gradimo i što ne
   API.md            ZAMRZNUTI kontrakt za frontend
   DATA-MODEL.md     tablice i jedinice
