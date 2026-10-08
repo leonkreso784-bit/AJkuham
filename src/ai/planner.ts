@@ -378,7 +378,10 @@ function formatBudget(budgetEur: number | null, p: ProfileInput): string {
     return 'Nema zadanog budžeta, ali ne rastezuj bez potrebe.'
   }
   const obroka = p.mealsPerDay * 7
-  const perPortion = budgetEur / (obroka * p.householdSize)
+  // Cilj za model je 75 % budzeta: cijela pakiranja i zacini u kosarici pojedu
+  // ostatak (mjereno: plan "na X" izlazi 30-50 % iznad X bez ove rezerve).
+  const target = Math.max(5, Math.round(budgetEur * 0.75))
+  const perPortion = target / (obroka * p.householdSize)
   // Razina stednje izvodi KOD iz budzeta po porciji; model dobiva samo smjernicu, ne racuna eure (D6).
   const tier =
     perPortion < 1
@@ -390,7 +393,7 @@ function formatBudget(budgetEur: number | null, p: ProfileInput): string {
           : 'To je iznad 2,5 € po porciji — KOMOTNO. Normalan, raznolik tjedan, ali i dalje bez rasipanja.'
   const orient =
     'Orijentacija (samo za odabir, NE računaj): pileća prsa ~11 €/kg, batak ~5 €/kg, mljeveno ~7 €/kg, svinjski vrat ~7 €/kg, losos ~25 €/kg, jaja ~0,25 €/kom, tuna konzerva ~1,5 €, leća/grah ~2-3 €/kg, riža/tjestenina ~2 €/kg, krumpir ~1 €/kg, luk/mrkva/kupus ~1 €/kg, paprika/tikvica ~3 €/kg, jogurt ~0,5 €/kom, sir ~10 €/kg, mlijeko ~1 €/l, kruh ~1,5 €.'
-  return `Tvrdo ograničenje: ${budgetEur} € za cijeli tjedan (${obroka} obroka, ${osobe(p.householdSize)}). Plan MORA stati u to.
+  return `Tvrdo ograničenje: ${budgetEur} € za cijeli tjedan (${obroka} obroka, ${osobe(p.householdSize)}). Cilj za sastojke je ${target} € — ostatak pojedu cijela pakiranja i začini. Plan MORA stati u ${target} €.
 ${tier}
 ${orient}`
 }
@@ -820,8 +823,10 @@ type ChunkOutput = z.infer<typeof ChunkOutput>
 /** Do 4 akcijska proizvoda oko kojih se gradi cijeli tjedan: meso, svjeze, suho, mlijecno. */
 function pickSaleAnchors(onSale: SaleProduct[]): SaleProduct[] {
   const out: SaleProduct[] = []
+  // Slucajan izbor unutar kategorije da svaki tjedan (i svaki demo) ne izgleda isto.
   for (const cat of ['meso', 'svjeze', 'suho', 'mlijecno']) {
-    const hit = onSale.find((s) => s.category === cat && !out.includes(s))
+    const pool = onSale.filter((s) => s.category === cat && !out.includes(s))
+    const hit = pool[Math.floor(Math.random() * pool.length)]
     if (hit) out.push(hit)
   }
   return out
@@ -861,6 +866,7 @@ SIDRA — da tjedan bude koherentan iako se dijelovi slažu odvojeno:
 - Tjedan je građen oko ovih akcija: ${anchorText}. Iskoristi barem jednu od njih u ovom dijelu i navedi je u \`saleDriven.items\`.
 - Isti jeftini nosači kroz cijeli tjedan: krumpir, riža, tjestenina, luk, mrkva, jaja. Ne uvodi novi skupi glavni sastojak ako sidro već daje protein.
 - Ne ponavljaj isti doručak dva dana zaredom unutar svog dijela.
+- Budi sažet: \`steps\` najviše 5 koraka, svaki do 12 riječi; \`ingredients\` najviše 8 stavki; \`why\` jedna rečenica. Kraći izlaz = brži plan.
 ${prepRule}
 \`rescue\` i \`saleDriven\` opisuju samo ovaj dio.`
 }

@@ -16,6 +16,7 @@ import {
   type Urgency,
 } from './schemas/index.js'
 import { generateQuestions } from './ai/questions.js'
+import sharp from 'sharp'
 import { scanFridge, MAX_IMAGE_BYTES } from './ai/vision.js'
 import {
   generateWeekPlan,
@@ -542,6 +543,7 @@ app.post('/api/questions/answers', async (c) => {
 
 // 5. POST /api/fridge/scan — fotka se NE cuva
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
+const RAW_IMAGE_LIMIT = 25 * 1024 * 1024
 app.post('/api/fridge/scan', async (c) => {
   let form: FormData
   try {
@@ -553,10 +555,27 @@ app.post('/api/fridge/scan', async (c) => {
   if (files.length === 0) throw new ApiError('VALIDATION_ERROR', 'Polje image nedostaje')
   const images: { data: Uint8Array; mediaType: string }[] = []
   for (const f of files) {
-    const mediaType = f.type || 'image/jpeg'
-    if (!IMAGE_TYPES.has(mediaType)) throw new ApiError('VALIDATION_ERROR', `Nepodrzan tip slike: ${mediaType} (jpeg/png/webp)`)
-    if (f.size > MAX_IMAGE_BYTES) throw new ApiError('VALIDATION_ERROR', 'Slika je veca od 8 MB')
-    images.push({ data: new Uint8Array(await f.arrayBuffer()), mediaType })
+    if (f.size > RAW_IMAGE_LIMIT) throw new ApiError('VALIDATION_ERROR', 'Slika je veca od 25 MB')
+    const raw = Buffer.from(await f.arrayBuffer())
+    // Fotka s telefona je 4-12 MB i 4000 px; vision ne treba vise od ~1600 px.
+    // Smanjivanje drzi upload ispod 8 MB limita i ubrzava poziv. HEIC/nepoznato
+    // isto prolazi kroz sharp — ako ga ne zna dekodirati, vracamo jasnu gresku.
+    try {
+      const data = await sharp(raw, { failOn: 'none' })
+        .rotate() // EXIF orijentacija s telefona
+        .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+        .jpeg({ quality: 82 })
+        .toBuffer()
+      images.push({ data: new Uint8Array(data), mediaType: 'image/jpeg' })
+    } catch (err) {
+      const mediaType = f.type || 'image/jpeg'
+      if (!IMAGE_TYPES.has(mediaType)) {
+        throw new ApiError('VALIDATION_ERROR', `Nepodrzan tip slike: ${mediaType} (jpeg/png/webp)`)
+      }
+      if (f.size > MAX_IMAGE_BYTES) throw new ApiError('VALIDATION_ERROR', 'Slika je veca od 8 MB')
+      console.warn('[scan] sharp nije uspio, saljem original:', (err as Error).message)
+      images.push({ data: new Uint8Array(raw), mediaType })
+    }
   }
   const sourceRaw = form.get('source')
   const source = typeof sourceRaw === 'string' && sourceRaw.trim() ? sourceRaw.trim() : undefined
