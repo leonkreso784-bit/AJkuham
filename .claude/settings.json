@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "\"C:\\Program Files\\nodejs\\node.exe\" \"C:\\Users\\leonk\\Documents\\SHAKER projekt\\.claude\\statusline.js\""
+  }
+}

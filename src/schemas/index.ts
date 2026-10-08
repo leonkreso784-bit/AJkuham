@@ -14,6 +14,22 @@ export type Slot = z.infer<typeof Slot>
 
 export const MealSource = z.enum(['kuhaj_sad', 'iz_prepa'])
 
+/**
+ * Koliko je namirnici hitno. Izvedeno iz expiresInDays:
+ * `umire` <=2 dana, `skoro` 3-7, `ok` 8+.
+ * Postoji jer se plan gradi POCEVSI od onoga sto umire — to je srce proizvoda.
+ */
+export const Urgency = z.enum(['umire', 'skoro', 'ok'])
+export type Urgency = z.infer<typeof Urgency>
+
+/**
+ * Traka na kojoj se nesto u prep bloku odvija paralelno.
+ * `ti` je jedina traka koja trosi korisnikovu paznju — suma te trake
+ * je stvarno aktivno vrijeme i uvijek je manja od ukupnih minuta bloka.
+ */
+export const PrepTrack = z.enum(['pecnica', 'stednjak', 'ti', 'mikrovalna', 'air_fryer'])
+export type PrepTrack = z.infer<typeof PrepTrack>
+
 export const Diet = z.enum([
   'sve',
   'bez_mesa',
@@ -96,6 +112,14 @@ export const ScannedItem = z.object({
   quantity: z.number().positive(),
   unit: Unit,
   confidence: z.number().min(0).max(1),
+  /**
+   * Procjena koliko dana namirnica jos ima, iz vizualnog stanja i tipicnog
+   * roka te vrste hrane. Bez .optional() — vision model ovo MORA vratiti,
+   * inace nema sto hraniti planer.
+   */
+  expiresInDays: z.number().int().min(0),
+  /** Izvedeno iz expiresInDays, ali ga model vraca da frontend ne racuna. */
+  urgency: Urgency,
 })
 export type ScannedItem = z.infer<typeof ScannedItem>
 
@@ -114,12 +138,78 @@ export const PantryInput = z.object({
       name: z.string().min(1),
       quantity: z.number().positive(),
       unit: Unit,
+      /** Opcionalan jer rucno dodani itemi nemaju procjenu roka. */
+      expiresInDays: z.number().int().min(0).optional(),
     }),
   ),
 })
 export type PantryInput = z.infer<typeof PantryInput>
 
 // --- POST /api/plan/generate ---
+
+/**
+ * Body za POST /api/plan/generate. Samo API input, nikad AI output —
+ * zato .optional() ovdje ne smeta.
+ * budgetEur je TVRDO ogranicenje, ne filter: plan se gradi da stane u njega.
+ * Ako nije poslan, pada se na budgetPerWeekEur iz profila.
+ */
+export const PlanGenerateInput = z.object({
+  budgetEur: z.number().positive().optional(),
+})
+export type PlanGenerateInput = z.infer<typeof PlanGenerateInput>
+
+/**
+ * Jedan zadatak na jednoj traci prep bloka. Postoji jer je prava kuhinja
+ * paralelna, a recepti su linearni samo zato sto su knjige linearne.
+ * startMinute je offset od pocetka bloka, ne apsolutno vrijeme.
+ */
+export const TimelineEntry = z.object({
+  track: PrepTrack,
+  label: z.string(),
+  startMinute: z.number().int().min(0),
+  durationMinutes: z.number().int().positive(),
+})
+export type TimelineEntry = z.infer<typeof TimelineEntry>
+
+/**
+ * Sto je plan spasio od bacanja. savedEur racuna deterministicki kod iz
+ * kataloga (CLAUDE.md: model ne izmislja brojeve), pa je ovo API-oblik,
+ * ne AI-oblik. AI daje samo PlannedRescue.
+ */
+export const RescueInfo = z.object({
+  savedItems: z.array(z.string()),
+  savedEur: z.number(),
+  message: z.string(),
+})
+export type RescueInfo = z.infer<typeof RescueInfo>
+
+/**
+ * Koliko je obroka gradeno oko akcija iz kataloga. `count` broji obroke,
+ * `items` su imena proizvoda na akciji.
+ */
+export const SaleDrivenInfo = z.object({
+  count: z.number().int().min(0),
+  items: z.array(z.string()),
+  message: z.string(),
+})
+export type SaleDrivenInfo = z.infer<typeof SaleDrivenInfo>
+
+/**
+ * AI-strana rescue bloka: model pise samo imena i ljudsku poruku.
+ * savedEur se dopisuje poslije, iz kataloga.
+ */
+export const PlannedRescue = z.object({
+  savedItems: z.array(z.string()),
+  message: z.string(),
+})
+export type PlannedRescue = z.infer<typeof PlannedRescue>
+
+/** AI-strana saleDriven bloka. `count` izvodi kod iz broja obroka. */
+export const PlannedSaleDriven = z.object({
+  items: z.array(z.string()),
+  message: z.string(),
+})
+export type PlannedSaleDriven = z.infer<typeof PlannedSaleDriven>
 
 export const PlannedIngredient = z.object({
   name: z.string(),
@@ -147,6 +237,15 @@ export const PlannedMeal = z.object({
     })
     .nullable(),
   imageHint: z.string().optional(),
+  /**
+   * Jedna konkretna recenica zasto je ovaj obrok tu. Nikad genericno
+   * ("zdravo i ukusno") — mora se vezati na pantry ili na nesto sto je
+   * korisnik rekao. Transparentan AI gradi povjerenje i izgleda pametnije
+   * od istog plana bez objasnjenja.
+   */
+  why: z.string().min(1),
+  /** Imena pantry namirnica s urgency 'umire' koje ovaj obrok trosi. */
+  usesExpiring: z.array(z.string()),
 })
 export type PlannedMeal = z.infer<typeof PlannedMeal>
 
@@ -156,10 +255,20 @@ export const PlannedPrepBlock = z.object({
   minutes: z.number().int().positive(),
   title: z.string(),
   covers: z.array(z.string()),
+  /**
+   * Paralelni raspored. Prava kuhinja je paralelna; recepti su linearni
+   * samo zato sto su knjige linearne. Suma trake 'ti' je stvarno aktivno
+   * vrijeme korisnika i mora biti manja od `minutes`.
+   */
+  timeline: z.array(TimelineEntry).min(1),
 })
 export type PlannedPrepBlock = z.infer<typeof PlannedPrepBlock>
 
-/** Structured-output shema za src/ai/planner.ts */
+/**
+ * Structured-output shema za src/ai/planner.ts.
+ * Model NE racuna eure — zato ovdje idu PlannedRescue/PlannedSaleDriven
+ * (imena + ljudska poruka), a brojke dopisuje src/engine/ iz kataloga.
+ */
 export const PlannerOutput = z.object({
   prepBlocks: z.array(PlannedPrepBlock),
   days: z
@@ -170,15 +279,27 @@ export const PlannerOutput = z.object({
       }),
     )
     .length(7),
+  rescue: PlannedRescue,
+  saleDriven: PlannedSaleDriven,
 })
 export type PlannerOutput = z.infer<typeof PlannerOutput>
 
-/** Structured-output shema za swap jednog obroka. */
+/** Structured-output shema za swap jednog obroka. Koristi se i za /shake. */
 export const SingleMealOutput = PlannedMeal
 
 export const SwapInput = z.object({
   reason: z.string().optional(),
 })
+
+/**
+ * Sastojak u detalju obroka. `expiring` znaci: iz pantry-ja I umire —
+ * frontend ga oboji drugacije jer je to obrok koji spasava hranu.
+ */
+export const MealDetailIngredient = PlannedIngredient.extend({
+  inPantry: z.boolean(),
+  expiring: z.boolean(),
+})
+export type MealDetailIngredient = z.infer<typeof MealDetailIngredient>
 
 // --- GET /api/plan/:id/cart ---
 
@@ -199,13 +320,49 @@ export const CartLine = z.object({
 })
 export type CartLine = z.infer<typeof CartLine>
 
+/**
+ * Zavrsni udarac demoa: koliko je tjedan kuhan doma jeftiniji od istog
+ * broja obroka preko dostave. `assumption` MORA biti ispisan na ekranu —
+ * brojka bez pretpostavke je marketing, brojka s pretpostavkom je argument.
+ */
+export const DeliveryComparison = z.object({
+  deliveryEur: z.number(),
+  savedEur: z.number(),
+  assumption: z.string(),
+})
+export type DeliveryComparison = z.infer<typeof DeliveryComparison>
+
 export const Cart = z.object({
   currency: z.literal('EUR'),
   totalEur: z.number(),
+  /** Sve sto korisnik ima doma, bez obzira na rok. */
   savedFromPantryEur: z.number(),
+  /** Samo ono sto bi se BACILO a plan ga je iskoristio. Druga brojka. */
+  savedFromWasteEur: z.number(),
   perMealEur: z.number(),
+  budgetEur: z.number().nullable(),
+  /**
+   * false nije bug, ali korisnik to mora vidjeti, s razlikom.
+   * Tihi fail je gori od plana koji priznaje da ne stane.
+   */
+  withinBudget: z.boolean(),
+  deliveryComparison: DeliveryComparison,
+  onSaleLinesCount: z.number().int().min(0),
   lines: z.array(CartLine),
   unmatched: z.array(PlannedIngredient),
   deepLink: z.string(),
 })
 export type Cart = z.infer<typeof Cart>
+
+// --- POST /api/plan/:planId/shake ---
+
+/**
+ * Protreses telefon, obrok se mijenja. Hackathon se zove SHAKER;
+ * gimmick je trivijalan (devicemotion + postojeca swap logika),
+ * a publika ga pamti.
+ */
+export const ShakeResult = z.object({
+  replacedMealId: z.string(),
+  meal: z.unknown(),
+})
+export type ShakeResult = z.infer<typeof ShakeResult>

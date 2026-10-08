@@ -148,9 +148,10 @@ Može se pozvati više puta (frižider, zamrzivač, ostava).
 ```json
 {
   "items": [
-    { "name": "jaja", "quantity": 6, "unit": "kom", "confidence": 0.93 },
-    { "name": "jogurt", "quantity": 400, "unit": "g", "confidence": 0.71 },
-    { "name": "kupus", "quantity": 0.5, "unit": "kom", "confidence": 0.55 }
+    { "name": "jaja", "quantity": 6, "unit": "kom", "confidence": 0.93, "expiresInDays": 12, "urgency": "ok" },
+    { "name": "jogurt", "quantity": 400, "unit": "g", "confidence": 0.71, "expiresInDays": 2, "urgency": "umire" },
+    { "name": "špinat", "quantity": 150, "unit": "g", "confidence": 0.68, "expiresInDays": 1, "urgency": "umire" },
+    { "name": "kupus", "quantity": 0.5, "unit": "kom", "confidence": 0.55, "expiresInDays": 7, "urgency": "skoro" }
   ],
   "followUpQuestions": [
     "Koliko ti je riže ostalo, pola kile ili skoro ništa?"
@@ -159,6 +160,10 @@ Može se pozvati više puta (frižider, zamrzivač, ostava).
 ```
 
 `confidence` je 0–1. Frontend prikaže sve, a ispod 0.6 vizualno označi kao nesigurno. Lista je **editabilna** — ništa se ne sprema dok se ne pozove PUT /api/pantry.
+
+`expiresInDays` je **procjena** koliko dana namirnica još ima, iz vizualnog stanja i tipičnog roka te vrste hrane. `urgency` je izvedeno: `umire` (≤2 dana), `skoro` (3–7), `ok` (8+).
+
+**Ovo je srce proizvoda, ne dekoracija.** Plan se gradi počevši od onoga što `umire`. Frontend mora te iteme vizualno istaknuti — korisnik mora vidjeti da ga aplikacija spašava od bacanja hrane.
 
 ---
 
@@ -171,13 +176,13 @@ Sprema potvrđenu listu. Zamjenjuje cijeli pantry (ne dodaje na postojeći).
 ```json
 {
   "items": [
-    { "name": "jaja", "quantity": 6, "unit": "kom" },
-    { "name": "jogurt", "quantity": 400, "unit": "g" }
+    { "name": "jaja", "quantity": 6, "unit": "kom", "expiresInDays": 12 },
+    { "name": "jogurt", "quantity": 400, "unit": "g", "expiresInDays": 2 }
   ]
 }
 ```
 
-`unit`: `g`, `ml`, `kom`.
+`unit`: `g`, `ml`, `kom`. `expiresInDays` je opcionalan (ručno dodani itemi ga nemaju).
 
 **Response 200**
 
@@ -205,7 +210,19 @@ Sprema potvrđenu listu. Zamjenjuje cijeli pantry (ne dodaje na postojeći).
 
 Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA pokazati progress stanje.
 
-**Request:** prazan body
+**Request** (sve opcionalno)
+
+```json
+{ "budgetEur": 35 }
+```
+
+| polje | tip | značenje |
+|---|---|---|
+| `budgetEur` | number | **Tvrdo ograničenje, ne filter.** Plan se gradi da stane u taj budžet. Ako nije poslan, koristi se `budgetPerWeekEur` iz profila; ako ni toga nema, nema ograničenja. |
+
+**Budžet kao ulaz je namjerno obrnut tok.** Frontend treba slider koji ponovno
+zove ovu rutu — korisnik spusti s 60 € na 35 € i tjedan se preuredi. To je
+glavni interaktivni moment proizvoda.
 
 **Response 200**
 
@@ -213,6 +230,18 @@ Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA p
 {
   "planId": "pl_x1y2",
   "weekStart": "2026-10-12",
+  "budgetEur": 35,
+  "estimatedTotalEur": 33.8,
+  "rescue": {
+    "savedItems": ["špinat", "jogurt", "pola kupusa", "mrkva"],
+    "savedEur": 11.2,
+    "message": "Špinat i jogurt ti umiru za 2 dana — stavio sam ih u ponedjeljak i utorak."
+  },
+  "saleDriven": {
+    "count": 3,
+    "items": ["svinjski file", "tikvice"],
+    "message": "Svinjski file je -30% ovaj tjedan, iskoristio sam ga tri puta."
+  },
   "prepBlocks": [
     {
       "id": "pb_1",
@@ -221,7 +250,33 @@ Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA p
       "minutes": 70,
       "title": "Veliki prep",
       "covers": ["ponedjeljak", "utorak", "srijeda"],
-      "mealIds": ["m_1", "m_4", "m_7"]
+      "mealIds": ["m_1", "m_4", "m_7"],
+      "timeline": [
+        {
+          "track": "pecnica",
+          "label": "Piletina",
+          "startMinute": 0,
+          "durationMinutes": 45
+        },
+        {
+          "track": "stednjak",
+          "label": "Riža",
+          "startMinute": 10,
+          "durationMinutes": 20
+        },
+        {
+          "track": "ti",
+          "label": "Nasjeckaj povrće",
+          "startMinute": 0,
+          "durationMinutes": 10
+        },
+        {
+          "track": "ti",
+          "label": "Pakiraj u posude",
+          "startMinute": 50,
+          "durationMinutes": 15
+        }
+      ]
     }
   ],
   "days": [
@@ -232,12 +287,14 @@ Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA p
         {
           "id": "m_1",
           "slot": "dorucak",
-          "title": "Kajgana s kupusom",
+          "title": "Kajgana sa špinatom",
           "minutes": 12,
           "source": "kuhaj_sad",
           "prepBlockId": null,
           "servings": 2,
-          "imageHint": "kajgana u tavi"
+          "imageHint": "kajgana u tavi",
+          "why": "Špinat ti umire za 2 dana, a rekao si da voliš češnjak.",
+          "usesExpiring": ["špinat"]
         }
       ]
     }
@@ -249,6 +306,29 @@ Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA p
 `source`: `kuhaj_sad` ili `iz_prepa`.
 `days` ima točno 7 elemenata. Broj obroka po danu = `mealsPerDay` iz profila.
 `imageHint` je kratki opis za placeholder ili generiranje slike — frontend ga smije ignorirati.
+
+### Nova polja i zašto postoje
+
+**`rescue`** — što je plan spasio od bacanja. `savedEur` je vrijednost tih
+namirnica iz kataloga. Ovo je brojka koja ide velikim fontom na ekran.
+
+**`saleDriven`** — koliko je obroka građeno oko akcija iz kataloga. Premisa
+nije "planiraj pa kupi", nego "vidi što je na akciji pa smisli tjedan" — tako
+kuhaju ljudi, a nijedna aplikacija to ne radi.
+
+**`why`** na svakom obroku — jedna rečenica zašto je taj obrok tu. Transparentan
+AI gradi povjerenje i izgleda pametnije od istog plana bez objašnjenja. Nikad
+nije `null`.
+
+**`usesExpiring`** — imena pantry namirnica s `urgency: "umire"` koje ovaj obrok
+troši. Frontend time označi obroke koji spašavaju hranu.
+
+**`prepBlocks[].timeline`** — paralelni raspored priprema. `track` je jedan od
+`pecnica`, `stednjak`, `ti`, `mikrovalna`, `air_fryer`. `startMinute` je offset
+od početka prep bloka. Frontend ovo renderira kao trake jednu pod drugom —
+recepti su linearni jer su knjige linearne, prava kuhinja je paralelna.
+Suma `durationMinutes` na traci `ti` je stvarno aktivno vrijeme korisnika i
+uvijek je manja od `minutes` cijelog bloka.
 
 ---
 
@@ -276,14 +356,19 @@ Isti oblik kao odgovor na POST /api/plan/generate.
     "Razmuti jaja, ulij, posoli i miješaj 2 min."
   ],
   "ingredients": [
-    { "name": "jaja", "quantity": 4, "unit": "kom", "inPantry": true },
-    { "name": "kupus", "quantity": 200, "unit": "g", "inPantry": false }
+    { "name": "jaja", "quantity": 4, "unit": "kom", "inPantry": true, "expiring": false },
+    { "name": "špinat", "quantity": 150, "unit": "g", "inPantry": true, "expiring": true },
+    { "name": "kupus", "quantity": 200, "unit": "g", "inPantry": false, "expiring": false }
   ],
+  "why": "Špinat ti umire za 2 dana, a rekao si da voliš češnjak.",
+  "usesExpiring": ["špinat"],
   "nutrition": { "kcal": 420, "protein": 28, "carbs": 12, "fat": 29 }
 }
 ```
 
 `nutrition` je **opcionalno** i može biti `null`. Frontend ne smije pasti ako ga nema.
+`why` je uvijek prisutan. `expiring: true` znači da je sastojak iz pantry-ja i
+da `umire` — frontend ga označi drugom bojom.
 
 ---
 
@@ -312,7 +397,16 @@ Zamjenjuje jedan obrok drugim, čuvajući profil i približnu cijenu.
   "currency": "EUR",
   "totalEur": 58.4,
   "savedFromPantryEur": 9.2,
+  "savedFromWasteEur": 11.2,
   "perMealEur": 2.78,
+  "budgetEur": 60,
+  "withinBudget": true,
+  "deliveryComparison": {
+    "deliveryEur": 310.0,
+    "savedEur": 251.6,
+    "assumption": "21 obrok preko dostave, prosjek 14,76 € po obroku s dostavom i naknadama"
+  },
+  "onSaleLinesCount": 5,
   "lines": [
     {
       "productId": "p_142",
@@ -340,6 +434,38 @@ Zamjenjuje jedan obrok drugim, čuvajući profil i približnu cijenu.
 `matchQuality`: `exact`, `fuzzy`, `generic`.
 `unmatched` su sastojci za koje nema proizvoda — frontend ih prikaže kao "dokupi sam". Košarica nikad nije prazna zbog neuspjelog matcha.
 
+**`deliveryComparison`** je završni udarac demoa: jedan broj koji kaže koliko
+je tjedan kuhan doma jeftiniji od istog broja obroka preko dostave. `assumption`
+mora biti ispisan na ekranu — brojka bez pretpostavke je marketing, brojka s
+pretpostavkom je argument.
+
+**`savedFromWasteEur`** je vrijednost namirnica koje bi se bacile a plan ih je
+iskoristio. Različito od `savedFromPantryEur` (sve što imaš doma, bez obzira na
+rok). Obje brojke idu na ekran.
+
+**`withinBudget`** — ako je `false`, frontend to mora pokazati jasno, s razlikom.
+Plan koji ne stane u budžet nije bug, ali korisnik to mora znati.
+
+---
+
+## 13. POST /api/plan/:planId/shake
+
+Zamijeni jedan slučajni obrok. Ista logika kao swap, bez odabira obroka.
+
+**Request:** prazan body
+
+**Response 200**
+
+```json
+{
+  "replacedMealId": "m_7",
+  "meal": { "...": "isti oblik kao GET /api/meal/:mealId" }
+}
+```
+
+Frontend ovo veže na `devicemotion` — **protreseš telefon, obrok se mijenja.**
+Hackathon se zove SHAKER; gimmick je trivijalan, a publika ga pamti.
+
 ---
 
 ## Red poziva (happy path za frontend)
@@ -349,10 +475,13 @@ POST /api/session
 PUT  /api/profile
 POST /api/questions            -> prikaži pitanja
 POST /api/questions/answers
-POST /api/fridge/scan          -> prikaži listu za potvrdu
+POST /api/fridge/scan          -> prikaži listu, istakni ono što UMIRE
 PUT  /api/pantry
-POST /api/plan/generate        -> progress, pa tjedni prikaz
-GET  /api/plan/:id/cart        -> košarica
+POST /api/plan/generate        -> progress, pa tjedni prikaz + rescue brojka
+GET  /api/plan/:id/cart        -> košarica + usporedba s dostavom
 ```
 
 Fotka frižidera se smije **preskočiti** — tada se pozove PUT /api/pantry s `items: []`.
+
+Budžet slider ponovno zove `POST /api/plan/generate` s novim `budgetEur`.
+Shake zove `POST /api/plan/:id/shake`.

@@ -53,6 +53,10 @@ export const pantryItems = pgTable('pantry_items', {
   quantity: numeric('quantity').notNull(),
   unit: text('unit').notNull(),
   source: text('source').notNull().default('manual'),
+  /** Procjena iz visiona. Rucno dodani itemi ga nemaju. */
+  expiresInDays: integer('expires_in_days'),
+  /** `umire` / `skoro` / `ok`. Plan se gradi pocevsi od onoga sto umire. */
+  urgency: text('urgency'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
@@ -62,8 +66,18 @@ export const plans = pgTable('plans', {
     .notNull()
     .references(() => sessions.id, { onDelete: 'cascade' }),
   weekStart: date('week_start').notNull(),
-  /** Cisto prezentacijska struktura, nikad se ne pretrazuje po njoj. */
+  /**
+   * Cisto prezentacijska struktura, nikad se ne pretrazuje po njoj.
+   * `timeline` (paralelne trake prep bloka) zivi unutra — ne treba tablicu.
+   */
   prepBlocks: jsonb('prep_blocks').$type<unknown[]>().notNull().default([]),
+  /** Tvrdo ogranicenje s kojim je plan generiran. null = bez ogranicenja. */
+  budgetEur: numeric('budget_eur'),
+  estimatedTotalEur: numeric('estimated_total_eur'),
+  /** { savedItems, savedEur, message } — sto je plan spasio od bacanja. */
+  rescue: jsonb('rescue').$type<unknown>(),
+  /** { count, items, message } — koliko je obroka gradeno oko akcija. */
+  saleDriven: jsonb('sale_driven').$type<unknown>(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
@@ -87,6 +101,10 @@ export const meals = pgTable('meals', {
     fat: number
   } | null>(),
   imageHint: text('image_hint'),
+  /** Jedna recenica zasto je ovaj obrok tu. Nikad prazno u praksi. */
+  why: text('why').notNull().default(''),
+  /** Pantry namirnice s urgency 'umire' koje ovaj obrok trosi. */
+  usesExpiring: jsonb('uses_expiring').$type<string[]>().notNull().default([]),
   /** Trag swapa: koji obrok je ovaj zamijenio. */
   replacedMealId: text('replaced_meal_id'),
 })

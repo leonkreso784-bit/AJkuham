@@ -81,7 +81,13 @@ To je ono što aplikaciju čini "pametnom" s vremenom — struktura ne hvata
 | `quantity` | numeric |
 | `unit` | text (`g`/`ml`/`kom`) |
 | `source` | text (`vision` / `manual`) |
+| `expires_in_days` | integer nullable — procjena iz visiona |
+| `urgency` | text nullable — `umire` / `skoro` / `ok` |
 | `created_at` | timestamptz |
+
+`urgency` je izvedeno iz `expires_in_days` (`umire` ≤2, `skoro` 3–7, `ok` 8+),
+ali se sprema jer ga frontend čita direktno. **Plan se gradi počevši od onoga
+što `umire`** — to je srce proizvoda, ne filter na kraju.
 
 ### `plans`
 
@@ -91,10 +97,18 @@ To je ono što aplikaciju čini "pametnom" s vremenom — struktura ne hvata
 | `session_id` | text FK |
 | `week_start` | date |
 | `prep_blocks` | jsonb |
+| `budget_eur` | numeric nullable — tvrdo ograničenje s kojim je plan generiran |
+| `estimated_total_eur` | numeric nullable |
+| `rescue` | jsonb nullable — `{ savedItems, savedEur, message }` |
+| `sale_driven` | jsonb nullable — `{ count, items, message }` |
 | `created_at` | timestamptz |
 
 `prep_blocks` je jsonb jer je čisto prezentacijska struktura i nikad se ne
-pretražuje po njoj. Ne trošimo vrijeme na zasebnu tablicu.
+pretražuje po njoj. **`timeline` s paralelnim trakama živi unutra** — ne treba
+mu zasebna tablica.
+
+`rescue` i `sale_driven` se spremaju jer su rezultat jednog skupog AI poziva
+plus izračuna iz kataloga; ne želimo ih vrtjeti na svaki GET.
 
 ### `meals`
 
@@ -112,6 +126,8 @@ pretražuje po njoj. Ne trošimo vrijeme na zasebnu tablicu.
 | `steps` | jsonb (string[]) |
 | `nutrition` | jsonb nullable |
 | `image_hint` | text nullable |
+| `why` | text — jedna rečenica zašto je obrok tu |
+| `uses_expiring` | jsonb (string[]) — koje namirnice koje umiru troši |
 | `replaced_meal_id` | text nullable — trag swapa |
 
 ### `meal_ingredients`

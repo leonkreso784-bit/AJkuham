@@ -1,0 +1,5 @@
+{
+  "label": "SHAKER",
+  "deadlineLocal": "2026-10-08T18:48:00",
+  "note": "Rok za demo. Mijenja se rucno ovdje; statusline ga cita na svaki render pa promjena vrijedi odmah, i u svakoj novoj sesiji."
+}
