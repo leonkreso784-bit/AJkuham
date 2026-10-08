@@ -6,10 +6,12 @@ import { ZodError } from 'zod'
 import { db, schema } from './db/client.js'
 import {
   AnswersInput,
+  CandidatesInput,
   PantryInput,
   PlanGenerateInput,
   ProfileInput,
   SwapInput,
+  TasteInput,
   type Cart,
   type PlannedMeal,
   type ProductCategory,
@@ -21,9 +23,12 @@ import { scanFridge, MAX_IMAGE_BYTES } from './ai/vision.js'
 import {
   generateWeekPlan,
   generateSingleMeal,
+  generateCandidates,
+  type CandidatesContext,
   type CategoryExamples,
   type PlannerInput,
   type SwapContext,
+  type Taste,
 } from './ai/planner.js'
 import { buildCart, type CatalogProduct, type MealForCart, type PantryItemForCart } from './engine/cart.js'
 
@@ -120,6 +125,11 @@ function rowToProfile(row: typeof schema.profiles.$inferSelect | undefined) {
     budgetLevel: row.budgetLevel,
     budgetPerWeekEur: num(row.budgetPerWeekEur) ?? undefined,
   })
+}
+
+/** Swipe izbor iz profila (API.md §15). Bez profila: prazno. */
+function rowToTaste(row: typeof schema.profiles.$inferSelect | undefined): Taste {
+  return { likes: row?.likes ?? [], dislikes: row?.dislikes ?? [] }
 }
 
 /** Tekst pitanja cuvamo u qa pod kljucem "q_text:<id>" — nema zasebne tablice. */
@@ -383,6 +393,7 @@ async function swapMeal(sessionId: string, meal: typeof schema.meals.$inferSelec
     profile,
     tasteNotes: profileRow?.tasteNotes ?? '',
     qa: qaPairs(profileRow?.qa ?? {}),
+    taste: rowToTaste(profileRow),
     oldMeal,
     reason,
     cartIngredients: [...new Set([...cart.lines.flatMap((l) => l.matchedIngredients), ...pantry.map((p) => p.name)])],
@@ -641,6 +652,7 @@ app.post('/api/plan/generate', async (c) => {
     profile,
     tasteNotes: profileRow?.tasteNotes ?? '',
     qa: qaPairs(profileRow?.qa ?? {}),
+    taste: rowToTaste(profileRow),
     pantry: pantryRows.map((r) => ({
       name: r.name,
       quantity: Number(r.quantity),
@@ -740,6 +752,79 @@ async function findMeal(mealId: string, sessionId: string) {
   if (!plan) throw new ApiError('NOT_FOUND', `Obrok ${mealId} ne pripada ovoj sesiji`)
   return meal
 }
+
+// 14. POST /api/taste/candidates — deck jela za swipe kartice, nista se ne sprema
+app.post('/api/taste/candidates', async (c) => {
+  const sessionId = c.get('sessionId')
+  const input = await readJson(c, (b) => CandidatesInput.parse(b ?? {}))
+  const [profileRow, pantryRows, catalog] = await Promise.all([
+    db.query.profiles.findFirst({ where: eq(schema.profiles.sessionId, sessionId) }),
+    db.select().from(schema.pantryItems).where(eq(schema.pantryItems.sessionId, sessionId)),
+    loadCatalog(),
+  ])
+  const profile = rowToProfile(profileRow)
+  const pantry = pantryRows.map((r) => ({
+    name: r.name,
+    quantity: Number(r.quantity),
+    unit: r.unit as 'g' | 'ml' | 'kom',
+    expiresInDays: r.expiresInDays,
+    urgency: (r.urgency as Urgency | null) ?? urgencyFromDays(r.expiresInDays),
+  }))
+  const ctx: CandidatesContext = {
+    profile,
+    tasteNotes: profileRow?.tasteNotes ?? '',
+    qa: qaPairs(profileRow?.qa ?? {}),
+    pantry,
+    onSale: catalog
+      .filter((p) => p.onSale)
+      .slice(0, 30)
+      .map((p) => ({ name: p.name, category: p.category, packageSize: p.packageSize, packageUnit: p.packageUnit })),
+    categories: categoryExamples(catalog),
+    count: input.count,
+  }
+  const meals = await generateCandidates(ctx)
+  // tvrda provjera dijete/alergija kao kod swapa; kandidat koji krsi profil ispada
+  const safe = meals.filter((m) => {
+    const v = violatesProfile(m, profile)
+    if (v) console.warn(`[candidates] izbacujem "${m.title}": ${v}`)
+    return !v
+  })
+  const pantryIdx = new Map(pantry.map((p) => [stripDiacritics(p.name), p]))
+  const cards = safe.map((m) => ({
+    id: id('cand'),
+    title: m.title,
+    slot: m.slot,
+    minutes: m.minutes,
+    servings: m.servings,
+    source: 'kuhaj_sad' as const,
+    steps: m.steps,
+    ingredients: m.ingredients.map((i) => {
+      const p = pantryIdx.get(stripDiacritics(i.name))
+      return { name: i.name, quantity: i.quantity, unit: i.unit, inPantry: !!p, expiring: !!p && p.urgency === 'umire' }
+    }),
+    why: m.why,
+    usesExpiring: m.usesExpiring,
+    nutrition: m.nutrition ?? null,
+    imageHint: m.imageHint ?? '',
+  }))
+  return c.json({ cards })
+})
+
+// 15. POST /api/taste — sto je odabrao na karticama; planer, swap i shake to citaju
+app.post('/api/taste', async (c) => {
+  const sessionId = c.get('sessionId')
+  const input = await readJson(c, (b) => TasteInput.parse(b ?? {}))
+  const dedupe = (xs: string[]) => [...new Set(xs.map((x) => x.trim()).filter(Boolean))]
+  const likes = dedupe(input.liked)
+  const dislikedSet = new Set(likes.map(stripDiacritics))
+  // isto jelo ne moze biti i odabrano i odbijeno; zadnja rijec je "odabrano"
+  const dislikes = dedupe(input.disliked).filter((d) => !dislikedSet.has(stripDiacritics(d)))
+  await db
+    .insert(schema.profiles)
+    .values({ sessionId, likes, dislikes })
+    .onConflictDoUpdate({ target: schema.profiles.sessionId, set: { likes, dislikes, updatedAt: new Date() } })
+  return c.json({ ok: true, likedCount: likes.length, dislikedCount: dislikes.length })
+})
 
 // 10. GET /api/meal/:mealId
 app.get('/api/meal/:mealId', async (c) => {

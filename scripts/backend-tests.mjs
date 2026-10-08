@@ -241,11 +241,50 @@ async function scenarioParallel() {
   ok(`${tag} jogurt (umire) spasen u oba`, [a, b].every((x) => x.r.json.rescue.savedItems.some((i) => strip(i).includes('jogurt'))), [a, b].map((x) => x.r.json.rescue.savedItems.join('/')).join(' | '))
 }
 
+// ---------- F. swipe kartice: kandidati + taste (API.md §14-15) ----------
+const words = (t) => strip(t).split(/\s+/).filter((w) => w.length >= 4)
+// "isto jelo" = isti naslov ili bar 2 zajednicke duze rijeci (model zna malo preformulirati naslov)
+const sameMeal = (a, b) => strip(a) === strip(b) || words(a).filter((w) => words(b).includes(w)).length >= 2
+
+async function scenarioTaste() {
+  const tag = 'F-taste'
+  const s = await newSession()
+  const v1 = await call('POST', '/api/taste', { session: s, body: { liked: 'nije lista' } })
+  ok(`${tag} liked kao string -> 400 VALIDATION_ERROR`, v1.status === 400 && v1.json?.error?.code === 'VALIDATION_ERROR', v1.json?.error?.message)
+  const v2 = await call('POST', '/api/taste/candidates', { session: s, body: { count: 20 } })
+  ok(`${tag} count 20 -> 400`, v2.status === 400, `${v2.status}`)
+  await call('PUT', '/api/profile', { session: s, body: { mealsPerDay: 3, householdSize: 2, cookingStyle: 'svaki_dan', minutesPerMeal: 30, diet: 'bez_svinjetine', allergies: ['orasi'], cuisines: ['domaca'], adventurousness: 3, budgetLevel: 'srednje', budgetPerWeekEur: 60 } })
+  await call('PUT', '/api/pantry', { session: s, body: { items: [{ name: 'špinat', quantity: 150, unit: 'g', expiresInDays: 1 }, { name: 'jaja', quantity: 6, unit: 'kom', expiresInDays: 12 }] } })
+  const c = await call('POST', '/api/taste/candidates', { session: s, body: {} })
+  ok(`${tag} candidates 200 u ${(c.ms / 1000).toFixed(0)} s (< 75 s)`, c.status === 200 && c.ms < 75000, `${c.status}`)
+  if (c.status !== 200) return
+  const cards = c.json.cards
+  ok(`${tag} 8-10 kartica`, cards.length >= 8 && cards.length <= 10, `${cards.length}`)
+  ok(`${tag} svaka kartica: id cand_, recept, sastojci s inPantry, why`, cards.every((k) => /^cand_/.test(k.id) && k.steps.length >= 1 && k.ingredients.length >= 1 && typeof k.ingredients[0].inPantry === 'boolean' && k.why && k.title))
+  ok(`${tag} naslovi razliciti`, new Set(cards.map((k) => strip(k.title))).size === cards.length)
+  ok(`${tag} bez svinjetine i oraha u sastojcima`, cards.every((k) => k.ingredients.every((i) => !/svinj|slanin|kobasic|hrenovk|sunk|panceta|orah|orasi/.test(strip(i.name)))))
+  ok(`${tag} bar jedna kartica trosi spinat (umire)`, cards.some((k) => k.usesExpiring.some((u) => strip(u).includes('spinat'))))
+  ok(`${tag} servings = 2 na svima`, cards.every((k) => k.servings === 2))
+  const liked = cards.slice(0, 3).map((k) => k.title)
+  const disliked = cards.slice(3, 5).map((k) => k.title)
+  const t = await call('POST', '/api/taste', { session: s, body: { liked, disliked: [...disliked, liked[0]] } })
+  ok(`${tag} taste 200, jelo u oba popisa ostaje samo liked`, t.status === 200 && t.json.likedCount === 3 && t.json.dislikedCount === 2, JSON.stringify(t.json))
+  const g = await call('POST', '/api/plan/generate', { session: s, body: {} })
+  ok(`${tag} generate nakon tastea 200 (${(g.ms / 1000).toFixed(0)} s)`, g.status === 200, `${g.status}`)
+  if (g.status !== 200) return
+  const titles = g.json.days.flatMap((d) => d.meals.map((m) => m.title))
+  const hit = liked.filter((l) => titles.some((pt) => sameMeal(l, pt))).length
+  ok(`${tag} bar 2 od 3 odabrana jela u tjednu (${hit}/3)`, hit >= 2, liked.join(' | '))
+  const bad = disliked.filter((d) => titles.some((pt) => strip(pt) === strip(d)))
+  ok(`${tag} odbijena jela nisu u tjednu`, bad.length === 0, bad.join(' | '))
+}
+
 const h = await call('GET', '/health')
 ok('health', h.status === 200 && h.json?.ok === true, BASE)
 await errorTests()
 await scenarioNoProfile()
 await Promise.all([scenarioVegan(), scenarioFamily(), scenarioParallel()])
+await scenarioTaste()
 
 const fails = results.filter((r) => !r.pass)
 console.log(`\n${results.length - fails.length}/${results.length} PASS, ${fails.length} FAIL, ${((Date.now() - t0) / 1000).toFixed(0)} s`)

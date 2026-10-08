@@ -2,6 +2,7 @@ import { generateObject } from 'ai'
 import { aiModel } from './model.js'
 import { z } from 'zod'
 import {
+  CandidatesOutput,
   PlannedMeal,
   PlannerOutput,
   SingleMealOutput,
@@ -52,10 +53,17 @@ export type SaleProduct = {
 /** kategorija -> 5-10 primjera imena iz kataloga */
 export type CategoryExamples = Record<string, string[]>
 
+/** Sto je korisnik odabrao na swipe karticama (naslovi jela). Prazno = nije prosao kartice. */
+export type Taste = {
+  likes: string[]
+  dislikes: string[]
+}
+
 export type PlannerInput = {
   profile: ProfileInput
   tasteNotes: string
   qa: Array<{ question: string; answer: string | string[] }>
+  taste: Taste
   pantry: PantryForPlanner[]
   onSale: SaleProduct[]
   categories: CategoryExamples
@@ -68,12 +76,24 @@ export type SwapContext = {
   profile: ProfileInput
   tasteNotes: string
   qa: PlannerInput['qa']
+  taste: Taste
   oldMeal: PlannedMeal
   reason: string | null
   /** imena sastojaka vec u kosarici + pantry */
   cartIngredients: string[]
   otherMealTitles: string[]
   categories: CategoryExamples
+}
+
+/** Ulaz za kandidate swipe kartica: isto sto i plan, bez budzeta i tjedna. */
+export type CandidatesContext = {
+  profile: ProfileInput
+  tasteNotes: string
+  qa: PlannerInput['qa']
+  pantry: PantryForPlanner[]
+  onSale: SaleProduct[]
+  categories: CategoryExamples
+  count: number
 }
 
 // ---------------------------------------------------------------------------
@@ -331,6 +351,15 @@ function formatProfile(p: ProfileInput, tasteNotes: string): string {
   return lines.join('\n')
 }
 
+/** Swipe izbor: odabrana jela idu u tjedan, odbijena (i njihov glavni sastojak) ne. */
+function formatTaste(t: Taste): string {
+  if (!t.likes.length && !t.dislikes.length) return '(nije prošao kartice — nema izričitog izbora jela)'
+  const lines: string[] = []
+  if (t.likes.length) lines.push(`ODABRAO da bi jeo (kvačica): ${t.likes.join('; ')}`)
+  if (t.dislikes.length) lines.push(`ODBIO (X): ${t.dislikes.join('; ')}`)
+  return lines.join('\n')
+}
+
 function formatQa(qa: PlannerInput['qa']): string {
   if (!qa.length) return '(nije odgovarao na dodatna pitanja)'
   return qa
@@ -408,6 +437,13 @@ ${formatProfile(input.profile, input.tasteNotes)}
 
 === ODGOVORI NA PITANJA ===
 ${formatQa(input.qa)}
+
+=== ŠTO JE ODABRAO NA KARTICAMA (swipe) ===
+${formatTaste(input.taste)}
+Pravilo: svako ODABRANO jelo stavi u tjedan, po mogućnosti doslovno (isti naslov,
+isti glavni sastojci) — to su jela koja je sam izabrao i očekuje ih vidjeti.
+ODBIJENO jelo ne smije se pojaviti, ni pod drugim imenom, ni njegov glavni sastojak
+kao nosač obroka.
 
 === ŠTO IMA DOMA (pantry) ===
 Umire (potroši u prva 2 dana):
@@ -855,6 +891,14 @@ function buildChunkPrompt(input: PlannerInput, chunkIdx: number, anchors: SalePr
     ? anchors.map((a) => `${a.name} (${a.category})`).join(', ')
     : '(ovaj tjedan nema akcija — gradi oko jeftinih nosača)'
 
+  // Odabrana jela se raspodijele po dijelovima (round-robin) da se ne pojave 4 puta.
+  const likedHere = input.taste.likes.filter((_, k) => k % CHUNKS.length === chunkIdx)
+  const likedRule = likedHere.length
+    ? `- Od jela koja je korisnik ODABRAO, u OVAJ dio idu: ${likedHere.join('; ')}. Stavi ih doslovno (isti naslov i glavni sastojci) u slot koji im odgovara. Ostala odabrana jela rade drugi dijelovi — ne ponavljaj ih.`
+    : input.taste.likes.length
+      ? '- Odabrana jela s kartica rade drugi dijelovi tjedna — ovdje ih NE ponavljaj.'
+      : ''
+
   return `${buildWeekPrompt(input)}
 
 === DIO TJEDNA KOJI SLAŽEŠ SAD ===
@@ -866,6 +910,7 @@ SIDRA — da tjedan bude koherentan iako se dijelovi slažu odvojeno:
 - Tjedan je građen oko ovih akcija: ${anchorText}. Iskoristi barem jednu od njih u ovom dijelu i navedi je u \`saleDriven.items\`.
 - Isti jeftini nosači kroz cijeli tjedan: krumpir, riža, tjestenina, luk, mrkva, jaja. Ne uvodi novi skupi glavni sastojak ako sidro već daje protein.
 - Ne ponavljaj isti doručak dva dana zaredom unutar svog dijela.
+${likedRule}
 - Budi sažet: \`steps\` najviše 5 koraka, svaki do 12 riječi; \`ingredients\` najviše 8 stavki; \`why\` jedna rečenica. Kraći izlaz = brži plan.
 ${prepRule}
 \`rescue\` i \`saleDriven\` opisuju samo ovaj dio.`
@@ -1114,6 +1159,10 @@ function buildSwapPrompt(ctx: SwapContext, extraLine?: string): string {
   return `=== PROFIL ===
 ${profil}
 
+=== ŠTO JE ODABRAO NA KARTICAMA (swipe) ===
+${formatTaste(ctx.taste)}
+Odbijena jela i njihov glavni sastojak NE predlaži. Odabrano jelo koje još nije u tjednu je dobar kandidat.
+
 === OBROK KOJI SE MIJENJA ===
 ${formatOldMeal(ctx.oldMeal)}
 
@@ -1148,6 +1197,123 @@ async function callSingleMeal(ctx: SwapContext, extraLine?: string): Promise<Pla
 
 function normTitle(t: string): string {
   return t.toLowerCase().replace(/\s+/g, ' ').trim()
+}
+
+// ---------------------------------------------------------------------------
+// Kandidati za swipe kartice (API.md §14)
+// ---------------------------------------------------------------------------
+
+const SYSTEM_CANDIDATES = `Ti si KuhAI. Korisnik će na karticama (kvačica / X) birati jela koja bi jeo ovaj
+tjedan; na temelju toga mu se slaže tjedni plan. Tvoj posao: predložiti NEKOLIKO
+cijelih jela s receptom, dovoljno različitih da izbor nešto znači.
+
+Pravila:
+- Svako jelo je drugo jelo: drugi glavni sastojak ILI druga tehnika. Ne dvije
+  varijante iste tjestenine.
+- Jela moraju biti realna za ovog čovjeka: dijeta i alergije su APSOLUTNE,
+  \`minutes\` <= njegovih minuta po obroku, \`servings\` = broj ljudi u kući.
+- Barem polovica jela troši nešto iz njegovog frižidera (osobito ono što umire —
+  navedi to u \`usesExpiring\`) ili nešto s akcije.
+- Sastojci SAMO iz dostupnih kategorija kataloga (obična hrvatska trgovina).
+- \`why\` jedna konkretna rečenica (veže se na frižider, akciju, odgovor iz
+  pitanja ili kuhinju koju voli). Nikad generički.
+- \`steps\` 3-6 koraka, imperativ, kratko. \`ingredients\` najviše 8 stavki,
+  \`unit\` samo "g"/"ml"/"kom". \`nutrition\` procjena ili null.
+- Svaki obrok: \`source: "kuhaj_sad"\`, \`prepBlockIndex: null\`.
+- \`imageHint\` 2-4 riječi. Sve na hrvatskom. Ne računaš cijene.`
+
+function buildCandidatesPrompt(ctx: CandidatesContext, half: 0 | 1, n: number): string {
+  const umire = ctx.pantry.filter((i) => i.urgency === 'umire')
+  const skoro = ctx.pantry.filter((i) => i.urgency === 'skoro')
+  const ok = ctx.pantry.filter((i) => i.urgency === 'ok')
+  // Dvije polovice decka paralelno, svaka drugog registra, da se ne preklope.
+  const register =
+    half === 0
+      ? `Vrati točno ${n} jela: ${Math.ceil(n * 0.6)} ručka/večere građene OKO FRIŽIDERA I AKCIJA (ono što umire ide prvo) i ${n - Math.ceil(n * 0.6)} doručka. Glavni sastojci svih jela različiti.`
+      : `Vrati točno ${n} jela DRUGOG REGISTRA: ručkovi i večere po kuhinjama koje voli i njegovom avanturizmu, jedan brzi obrok do 15 min, jedan comfort obrok. NE koristi jaja, tjesteninu ni piletinu kao glavni sastojak (to pokriva druga lista). Glavni sastojci svih jela različiti.`
+
+  return `=== PROFIL ===
+${formatProfile(ctx.profile, ctx.tasteNotes)}
+
+=== ODGOVORI NA PITANJA ===
+${formatQa(ctx.qa)}
+
+=== ŠTO IMA DOMA (pantry) ===
+Umire:
+${formatPantryGroup(umire)}
+Skoro:
+${formatPantryGroup(skoro)}
+Ostalo:
+${formatPantryGroup(ok)}
+
+=== NA AKCIJI OVAJ TJEDAN ===
+${formatSales(ctx.onSale)}
+
+=== DOSTUPNE KATEGORIJE KATALOGA ===
+${formatCategories(ctx.categories)}
+
+=== ZADATAK ===
+${register}`
+}
+
+async function callCandidates(ctx: CandidatesContext, half: 0 | 1, n: number): Promise<PlannedMeal[]> {
+  const { object } = await generateObject({
+    model: aiModel(MODEL_ID),
+    schema: CandidatesOutput,
+    schemaName: 'kandidati',
+    maxRetries: MAX_RETRIES,
+    maxOutputTokens: 8_000,
+    abortSignal: AbortSignal.timeout(MEAL_TIMEOUT_MS),
+    system: SYSTEM_CANDIDATES,
+    prompt: buildCandidatesPrompt(ctx, half, n),
+  })
+  return object.meals
+}
+
+/**
+ * Deck kandidata za swipe. Dva paralelna poziva (dva registra), dedupe po
+ * naslovu, dopuna iz statičnih obroka ako model padne. Nikad ne baca i
+ * nikad ne vraća manje od 4 kartice.
+ */
+export async function generateCandidates(ctx: CandidatesContext): Promise<PlannedMeal[]> {
+  const n1 = Math.ceil(ctx.count / 2)
+  const n2 = ctx.count - n1
+  const t0 = Date.now()
+  const settled = await Promise.allSettled([callCandidates(ctx, 0, n1), callCandidates(ctx, 1, n2)])
+  const okCount = settled.filter((s) => s.status === 'fulfilled').length
+  console.log(`[candidates] 2 poziva gotova u ${Math.round((Date.now() - t0) / 1000)} s (${okCount}/2 uspjela)`)
+
+  const seen = new Set<string>()
+  const out: PlannedMeal[] = []
+  for (const s of settled) {
+    if (s.status === 'rejected') {
+      console.warn('[candidates] poziv pao:', errMessage(s.reason))
+      continue
+    }
+    for (const m of s.value) {
+      const key = normTitle(m.title)
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push({
+        ...m,
+        source: 'kuhaj_sad',
+        prepBlockIndex: null,
+        servings: ctx.profile.householdSize,
+        why: m.why.trim() ? m.why : fillWhy(m.usesExpiring),
+      })
+    }
+  }
+
+  // Dopuna iz statičnih obroka: bolje poznata jela nego prazan deck.
+  const slots: Slot[] = ['rucak', 'vecera', 'dorucak', 'snack1', 'snack2']
+  for (let i = 0; out.length < Math.max(4, ctx.count) && i < 10; i++) {
+    const m = fallbackMealFor(slots[i % slots.length]!, ctx.profile)
+    const key = normTitle(m.title)
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push(m)
+  }
+  return out.slice(0, ctx.count)
 }
 
 /**

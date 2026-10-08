@@ -468,6 +468,76 @@ Hackathon se zove SHAKER; gimmick je trivijalan, a publika ga pamti.
 
 ---
 
+## 14. POST /api/taste/candidates
+
+*(dodano 2026-10-08 ~14:50, Leon potvrdio; swipe kartice kvačica / X)*
+
+Deck jela koja korisnik ocjenjuje na karticama prije nego se složi tjedan. AI, 2 paralelna
+poziva, **15–30 s**; frontend timeout 60 s. Kandidati se **ne spremaju**: nema
+`GET /api/meal/:id` za njih, recept je u kartici.
+
+**Request** (body smije biti prazan)
+
+```json
+{ "count": 10 }
+```
+
+`count` 4–12, default 10.
+
+**Response 200**
+
+```json
+{
+  "cards": [
+    {
+      "id": "cand_a1b2c3d4e5",
+      "title": "Pečeni batak s krumpirom",
+      "slot": "vecera",
+      "minutes": 40,
+      "servings": 2,
+      "source": "kuhaj_sad",
+      "steps": ["...", "..."],
+      "ingredients": [{ "name": "pileći batak", "quantity": 500, "unit": "g", "inPantry": false, "expiring": false }],
+      "why": "Batak je na akciji, a rekao si da voliš pečeno.",
+      "usesExpiring": [],
+      "nutrition": null,
+      "imageHint": "pečeni batak na limu"
+    }
+  ]
+}
+```
+
+Isti oblik kao GET /api/meal/:mealId, plus `imageHint`. Dijeta i alergije su već
+provjerene na backendu. Ako AI padne, deck se dopuni statičnim jelima; nikad manje od 4.
+
+---
+
+## 15. POST /api/taste
+
+*(dodano 2026-10-08 ~14:50)*
+
+Što je korisnik odabrao na karticama. **Naslovi** jela (`title`), ne id-evi. Zamjenjuje
+prethodni izbor. Planer, swap i shake to čitaju: odabrana jela idu u tjedan (po mogućnosti
+doslovno), odbijena se ne pojavljuju.
+
+**Request**
+
+```json
+{ "liked": ["Pečeni batak s krumpirom", "Varivo od leće"], "disliked": ["Kajgana s paprikom"] }
+```
+
+**Response 200**
+
+```json
+{ "ok": true, "likedCount": 2, "dislikedCount": 1 }
+```
+
+Red poziva: `PUT /api/pantry` → `POST /api/taste/candidates` → korisnik bira →
+`POST /api/taste` → `POST /api/plan/generate`. Preskakanje kartica je dopušteno (planer
+radi i bez izbora).
+
+---
+
 ## Red poziva (happy path za frontend)
 
 ```

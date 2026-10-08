@@ -354,6 +354,33 @@ export const Cart = z.object({
 })
 export type Cart = z.infer<typeof Cart>
 
+// --- POST /api/taste/candidates i POST /api/taste (swipe kartice, API.md §14-15) ---
+
+/**
+ * Kandidati za swipe: model vraca nekoliko cijelih jela (s receptom) koja
+ * korisnik ocjenjuje kvacicom / X-om. Nije plan, nista se ne sprema.
+ */
+export const CandidatesInput = z.object({
+  count: z.number().int().min(4).max(12).default(10),
+})
+export type CandidatesInput = z.infer<typeof CandidatesInput>
+
+/** Structured-output shema za jedan poziv kandidata (pola decka). */
+export const CandidatesOutput = z.object({
+  meals: z.array(PlannedMeal).min(1).max(8),
+})
+export type CandidatesOutput = z.infer<typeof CandidatesOutput>
+
+/**
+ * Sto je korisnik odabrao na karticama. Naslovi jela, ne id-evi: kandidati
+ * se ne spremaju, a planer ionako cita naslove. Zamjenjuje prethodni izbor.
+ */
+export const TasteInput = z.object({
+  liked: z.array(z.string().trim().min(1)).max(30).default([]),
+  disliked: z.array(z.string().trim().min(1)).max(30).default([]),
+})
+export type TasteInput = z.infer<typeof TasteInput>
+
 // --- POST /api/plan/:planId/shake ---
 
 /**
