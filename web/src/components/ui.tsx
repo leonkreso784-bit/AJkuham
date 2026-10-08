@@ -129,6 +129,7 @@ const TABS: { to: string; label: string; ico: ArtName }[] = [
   { to: '/frizider', label: 'Frižider', ico: 'frizider' },
   { to: '/plan', label: 'Tjedan', ico: 'kalendar' },
   { to: '/kosarica', label: 'Košarica', ico: 'kosarica' },
+  { to: '/profil', label: 'Profil', ico: 'kuhar' },
 ]
 
 function TabBar() {

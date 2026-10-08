@@ -9,6 +9,7 @@ import Landing from './pages/Landing'
 import Meal from './pages/Meal'
 import Onboarding from './pages/Onboarding'
 import Plan from './pages/Plan'
+import Profile from './pages/Profile'
 import Swipe from './pages/Swipe'
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
   { path: '/plan', element: <Plan /> },
   { path: '/obrok/:id', element: <Meal /> },
   { path: '/kosarica', element: <Cart /> },
+  { path: '/profil', element: <Profile /> },
 ])
 
 createRoot(document.getElementById('root')!).render(
