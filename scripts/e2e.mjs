@@ -97,7 +97,23 @@ try {
   } else {
     await page.getByRole('button', { name: /Preskoči, kreni od nule/ }).click()
   }
-  await page.waitForURL(/\/plan/, { timeout: 20_000 })
+
+  // 4b. Swipe kartice "Što ti se jede?" (POST /api/taste/candidates 25-45 s, pa POST /api/taste)
+  await page.waitForURL(/\/biram/, { timeout: 20_000 })
+  log('kartice: cekam kandidate')
+  await page.getByText(/^1 \/ \d+$/).waitFor({ timeout: 100_000 })
+  await fallbackBadge('nakon kandidata')
+  await shot(page, '06b-swipe-deck')
+  await page.getByRole('button', { name: 'Bih ovo', exact: true }).click()
+  await page.waitForTimeout(450)
+  await page.getByRole('button', { name: 'Ne bih ovo', exact: true }).click()
+  await page.waitForTimeout(450)
+  await page.getByRole('button', { name: 'Bih ovo', exact: true }).click()
+  await page.waitForTimeout(450)
+  const taste = await page.evaluate(() => JSON.parse(localStorage.getItem('kuhai.state') || '{}').taste)
+  log(`kartice: liked ${taste?.liked?.length ?? 0}, disliked ${taste?.disliked?.length ?? 0}`)
+  await page.getByRole('button', { name: /Dosta mi je/ }).click()
+  await page.waitForURL(/\/plan/, { timeout: 25_000 })
 
   // 5. Plan generate (60-90 s)
   log('plan/generate krenuo')

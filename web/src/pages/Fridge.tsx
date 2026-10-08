@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { api } from '../api/client'
 import type { Unit, Urgency } from '../api/types'
-import { Button, Pill, Shell, Spinner, Title, cx } from '../components/ui'
+import { Button, Chip, Pill, Shell, Spinner, Title, cx } from '../components/ui'
 import { setState } from '../store'
 import { Art, ingredientArt } from '../illustrations'
 
@@ -28,9 +28,26 @@ const GROUPS: { u: Urgency; title: string; sub: string }[] = [
 
 let k = 0
 
+// Brze opcije kod "Dodaj ručno" (Leon, 15:05): najčešće namirnice s tipičnom količinom, bez roka.
+const QUICK: { name: string; quantity: number; unit: Unit }[] = [
+  { name: 'jaja', quantity: 6, unit: 'kom' }, { name: 'mlijeko', quantity: 1000, unit: 'ml' },
+  { name: 'jogurt', quantity: 400, unit: 'g' }, { name: 'sir', quantity: 200, unit: 'g' },
+  { name: 'maslac', quantity: 250, unit: 'g' }, { name: 'kruh', quantity: 1, unit: 'kom' },
+  { name: 'riža', quantity: 500, unit: 'g' }, { name: 'tjestenina', quantity: 500, unit: 'g' },
+  { name: 'krumpir', quantity: 1000, unit: 'g' }, { name: 'luk', quantity: 3, unit: 'kom' },
+  { name: 'češnjak', quantity: 1, unit: 'kom' }, { name: 'mrkva', quantity: 500, unit: 'g' },
+  { name: 'rajčica', quantity: 3, unit: 'kom' }, { name: 'paprika', quantity: 2, unit: 'kom' },
+  { name: 'piletina', quantity: 500, unit: 'g' }, { name: 'mljeveno meso', quantity: 500, unit: 'g' },
+  { name: 'tuna', quantity: 1, unit: 'kom' }, { name: 'grah', quantity: 1, unit: 'kom' },
+  { name: 'brašno', quantity: 1000, unit: 'g' }, { name: 'ulje', quantity: 500, unit: 'ml' },
+]
+
 export default function Fridge() {
   const nav = useNavigate()
+  // dva inputa: kamera (capture) i galerija (bez capture, mobitel nudi izbor)
   const fileRef = useRef<HTMLInputElement>(null)
+  const galleryRef = useRef<HTMLInputElement>(null)
+  const [quickOpen, setQuickOpen] = useState(false)
   const [photo, setPhoto] = useState<string | null>(null)
   const [phase, setPhase] = useState<'pick' | 'scan' | 'review'>('pick')
   const [rows, setRows] = useState<Row[]>([])
@@ -68,7 +85,17 @@ export default function Fridge() {
 
   const update = (key: number, patch: Partial<Row>) => setRows((r) => r.map((x) => (x.key === key ? { ...x, ...patch } : x)))
   const remove = (key: number) => setRows((r) => r.filter((x) => x.key !== key))
-  const addManual = () => { setRows((r) => [...r, { key: ++k, name: '', quantity: 1, unit: 'kom', confidence: 1 }]); setPhase('review') }
+  const addManual = () => { setRows((r) => [...r, { key: ++k, name: '', quantity: 1, unit: 'kom', confidence: 1 }]); setQuickOpen(true); setPhase('review') }
+  const has = (name: string) => rows.some((r) => r.name.trim().toLowerCase() === name)
+  const addQuick = (q: (typeof QUICK)[number]) => {
+    if (has(q.name)) { setRows((r) => r.filter((x) => x.name.trim().toLowerCase() !== q.name)); return }
+    // prazan red iz "Dodaj ručno" se iskoristi umjesto da ostane visjeti
+    setRows((r) => {
+      const empty = r.findIndex((x) => !x.name.trim())
+      const row: Row = { key: ++k, ...q, confidence: 1 }
+      return empty >= 0 ? r.map((x, i) => (i === empty ? row : x)) : [...r, row]
+    })
+  }
 
   async function save(items: Row[]) {
     setBusy(true); setErr(null)
@@ -87,6 +114,7 @@ export default function Fridge() {
   return (
     <Shell tabs>
       <input ref={fileRef} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = '' }} />
+      <input ref={galleryRef} type="file" accept="image/*" hidden onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = '' }} />
 
       {phase === 'pick' && (
         <div className="mx-auto max-w-xl lg:grid lg:max-w-none lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start lg:gap-10">
@@ -97,9 +125,10 @@ export default function Fridge() {
               className="flex w-full flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-[#F3CFA8] bg-[#FFF3E6] px-6 py-10 text-center transition-colors hover:bg-[#FFEEDC] lg:py-20"
             >
               <span className="mb-1 grid size-16 place-items-center rounded-xl bg-white lg:size-20"><Art name="kamera" className="size-12 lg:size-14" /></span>
-              <b className="text-[17px] font-extrabold lg:text-xl">Slikaj ili učitaj sliku frižidera</b>
+              <b className="text-[17px] font-extrabold lg:text-xl">Slikaj frižider</b>
               <span className="text-sm text-muted lg:text-base">Dovoljna je jedna slika otvorenog frižidera.</span>
             </button>
+            <Button variant="soft" className="mt-2 w-full" onClick={() => galleryRef.current?.click()}>Odaberi iz galerije</Button>
             <p className="mt-3 text-center text-xs text-muted lg:text-left">Fotka se ne čuva, spremamo samo listu namirnica.</p>
           </div>
           <div className="mt-6 flex flex-col gap-2 lg:mt-[5.5rem] lg:rounded-2xl lg:border lg:border-line lg:bg-white lg:p-5">
@@ -147,11 +176,25 @@ export default function Fridge() {
             </Title>
             {photo && <img src={photo} alt="Tvoj frižider" className="mb-4 hidden aspect-[4/3] w-full rounded-2xl object-cover lg:block" />}
             <div className="hidden lg:block">
-              <Actions onPhoto={() => fileRef.current?.click()} onAdd={addManual} onSave={() => save(rows)} busy={busy} />
+              <Actions onPhoto={() => galleryRef.current?.click()} onAdd={addManual} onSave={() => save(rows)} busy={busy} />
             </div>
           </aside>
 
           <div>
+            {quickOpen && (
+              <section className="mb-6 rounded-2xl border border-line bg-white p-4">
+                <div className="mb-2 flex items-baseline justify-between">
+                  <span className="font-extrabold">Brzo dodaj</span>
+                  <button className="text-sm font-bold text-muted" onClick={() => setQuickOpen(false)}>Zatvori</button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {QUICK.map((q) => (
+                    <Chip key={q.name} on={has(q.name)} onClick={() => addQuick(q)} className="px-3 py-2 text-sm">{q.name}</Chip>
+                  ))}
+                </div>
+                <p className="mt-2 text-xs text-muted">Tap dodaje s tipičnom količinom, bez roka. Količinu i rok uredi dolje.</p>
+              </section>
+            )}
             {GROUPS.map(({ u, title, sub }) => {
               const list = rows.filter((r) => urgencyOf(r.expiresInDays) === u)
               if (!list.length) return null
@@ -176,7 +219,7 @@ export default function Fridge() {
             ))}
 
             <div className="mt-4 lg:hidden">
-              <Actions onPhoto={() => fileRef.current?.click()} onAdd={addManual} onSave={() => save(rows)} busy={busy} />
+              <Actions onPhoto={() => galleryRef.current?.click()} onAdd={addManual} onSave={() => save(rows)} busy={busy} />
             </div>
           </div>
         </div>

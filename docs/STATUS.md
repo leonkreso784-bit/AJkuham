@@ -155,3 +155,8 @@ usporedba s dostavom. Sve to radi.
   3 kvačice spremljene, `Dosta mi je` → `/plan`).
 - **Peti krug testova na produkciji 14:35: 114/114 PASS** (uključuje sekciju F, candidates 45 s, generate 47 s).
 - Poznato: plan na 60 € izašao 83,97 € u taste testu (D13 budžet, +40 %).
+- **15:10 testovi:** backend 116/116 PASS (211 s); e2e kroz LIVE frontend s pravom fotkom frižidera
+  prošao u 188 s (vision 36 s, kandidati 45 s, generate 72 s, shake 14 s, swap 15 s). Screenshotovi
+  u `.playwright-mcp/e2e-live/`. `scripts/e2e.mjs` zna za korak `/biram`.
+- **Frižider (Leon 15:05):** gumb "Odaberi iz galerije" uz kameru; "Upiši ručno" otvara "Brzo dodaj"
+  čipove (20 čestih namirnica s tipičnom količinom, tap dodaje/miče).
