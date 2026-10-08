@@ -38,6 +38,11 @@ async function errorTests() {
   ok('A3 POST /api/session vraca ses_ id', /^ses_/.test(s), s)
   const r3 = await call('PUT', '/api/profile', { session: s, raw: '{ nije json' })
   ok('A4 neispravan JSON -> 400 s porukom', r3.status === 400 && /JSON/i.test(r3.json?.error?.message ?? ''), r3.json?.error?.message)
+  const base = { mealsPerDay: 3, householdSize: 1, cookingStyle: 'svaki_dan', minutesPerMeal: 30, diet: 'bez_laktoze', allergies: [], cuisines: [], adventurousness: 3, budgetLevel: 'srednje' }
+  const r5 = await call('PUT', '/api/profile', { session: s, body: { ...base, diets: ['bez_laktoze', 'bez_glutena'], dietNote: 'ne jedem ribu' } })
+  ok('A5 profil s vise dijeta + dietNote (API.md §2 dodatak) -> 200', r5.status === 200 && r5.json?.ok === true, `${r5.status}`)
+  const r6 = await call('PUT', '/api/profile', { session: s, body: { ...base, diets: ['keto'] } })
+  ok('A6 nepoznata dijeta u diets -> 400', r6.status === 400 && r6.json?.error?.code === 'VALIDATION_ERROR', r6.json?.error?.message)
   const r4 = await call('PUT', '/api/profile', { session: s, body: { mealsPerDay: 7, householdSize: 2, cookingStyle: 'meal_prep', minutesPerMeal: 30, diet: 'sve', allergies: [], cuisines: [], adventurousness: 3, budgetLevel: 'srednje' } })
   ok('A5 mealsPerDay=7 -> 400 i poruka imenuje polje', r4.status === 400 && /mealsPerDay/.test(r4.json?.error?.message ?? ''), r4.json?.error?.message)
   const r5 = await call('GET', '/api/nema/ove/rute', { session: s })

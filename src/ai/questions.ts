@@ -96,7 +96,7 @@ export function profileToText(p: ProfileInput): string {
     `Ljudi u kući: ${p.householdSize}`,
     `Stil kuhanja: ${style}`,
     `Minute po obroku: ${p.minutesPerMeal}`,
-    `Dijeta: ${p.diet}`,
+    `Dijeta: ${[...new Set([p.diet, ...p.diets])].join(' + ')}${p.dietNote.trim() ? ` (ostalo: ${p.dietNote.trim()})` : ''}`,
     `Alergije: ${p.allergies.length ? p.allergies.join(', ') : 'nema'}`,
     `Kuhinje koje voli: ${p.cuisines.length ? p.cuisines.join(', ') : 'nije rekao'}`,
     `Avanturizam (1 sigurno – 5 eksperimentalno): ${p.adventurousness}`,

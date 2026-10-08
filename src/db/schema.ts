@@ -29,6 +29,9 @@ export const profiles = pgTable('profiles', {
   cookingStyle: text('cooking_style').notNull().default('meal_prep'),
   minutesPerMeal: integer('minutes_per_meal').notNull().default(30),
   diet: text('diet').notNull().default('sve'),
+  /** Vise dijeta odjednom + slobodni tekst "ostalo" (API.md §2, dodano 2026-10-08). */
+  diets: jsonb('diets').$type<string[]>().notNull().default([]),
+  dietNote: text('diet_note').notNull().default(''),
   allergies: jsonb('allergies').$type<string[]>().notNull().default([]),
   cuisines: jsonb('cuisines').$type<string[]>().notNull().default([]),
   adventurousness: integer('adventurousness').notNull().default(3),

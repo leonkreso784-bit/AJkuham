@@ -35,13 +35,21 @@ const people = (n: number) => (n === 1 ? 'samo ja' : `${n} ${n >= 2 && n <= 4 ? 
 
 const TAPS = 8
 const toggle = <T,>(arr: T[], v: T) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v])
+// Više dijeta odjednom (Leon, 15:25): `diets` je istina, `diet` = prva odabrana (API kompatibilnost).
+const withDiets = (diets: Diet[]): Pick<Profile, 'diet' | 'diets'> => ({ diets, diet: diets[0] ?? 'sve' })
+const dietLabel = (p: Profile) => {
+  const parts = p.diets.map((d) => label(DIETS, d))
+  if (p.dietNote?.trim()) parts.push(p.dietNote.trim())
+  return parts.length ? parts.join(', ') : label(DIETS, 'sve')
+}
 
 export default function Onboarding() {
   const nav = useNavigate()
   const [p, setP] = useState<Profile>({
-    mealsPerDay: 3, householdSize: 2, cookingStyle: 'meal_prep', minutesPerMeal: 30, diet: 'sve',
+    mealsPerDay: 3, householdSize: 2, cookingStyle: 'meal_prep', minutesPerMeal: 30, diet: 'sve', diets: [], dietNote: '',
     allergies: [], cuisines: [], adventurousness: 3, budgetLevel: 'srednje', budgetPerWeekEur: 60,
   })
+  const [dietOther, setDietOther] = useState(false)
   const set = (patch: Partial<Profile>) => setP((x) => ({ ...x, ...patch }))
 
   const [phase, setPhase] = useState<'taps' | 'thinking' | 'ai' | 'summary'>('taps')
@@ -186,11 +194,23 @@ export default function Onboarding() {
       ),
     },
     {
-      bot: <>Kako jedeš?</>,
-      answer: label(DIETS, p.diet),
+      bot: <>Kako jedeš? Možeš odabrati više stvari.</>,
+      answer: dietLabel(p),
+      cta: { label: 'Dalje' },
       input: (
-        <div className="flex flex-wrap gap-2">
-          {DIETS.map(([v, l]) => <Chip key={v} onClick={() => tap({ diet: v })}>{l}</Chip>)}
+        <div>
+          <div className="flex flex-wrap gap-2">
+            {DIETS.map(([v, l]) => (
+              <Chip key={v} on={v === 'sve' ? p.diets.length === 0 && !dietOther : p.diets.includes(v)}
+                onClick={() => setP((x) => ({ ...x, ...withDiets(v === 'sve' ? [] : toggle(x.diets, v)) }))}>{l}</Chip>
+            ))}
+            <Chip on={dietOther} onClick={() => { setDietOther((o) => !o); if (dietOther) set({ dietNote: '' }) }}>Ostalo</Chip>
+          </div>
+          {dietOther && (
+            <input value={p.dietNote ?? ''} onChange={(e) => set({ dietNote: e.target.value.slice(0, 200) })} autoFocus
+              placeholder="npr. ne jedem ribu, bez šećera…" aria-label="Ostalo o prehrani"
+              className="mt-2 w-full rounded-2xl border border-line bg-white px-4 py-3 text-[15px] font-bold outline-none placeholder:font-semibold placeholder:text-muted/60 focus:border-ink" />
+          )}
         </div>
       ),
     },
@@ -278,7 +298,7 @@ export default function Onboarding() {
     tapsDone > 1 && people(p.householdSize),
     tapsDone > 2 && (p.cookingStyle === 'meal_prep' ? 'meal prep' : 'svaki dan'),
     tapsDone > 3 && `${p.minutesPerMeal} min`,
-    tapsDone > 4 && p.diet !== 'sve' && label(DIETS, p.diet).toLowerCase(),
+    tapsDone > 4 && (p.diets.length > 0 || p.dietNote) && dietLabel(p).toLowerCase(),
     tapsDone > 5 && p.allergies.length > 0 && `bez: ${p.allergies.join(', ')}`,
     tapsDone > 6 && p.cuisines.map((c) => label(CUISINES, c).toLowerCase()).join(', '),
     tapsDone > 7 && `${p.budgetPerWeekEur} €/tj`,
@@ -370,7 +390,7 @@ export default function Onboarding() {
                   {([
                     ['Obroci', `${p.mealsPerDay} dnevno · ${people(p.householdSize)}`, 0],
                     ['Kuhanje', `${p.cookingStyle === 'meal_prep' ? 'Meal prep' : 'Svaki dan'} · do ${p.minutesPerMeal} min`, 2],
-                    ['Prehrana', `${label(DIETS, p.diet)}${p.allergies.length ? ` · bez: ${p.allergies.join(', ')}` : ''}`, 4],
+                    ['Prehrana', `${dietLabel(p)}${p.allergies.length ? ` · bez: ${p.allergies.join(', ')}` : ''}`, 4],
                     ['Voliš', p.cuisines.map((c) => label(CUISINES, c)).join(', '), 6],
                     ['Budžet', `${p.budgetPerWeekEur} € tjedno · ${eur(perPortion)}/porcija`, 7],
                   ] as const).map(([k, v, s]) => (

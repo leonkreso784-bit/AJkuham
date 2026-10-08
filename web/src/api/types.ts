@@ -9,6 +9,10 @@ export interface Profile {
   cookingStyle: 'svaki_dan' | 'meal_prep'
   minutesPerMeal: 15 | 30 | 45
   diet: Diet
+  /** Više dijeta odjednom (API.md §2, dodano 15:30); `diet` = prva/najstroža radi kompatibilnosti. */
+  diets: Diet[]
+  /** "Ostalo": slobodni tekst o prehrani, do 200 znakova. */
+  dietNote?: string
   allergies: string[]
   cuisines: Cuisine[]
   adventurousness: number

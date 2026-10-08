@@ -70,6 +70,13 @@ export const ProfileInput = z.object({
   cookingStyle: z.enum(['svaki_dan', 'meal_prep']),
   minutesPerMeal: z.union([z.literal(15), z.literal(30), z.literal(45)]),
   diet: Diet,
+  /**
+   * Dodatno (2026-10-08 15:25, Leon): vise dijeta odjednom (npr. bez laktoze + bez glutena)
+   * i slobodni tekst "ostalo". `diet` ostaje zbog kompatibilnosti = prva/najstroza.
+   * Sve su tvrde: provjera sastojaka gleda uniju diet + diets.
+   */
+  diets: z.array(Diet).max(6).default([]),
+  dietNote: z.string().trim().max(200).default(''),
   allergies: z.array(z.string()).default([]),
   cuisines: z.array(Cuisine).default([]),
   adventurousness: z.number().int().min(1).max(5),

@@ -164,3 +164,8 @@ usporedba s dostavom. Sve to radi.
   Preuzmi u trgovini + termin, potvrda s brojem narudžbe (KUH-…) ostaje na ekranu, "Kopiraj popis",
   "Podijeli popis" (Web Share, fallback kopiranje). Konzum deep link je samo mali link u dnu sheeta.
   Demo narudžba, ne šalje se trgovini (piše na ekranu). Backend nedirnut.
+- **"Kako jedeš?" s više izbora + Ostalo (Leon 15:25):** API.md §2 dodatno `diets: Diet[]` i
+  `dietNote: string` (unatrag kompatibilno, `diet` ostaje = prva). Kolone `profiles.diets`,
+  `profiles.diet_note` dodane `drizzle-kit push` na produkcijsku bazu 15:35. Tvrda provjera
+  sastojaka (swap, kandidati) i prompt gledaju uniju svih dijeta; `dietNote` ide planeru doslovno.
+  Testovi A5/A6. Frontend: čipovi s više izbora, "Ostalo" otvara tekst, "Dalje".

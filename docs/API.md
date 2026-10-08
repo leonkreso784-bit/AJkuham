@@ -60,6 +60,8 @@ Sprema odgovore iz tap-onboardinga. Idempotentno.
 | `cookingStyle` | enum | `svaki_dan`, `meal_prep` |
 | `minutesPerMeal` | int | 15, 30, 45 |
 | `diet` | enum | `sve`, `bez_mesa`, `vegan`, `bez_svinjetine`, `bez_laktoze`, `bez_glutena` |
+| `diets` | enum[] | *(dodano 2026-10-08 15:30)* više dijeta odjednom, isti enum; opcionalno, default `[]`. `diet` ostaje = prva/najstroža. Sve su tvrde ograničenje. |
+| `dietNote` | string | *(dodano 2026-10-08 15:30)* "Ostalo": slobodni tekst do 200 znakova, npr. "ne jedem ribu"; opcionalno, default `""`. Ide planeru doslovno. |
 | `allergies` | string[] | slobodno, može biti prazno |
 | `cuisines` | string[] | `domaca`, `talijanska`, `azijska`, `meksicka`, `mediteranska`, `bliskoistocna`, `indijska`, `comfort` |
 | `adventurousness` | int | 1–5 (1 = sigurno, 5 = eksperimentalno) |

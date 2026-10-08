@@ -327,6 +327,13 @@ const STYLE_LABEL: Record<ProfileInput['cookingStyle'], string> = {
   svaki_dan: 'kuha svaki dan',
 }
 
+/** Unija diet + diets, bez "sve" ako postoji ista stroza. */
+function allDiets(p: ProfileInput): ProfileInput['diet'][] {
+  const set = [...new Set([p.diet, ...p.diets])]
+  const strict = set.filter((d) => d !== 'sve')
+  return strict.length ? strict : ['sve']
+}
+
 /** 1 osoba, 2-4 osobe, 5+ osoba */
 function osobe(n: number): string {
   if (n === 1) return '1 osoba'
@@ -340,7 +347,8 @@ function formatProfile(p: ProfileInput, tasteNotes: string): string {
     `Ljudi u kući: ${p.householdSize}`,
     `Stil kuhanja: ${STYLE_LABEL[p.cookingStyle]}`,
     `Minute po obroku: ${p.minutesPerMeal}`,
-    `Dijeta: ${DIET_LABEL[p.diet]}`,
+    `Dijeta: ${allDiets(p).map((d) => DIET_LABEL[d]).join(' + ')}`,
+    ...(p.dietNote.trim() ? [`Ostalo o prehrani (korisnik sam napisao, poštuj doslovno): ${p.dietNote.trim()}`] : []),
     `Alergije: ${p.allergies.length ? p.allergies.join(', ') : 'nema'}`,
     `Kuhinje koje voli: ${p.cuisines.length ? p.cuisines.join(', ') : 'nije rekao'}`,
     `Avanturizam (1 = samo poznato, 5 = sve novo): ${p.adventurousness}`,
@@ -687,7 +695,8 @@ function fallbackMealFor(slot: Slot, profile: ProfileInput): PlannedMeal {
   const hasAllergen = (name: string) => allergies.some((a) => name.toLowerCase().includes(a))
 
   // Dijeta je tvrda: zadnji kandidat u svakom slotu je siguran za sve dijete.
-  const dietSafe = candidates.filter((m) => !m.avoidDiet.includes(profile.diet))
+  const diets = allDiets(profile)
+  const dietSafe = candidates.filter((m) => !m.avoidDiet.some((d) => diets.includes(d)))
   const pool = dietSafe.length ? dietSafe : [candidates[candidates.length - 1]!]
 
   // Alergen je isto tvrd: prvo cisti kandidat, inace izbaci alergen iz

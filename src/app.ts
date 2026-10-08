@@ -119,6 +119,8 @@ function rowToProfile(row: typeof schema.profiles.$inferSelect | undefined) {
     cookingStyle: row.cookingStyle,
     minutesPerMeal: row.minutesPerMeal,
     diet: row.diet,
+    diets: row.diets ?? [],
+    dietNote: row.dietNote ?? '',
     allergies: row.allergies,
     cuisines: row.cuisines,
     adventurousness: row.adventurousness,
@@ -351,9 +353,12 @@ const DIET_FORBIDDEN: Record<string, string[]> = {
 
 function violatesProfile(meal: PlannedMeal, profile: ProfileInput): string | null {
   const names = meal.ingredients.map((i) => stripDiacritics(i.name))
-  const forbidden = DIET_FORBIDDEN[profile.diet] ?? []
+  // sve dijete su tvrde: unija diet + diets
+  const diets = [...new Set([profile.diet, ...profile.diets])]
   for (const n of names) {
-    if (forbidden.some((f) => n.includes(f))) return `dijeta ${profile.diet}: ${n}`
+    for (const d of diets) {
+      if ((DIET_FORBIDDEN[d] ?? []).some((f) => n.includes(f))) return `dijeta ${d}: ${n}`
+    }
     for (const a of profile.allergies) {
       const na = stripDiacritics(a)
       if (na && n.includes(na)) return `alergija ${a}: ${n}`
@@ -504,6 +509,8 @@ app.put('/api/profile', async (c) => {
     cookingStyle: input.cookingStyle,
     minutesPerMeal: input.minutesPerMeal,
     diet: input.diet,
+    diets: input.diets,
+    dietNote: input.dietNote,
     allergies: input.allergies,
     cuisines: input.cuisines,
     adventurousness: input.adventurousness,
