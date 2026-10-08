@@ -82,12 +82,26 @@ pod starim imenom).
 
 ---
 
+## Drugi krug (12:40–13:30)
+
+- **Vision testiran na pravoj fotki frižidera** (Wikimedia, 1920 px): 19 namirnica
+  u 10 s, špinat `umire`, konzerve `ok`, 3 pametna follow-up pitanja. Fotke se
+  sad **smanjuju na 1600 px prije visiona** (`sharp`), pa 9 MB fotka s telefona
+  prolazi u 11 s; raw limit je 25 MB, EXIF rotacija se poštuje.
+- **Rubni slučajevi prošli**: prazan pantry + vegan + 2 obroka (30 s), 5 obroka
+  + bez glutena + alergije jaja/kikiriki + 4 osobe (82 s), bez mesa + strogi
+  budžet (57 s). Dijete i alergije poštovane u planu i u swapu.
+- **Budžet**: model sad cilja 75 % zadanog budžeta jer pakiranja pojedu ostatak.
+- **Akcije se rotiraju** (slučajan izbor unutar kategorije) da svaki demo ne
+  izgleda isto.
+- **`docs/samples/*.json`** — pravi odgovori s produkcije za svih 8 oblika
+  (questions, fridge-scan, pantry, plan, meal, cart, swap, shake). Frontend
+  sesija ih može koristiti kao fixture.
+
 ## Što bi se još dalo (ako ima vremena)
 
-1. Test visiona na pravim fotkama frižidera — prompt i ruta su spremni,
-   `curl -F image=@fotka.jpg`, nije još pozvano s pravom slikom
-2. Kraći plan: `steps` ograničiti na 4 kratka koraka u promptu → ~40 s
-3. `cijene-api` za prave cijene (D20), tek nakon svega ostalog
+1. `cijene-api` za prave cijene (D20), tek nakon svega ostalog
+2. Ciljani "tighten" prolaz kad košarica probije budžet za >30 %
 
 ## Što se ne reže
 

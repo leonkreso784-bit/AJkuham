@@ -13,6 +13,15 @@ obavezno. CORS je otvoren (`*`), header `x-session-id` je dopušten.
 
 Lokalno: `npm run dev` sluša na `PORT` iz `.env` (default 3000).
 
+**Pravi odgovori za fixture:** `docs/samples/*.json` — snimljeno s produkcije,
+po jedan za svaki oblik (questions, fridge-scan, pantry, plan, meal, cart,
+swap, shake).
+
+**Upload fotke:** `multipart/form-data`, polje `image` (može više puta),
+opcionalno `source` (`frižider` / `zamrzivač` / `ostava`). Backend smanjuje
+sliku sam, pa šaljite original s telefona (do 25 MB). `<input type="file"
+accept="image/*" capture="environment">` je dovoljno. Scan traje ~10 s.
+
 ## Jedino što dijelimo
 
 **`docs/API.md`** — 13 ruta s točnim JSON-ima. To je zamrznuti kontrakt.
