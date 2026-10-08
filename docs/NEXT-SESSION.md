@@ -36,6 +36,8 @@ Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <
    "Nastavi, odabiri su zapamćeni" (profil bez plana) i onboarding kaže "Ovo su tvoji prošli odabiri";
    (2) termin dostave/preuzimanja: dan (danas/sutra/prekosutra ili bilo koji datum) + vrijeme
    (prozori 8–20 h ili točan sat), sve neobavezno, sažetak ispod.
+   17:15 SVE LIVE: backend 95623fc (ukljucen Gemini fallback iz kuhai-27, u produkciji neaktivan jer
+   nema Google kljuca), web a028ba3. Backend testovi na produkciji 117/118, jedini pad = D13 budzet.
 5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
 
 **Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;
