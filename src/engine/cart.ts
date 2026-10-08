@@ -92,6 +92,7 @@ function aggregateIngredients(meals: MealForCart[]): AggregatedIngredient[] {
       const norm = normalize(ing.quantity, ing.unit, ing.name)
       const normName = normalizeName(ing.name)
       if (!normName) continue
+      if (IGNORED_INGREDIENT.test(normName)) continue // voda/led se ne kupuju
       const key = `${normName}|${norm.unit}`
       const existing = byKey.get(key)
       if (existing) {
