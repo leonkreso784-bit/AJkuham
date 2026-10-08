@@ -6,6 +6,8 @@ Ime: **KuhAI** — "kuhaj" + AI u jednoj riječi.
 
 Hackathon projekt, SHAKER 2026.
 
+**Live API:** https://kuhai-api-production.up.railway.app (`/health`)
+
 ---
 
 ## Što radi

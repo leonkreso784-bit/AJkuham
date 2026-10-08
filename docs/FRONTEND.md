@@ -2,6 +2,17 @@
 
 Ovo je sve što trebate od nas. Ne morate čekati da backend bude gotov.
 
+## Live backend
+
+**Base URL (prod):** `https://kuhai-api-production.up.railway.app`
+
+`GET /health` vraća `{"ok":true}`. Sve rute iz `docs/API.md` su žive i testirane
+od kraja do kraja (session → profil → pitanja → pantry → plan → košarica →
+swap → shake). `POST /api/plan/generate` traje **60–90 s** — progress stanje je
+obavezno. CORS je otvoren (`*`), header `x-session-id` je dopušten.
+
+Lokalno: `npm run dev` sluša na `PORT` iz `.env` (default 3000).
+
 ## Jedino što dijelimo
 
 **`docs/API.md`** — 13 ruta s točnim JSON-ima. To je zamrznuti kontrakt.

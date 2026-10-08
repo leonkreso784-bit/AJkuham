@@ -1,131 +1,95 @@
 # KuhAI — Stanje i handoff
 
-Zadnje ažurirano: **2026-10-08**, kraj pripremne sesije.
-Gradnja **nije** počela. Priprema je zaključena.
-
-**Sljedeća sesija kreće iz `docs/NEXT-SESSION.md`** — tamo je gotov kickoff
-prompt i gotovi briefovi za sva 4 agent tracka. Ovaj dokument je stanje; onaj je
-akcija.
+Zadnje ažurirano: **2026-10-08, ~12:40**, sredina hackathona.
+Backend je **gotov, deployan i testiran od kraja do kraja.**
 
 ---
 
 ## TL;DR
 
-**Nema blokada.** Sve je napisano, temelj stoji, `tsc --noEmit` je čist, baza
-radi i shema je primijenjena. Sljedeća sesija ide ravno na `docs/PLAN.md` korak
-S1, s 4 agenta paralelno.
-
----
-
-## Što je gotovo
-
-### Dokumentacija
-| file | sadržaj |
+| | |
 |---|---|
-| `docs/NEXT-SESSION.md` | **copy-paste** kickoff prompt + 4 agent briefa |
-| `CLAUDE.md` | pravila rada, stack, struktura, što se ne smije dirati |
-| `docs/SPEC.md` | 12 sekcija; §2 objašnjava zašto očiti tok nije dovoljan |
-| `docs/API.md` | **zamrznuti kontrakt**, 13 ruta s točnim JSON-ima |
-| `docs/PROMPTS.md` | **gotovi produkcijski promptovi** za sva 4 AI poziva |
-| `docs/DATA-MODEL.md` | 7 tablica, kanonske jedinice, pretvorbe |
-| `docs/PLAN.md` | raspored po satima, agent trackovi, što se reže |
-| `docs/DECISIONS.md` | 19 odluka s obrazloženjem |
-| `docs/FRONTEND.md` | sve za frontend tim, uključujući nove ekrane |
+| Live API | **https://kuhai-api-production.up.railway.app** (`/health` → `{"ok":true}`) |
+| Rute | svih 13 iz `docs/API.md`, pozvane uživo na produkciji |
+| `npm run typecheck` | čist |
+| Katalog | 249 proizvoda, 53 na akciji, seedano u Railway Postgres |
+| Plan generate | **60–90 s** (4 paralelna poziva), frontend mora imati progress |
+| Ime | **KuhAI** (preimenovano iz AJkuham 2026-10-08) |
 
-### Kod — temelj, typecheck čist
-| file | sadržaj |
+Sve je na `main` i pushano na GitHub (`leonkreso784-bit/AJkuham` — repo ostaje
+pod starim imenom).
+
+---
+
+## Što je napravljeno u sesiji gradnje
+
+### Kod
+| file | što |
 |---|---|
-| `package.json` | Hono, Drizzle, postgres.js, Zod, AI SDK, fuse.js — **instalirano** |
-| `src/db/schema.ts` | 7 tablica, uključujući `urgency`, `why`, `rescue`, `budget_eur` |
-| `src/db/client.ts` | postgres.js + Drizzle; radi i na Railwayu i na Neonu |
-| `src/schemas/index.ts` | sve Zod sheme; AI-strane razdvojene od API-strana |
-| `src/env.ts` | validacija env-a, pada s jasnom porukom |
-| `tsconfig.json`, `drizzle.config.ts`, `vercel.json` | |
+| `src/app.ts` | Hono app, 13 ruta, CORS, greške u obliku iz API.md, sesija iz `x-session-id` |
+| `src/server.ts` | lokalni/Railway Node server (`npm run dev`, `npm start`) |
+| `api/index.ts` | Vercel ulaz (`hono/vercel`), rezerva ako Railway padne |
+| `src/ai/questions.ts` | adaptivna pitanja, statični fallback od 4 pitanja |
+| `src/ai/vision.ts` | fotka → namirnice, `urgency` izvodi kod, nikad ne baca |
+| `src/ai/planner.ts` | tjedan u **4 paralelna dijela** (pon-uto, sri-čet, pet-sub, ned) sa sidrima; fallback dan-po-dan → statični obroci; swap/shake |
+| `src/engine/units.ts` | pretvorbe jedinica, gustoće, mase komada |
+| `src/engine/packaging.ts` | sastojak → pakiranja, `neededAmount` / `leftoverAmount` |
+| `src/engine/matcher.ts` | fuse.js nad keywords, `exact`/`fuzzy`/`generic`, nikad prazna košarica |
+| `src/engine/cart.ts` | agregacija, odbijanje pantry-ja, `savedFromWasteEur`, `withinBudget`, `deliveryComparison` |
+| `src/engine/__check.ts` | ~60 brzih provjera (`npx tsx src/engine/__check.ts`) |
+| `data/konzum-products.json` + `src/db/seed.ts` | katalog i seed |
 
-**Nije napisano, i to je namjerno:** `src/app.ts`, `src/server.ts`,
-`src/ai/*`, `src/engine/*`, `data/konzum-products.json`. To je posao sljedeće
-sesije i raspodijeljeno je na trackove.
-
-### Alat
-`.claude/statusline.js` dodaje SHAKER countdown ispred postojećeg statuslinea.
-Rok je u `.claude/deadline.json` (trenutno **2026-10-08 18:48**) — promjena
-vrijedi odmah i u svakoj novoj sesiji. Zeleno >3 h, žuto 1–3 h, crveno <1 h.
-
-### Računi i servisi
-| | stanje |
-|---|---|
-| GitHub repo | `leonkreso784-bit/AJkuham` (GitHub repo ostaje pod starim imenom), public, sve na `main` |
-| Klara610 | **pozvana** s write pristupom — mora prihvatiti invite |
-| `ANTHROPIC_API_KEY` | **radi**, testirano pravim pozivom (HTTP 200, `claude-sonnet-5-5`). U `.env`, gitignoran |
-| Railway CLI | instaliran, prijavljen kao LeonKreso |
-| Railway projekti | 4 stara zakazana za brisanje 2026-10-10 |
-| Vercel CLI | instaliran, prijavljen kao `leonkreso784-bit` |
-| Vercel projekt | `leon-kresos-projects/ajkuham`, povezan s GitHub repom |
+### Što je provjereno uživo (produkcija)
+- `POST /api/questions`: 5 pitanja, točno jedno `text`, pitanja ovise o profilu
+  (meal prep → termin i posude; alergija orasi → koliko strogo; budžet → ponavljanje)
+- `POST /api/plan/generate` s budžetom 35 €: špinat i jogurt (umire) potrošeni u
+  pon/uto, oba u `rescue.savedItems`, svaki obrok ima konkretan `why`, 3 prep
+  bloka s `timeline` gdje je traka `ti` 25–40 % minuta bloka
+- 60 € vs 35 € daje **vidljivo drukčiji tjedan**: 8 mesnih obroka s pilećim
+  prsima vs 4 mesna s batkom, jaja i riža
+- `GET /cart`: realna pakiranja (1 kg riže, ne 10 l ulja), `withinBudget: false`
+  kad ne stane, `deliveryComparison` s `assumption`
+- swap i shake vraćaju novi obrok s novim `id`, isti slot
 
 ---
 
-## Baza — riješeno
+## Zamke i odluke iz gradnje
 
-Railway projekt **`ajkuham`** (`381157da-303a-4bad-92f3-2e43043ac9af`),
-workspace `LeonKreso's Projects`, environment `production`.
-Postgres 18, EU West, volume 4.9 GB.
-
-**Shema je primijenjena** (`npm run db:push`, svih 7 tablica + foreign keyevi).
-
-Jedna zamka za sljedeću sesiju: Railwayev `DATABASE_URL` pokazuje na
-`postgres.railway.internal`, što **ne radi izvan Railwayeve mreže**. Zato je
-kreiran javni TCP proxy:
-
-```
-maglev.proxy.rlwy.net:36534  ->  Postgres:5432
-```
-
-`.env` već sadrži connection string preko tog proxyja. Ako ga treba ponovno
-izvući:
-
-```bash
-railway variables --service Postgres --json     # PGUSER, POSTGRES_PASSWORD, PGDATABASE
-railway tcp-proxy list --service Postgres       # host i port proxyja
-```
-
-Kad backend bude deployan **na Railway**, tamo treba koristiti interni
-`DATABASE_URL` (brže i bez prolaza kroz proxy); lokalno ide proxy verzija.
-
-### Dizajn i logo
-Ekipa radi, nije gotovo. **Ne blokira backend.** Kad dođe, ide u repo i README.
+- **Jedan poziv za cijeli tjedan ne radi.** 21 obrok na hrvatskom prelazi
+  24k izlaznih tokena i traje 4+ min, pa pukne s "could not parse". Zato
+  planer radi 4 paralelna poziva sa sidrima (isti akcijski proizvodi i
+  nosači u svakom dijelu, `umire` samo u prvom). `PLANNER_MODE=week` vraća
+  stari način ako netko želi eksperimentirati.
+- **Budžet se ne poštuje do eura.** Model nema cijene; dobiva razinu štednje
+  izvedenu iz €/porciji (kod računa) i grubu orijentaciju cijena. Plan na 35 €
+  izađe ~50–60 € jer se kupuju cijela pakiranja. `withinBudget: false` i razlika
+  su vidljivi — to je po dizajnu (D13), ne bug.
+- **Port 3000 je na Leonovom laptopu zauzet** drugim Next.js procesom. Lokalno
+  pokreći s `PORT=3001 npm run dev`.
+- **curl na Windowsu šalje cp1250** kad se JSON piše inline s dijakritikom —
+  za ručne testove body stavi u UTF-8 datoteku i šalji `-d @file`. Iz browsera
+  nema tog problema.
+- **Railway**: servis `kuhai-api` u projektu `ajkuham`, `DATABASE_URL` je
+  referenca `${{Postgres.DATABASE_URL}}` (interni host), `ANTHROPIC_API_KEY`
+  postavljen. Deploy: `railway up --service kuhai-api -d`. Lokalno `.env` i
+  dalje ide preko javnog proxyja `maglev.proxy.rlwy.net:36534`.
+- **`docs/API.md` nije diran.** Linija "Base URL (prod)" čeka Leonov `api!:`
+  commit; URL je zasad u `docs/FRONTEND.md` i README-u.
+- Tekst pitanja se čuva u `profiles.qa` pod ključem `q_text:<id>` da planer
+  dobije "pitanje: odgovor" bez nove tablice.
+- Swap briše stari obrok i ubacuje novi na isto mjesto (`replacedMealId` čuva
+  trag), pa `GET /api/plan/:id` odmah pokazuje zamjenu.
 
 ---
 
-## Što se dogodilo u pripremnoj sesiji, ukratko
+## Što bi se još dalo (ako ima vremena)
 
-Proizvod je prošao kreativni preokret. Prva verzija koncepta bila je fitness
-planer s makroima; druga je bila "AI meal planner" (profil → plan → košarica).
-Ni jedno nije dovoljno — očiti tok stavlja sva prava ograničenja na kraj.
+1. Test visiona na pravim fotkama frižidera — prompt i ruta su spremni,
+   `curl -F image=@fotka.jpg`, nije još pozvano s pravom slikom
+2. Kraći plan: `steps` ograničiti na 4 kratka koraka u promptu → ~40 s
+3. `cijene-api` za prave cijene (D20), tek nakon svega ostalog
 
-Zaključano je šest preokreta (`docs/DECISIONS.md` D13–D19): budžet kao ulaz,
-frižider kao protagonist s rokovima, rescue-first planiranje, planiranje iz
-akcija, prep blok kao paralelni timeline, i jedna brojka na kraju (usporedba s
-dostavom). Plus shake kao gimmick koji dijeli kod sa swapom.
+## Što se ne reže
 
-Ključno: **ništa od toga nije novi podsustav.** Sve je promjena prompta i
-izlazne sheme, zato raspored ostaje 5 sati. Ako u sljedećoj sesiji netko otvori
-novi modul zbog novog smjera, zadatak je pogrešno shvaćen.
-
----
-
-## Što NE zaboraviti
-
-- **Tajne idu samo u `.env`.** `ANTHROPIC_API_KEY` je u jednom trenutku bio
-  upisan u `.env.example` (tracked file, javni repo) — izvučen je prije nego je
-  ikad commitan. Nije procurio. `.gitignore` ima `!.env.example` da placeholder
-  ostane tracked a pravi `.env` nikad ne bude.
-- `docs/API.md` se mijenja **samo** commitom čiji naslov počinje s `api!:`.
-- Logika pakiranja i cijene **nije AI** — deterministički kod u `src/engine/`.
-  Model ne računa eure (D6). AI vraća `PlannedRescue` (imena + poruka), brojke
-  dopisuje engine.
-- `urgency` izvodi **kod**, ne model (D14). Model vraća samo `expiresInDays`.
-- Planer dobiva **samo kategorije koje postoje u katalogu** (D7).
-- Red gradnje plana je fiksan: `umire` → `skoro` → `onSale` → ostatak (D15).
-- Fotke frižidera se **ne čuvaju** — zato nam ne treba object storage.
-- Svi importi s `.js` ekstenzijom (ESM projekt).
-- `deliveryComparison.assumption` je obavezan i ide na ekran (D18).
+Vision s rokovima, rescue-first plan, budžet kao ulaz, logika pakiranja,
+usporedba s dostavom. Sve to radi.
