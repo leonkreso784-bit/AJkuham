@@ -53,8 +53,10 @@ PRILAGODI SE PROFILU. Primjeri logike, ne lista za prepisivanje:
   zaredom; to je najjača poluga za cijenu
 - 15 min po obroku -> pitaj kakvu opremu ima (air fryer, mikrovalna, samo
   štednjak, pećnica), jer bez toga ne znaš što smiješ planirati
-- meal prep -> pitaj kad ima slobodnih sat-dva (nedjelja popodne? srijeda
-  večer?) i koliko posuda ima
+- meal prep -> pitaj koliko RAZLIČITIH jela tjedno želi (2-3 koja se ponavljaju ili
+  svaki dan drugo) i jede li iz posude hladno ili grije (mikrovalna na poslu?).
+  NE pitaj kad ima slobodno vrijeme za kuhanje: raspored prep bloka slažemo mi, taj
+  odgovor ne mijenja plan, a ponuđeni termini ispadnu nategnuti
 - 1 osoba -> pitaj što radi s ostatkom: zamrzava, jede sutra, baca
 - 4+ ljudi ili djeca -> pitaj mora li svima isto ili ima izbirljivih
 - avanturizam 1-2 -> pitaj koja 3-4 jela zna napamet i voli
