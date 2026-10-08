@@ -24,9 +24,9 @@ Pokretanje: `node scripts/backend-tests.mjs` i `node scripts/e2e.mjs <app-url> <
 1. Prolaz na pravom telefonu još nitko nije napravio (kamera, shake, flip na iOS-u, "dodaj na početni zaslon").
 2. Čekanja: kartice ~42 s, plan ~70–80 s. Pokriti pričom na sceni; telefon na mobilne podatke.
 3. Anthropic kredit danas jednom pao na nulu; provjeriti saldo prije scene. Preklopnik na Gemini u §4.
-4. Necommitane tuđe promjene u korijenu: `src/env.ts` (AI ključ neobavezan ako je Gemini) i
-   `scripts/compare-providers.mjs` (sesija kuhai-27, 15:37). Bezopasno, ali **ne deployati backend**
-   (`railway up` uploada radno stablo) dok se to ne commita ili vrati.
+4. Tuđe Gemini promjene (kuhai-27) commitane u 942e7b4; radno stablo čisto. Backend deployan 16:03
+   (d51397b): onboarding više ne pita "kad imaš sat-dva za prep", nego koliko različitih jela i
+   hladno/grijano iz posude (Leon 16:00). Produkcija provjerena.
 5. Plan na 60 € izlazi 70–84 € (D13); košarica to kaže tekstom.
 
 **Pravila koja su se danas pokazala važnima:** deploy weba SAMO `bash scripts/deploy-web.sh`;
