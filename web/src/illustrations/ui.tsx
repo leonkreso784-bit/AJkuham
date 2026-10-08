@@ -187,3 +187,28 @@ export function Lonac() {
     </>
   )
 }
+
+/** kvačica: "bih ovo jesti" (ide na crveni gumb, zato krem) */
+export function Kvacica() {
+  return (
+    <>
+      <S d="M10.1 37.9A5.5 5.5 0 0 1 17.9 30.1L25.8 38L46.9 14.3A5.5 5.5 0 0 1 55.1 21.7L30.3 50.2C28.2 52.6 24.5 52.7 22.3 50.4Z" fill={P.cream} off={2.5}>
+        <Hi d="M14.5 34L21 40.5M48 18.5L41 26.5" w={2.2} o={0.9} />
+      </S>
+    </>
+  )
+}
+
+/** iks: "ne bih" (na bijelom gumbu, tamno smeđ, nije crven) */
+export function Iks() {
+  return (
+    <>
+      <S d="M12.1 19.9A5.5 5.5 0 0 1 19.9 12.1L51.9 44.1A5.5 5.5 0 0 1 44.1 51.9Z" fill={P.pan} off={2.5}>
+        <Hi d="M16.5 16.5L24 24" w={2.2} o={0.45} />
+      </S>
+      <S d="M51.9 19.9A5.5 5.5 0 0 0 44.1 12.1L12.1 44.1A5.5 5.5 0 0 0 19.9 51.9Z" fill={P.pan} off={2.5}>
+        <Hi d="M47.5 16.5L40 24" w={2.2} o={0.45} />
+      </S>
+    </>
+  )
+}

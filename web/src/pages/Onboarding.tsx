@@ -20,6 +20,13 @@ const CUISINES: [Cuisine, string][] = [
 const ALLERGIES = ['orasi', 'kikiriki', 'jaja', 'riba', 'školjke', 'soja']
 const ADVENTURE: [number, string][] = [[1, 'Provjereno'], [3, 'Pola-pola'], [5, 'Iznenadi me']]
 const MEALS_SUB: Record<number, string> = { 2: 'brzo i jednostavno', 3: 'klasika', 4: '+ užina', 5: '+ dvije užine' }
+// Granice iz docs/API.md (mealsPerDay 2–5); upisani broj izvan toga se ne prihvaća.
+const MEALS_MIN = 2
+const MEALS_MAX = 5
+const clampMeals = (s: string): Profile['mealsPerDay'] | null => {
+  const n = Number(s)
+  return Number.isInteger(n) && n >= MEALS_MIN && n <= MEALS_MAX ? (n as Profile['mealsPerDay']) : null
+}
 // Ista pretpostavka kao backend deliveryComparison.
 const DELIVERY_PER_MEAL = 14.76
 
@@ -44,6 +51,7 @@ export default function Onboarding() {
   const [qi, setQi] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
   const [allergyDraft, setAllergyDraft] = useState('')
+  const [mealsTyped, setMealsTyped] = useState('')
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
 
@@ -111,14 +119,28 @@ export default function Onboarding() {
       bot: <>Bok! Ja sam KuhAI i složit ću ti cijeli tjedan hrane. Za početak: <b>koliko obroka dnevno</b> pojedeš?</>,
       answer: `${p.mealsPerDay} obroka dnevno`,
       input: (
-        <div className="grid grid-cols-2 gap-2">
-          {[2, 3, 4, 5].map((n) => (
-            <button key={n} onClick={() => tap({ mealsPerDay: n as Profile['mealsPerDay'] })}
-              className={cx('rounded-2xl border bg-white px-4 py-3 text-left transition-colors active:translate-y-px', p.mealsPerDay === n && step > 0 ? 'border-ink ring-1 ring-ink' : 'border-line hover:border-[#E6D3BF]')}>
-              <span className="block text-2xl font-black">{n}</span>
-              <span className="text-sm text-muted">{MEALS_SUB[n]}</span>
-            </button>
-          ))}
+        <div>
+          <div className="grid grid-cols-2 gap-2">
+            {[2, 3, 4, 5].map((n) => (
+              <button key={n} onClick={() => tap({ mealsPerDay: n as Profile['mealsPerDay'] })}
+                className={cx('rounded-2xl border bg-white px-4 py-3 text-left transition-colors active:translate-y-px', p.mealsPerDay === n && step > 0 ? 'border-ink ring-1 ring-ink' : 'border-line hover:border-[#E6D3BF]')}>
+                <span className="block text-2xl font-black">{n}</span>
+                <span className="text-sm text-muted">{MEALS_SUB[n]}</span>
+              </button>
+            ))}
+          </div>
+          {/* Leon (14:40): broj se mora moci upisati. Granica je ona koju API vec ima: 2 do 5. */}
+          <form className="mt-2 flex items-center gap-2 rounded-2xl border border-line bg-white px-4 py-2"
+            onSubmit={(e) => { e.preventDefault(); const n = clampMeals(mealsTyped); if (n) tap({ mealsPerDay: n }) }}>
+            <label htmlFor="meals-typed" className="flex-1 text-sm font-bold text-muted">Ili upiši broj (2 do {MEALS_MAX})</label>
+            <input id="meals-typed" type="number" inputMode="numeric" min={MEALS_MIN} max={MEALS_MAX} step={1} value={mealsTyped}
+              onChange={(e) => setMealsTyped(e.target.value)} placeholder={String(p.mealsPerDay)}
+              className="w-16 rounded-xl border border-line bg-bg px-2 py-1.5 text-center text-lg font-black tabular-nums outline-none focus:border-ink" />
+            <button type="submit" disabled={!clampMeals(mealsTyped)} className="rounded-xl bg-ink px-3 py-2 text-sm font-extrabold text-white disabled:opacity-40">U redu</button>
+          </form>
+          {mealsTyped !== '' && !clampMeals(mealsTyped) && (
+            <p className="mt-1 text-xs font-bold text-hot">Može između {MEALS_MIN} i {MEALS_MAX} obroka dnevno.</p>
+          )}
         </div>
       ),
     },

@@ -51,6 +51,8 @@ export const ART = {
   kuhar: U.Kuhar,
   dostava: U.Dostava,
   lonac: U.Lonac,
+  kvacica: U.Kvacica,
+  iks: U.Iks,
 } as const
 
 export type ArtName = keyof typeof ART
@@ -67,7 +69,7 @@ export const INGREDIENT_ARTS = [
 ] as const satisfies readonly ArtName[]
 
 export const UI_ARTS = [
-  'kamera', 'frizider', 'kalendar', 'kosarica', 'pecnica', 'stednjak', 'kuhar', 'dostava', 'lonac',
+  'kamera', 'frizider', 'kalendar', 'kosarica', 'pecnica', 'stednjak', 'kuhar', 'dostava', 'lonac', 'kvacica', 'iks',
 ] as const satisfies readonly ArtName[]
 
 /** Inline SVG ilustracija. Veličina ide kroz className (npr. "size-12").

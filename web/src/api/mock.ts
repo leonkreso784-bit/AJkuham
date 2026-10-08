@@ -1,5 +1,5 @@
 // Mock odgovori po docs/API.md. Koristi se kad VITE_API_URL nije postavljen.
-import type { Cart, MealDetail, Plan, PlanMeal, Question, ScanResult, Slot } from './types'
+import type { Cart, MealDetail, Plan, PlanMeal, Question, ScanResult, Slot, TasteCard } from './types'
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -112,6 +112,84 @@ function detail(id: string): MealDetail {
   }
 }
 
+
+// "Što ti se jede?": 10 kandidata s receptom. Sastojci prate mock frižider (jaja, jogurt i špinat umiru, kupus i mrkva skoro).
+type Ing = TasteCard['ingredients'][number]
+const ing = (name: string, quantity: number, unit: Ing['unit'], inPantry = false, expiring = false): Ing => ({ name, quantity, unit, inPantry, expiring })
+
+const CANDIDATES: TasteCard[] = [
+  {
+    id: 'cand_01', title: 'Kajgana sa špinatom', slot: 'dorucak', minutes: 12, servings: 2, source: 'kuhaj_sad', imageHint: 'kajgana',
+    why: 'Špinat ti umire za 1 dan, a jaja već imaš.', usesExpiring: ['špinat'],
+    ingredients: [ing('jaja', 4, 'kom', true), ing('špinat', 150, 'g', true, true), ing('sir gauda', 40, 'g', true), ing('luk', 1, 'kom'), ing('maslinovo ulje', 15, 'ml', true)],
+    steps: ['Nasjeckaj luk i kratko ga prodinstaj na ulju.', 'Dodaj špinat i miješaj dok ne splasne, oko 2 minute.', 'Razmuti jaja, ulij u tavu i miješaj na srednjoj vatri dok se ne stisnu.', 'Posipaj naribanim sirom, posoli i posluži s kruhom.'],
+    nutrition: { kcal: 380, protein: 26, carbs: 6, fat: 28 },
+  },
+  {
+    id: 'cand_02', title: 'Zobena s jogurtom i jabukom', slot: 'dorucak', minutes: 5, servings: 2, source: 'kuhaj_sad', imageHint: 'zobena',
+    why: 'Jogurt mora otići za 2 dana, a zobena je 0,40 € po porciji.', usesExpiring: ['jogurt'],
+    ingredients: [ing('zobene pahuljice', 120, 'g'), ing('jogurt', 300, 'g', true, true), ing('jabuka', 1, 'kom'), ing('med', 20, 'g'), ing('cimet', 2, 'g')],
+    steps: ['Pomiješaj pahuljice i jogurt u zdjeli.', 'Naribaj jabuku i umiješaj je s medom.', 'Posipaj cimetom i ostavi 5 minuta da pahuljice omekšaju.'],
+    nutrition: { kcal: 410, protein: 16, carbs: 62, fat: 9 },
+  },
+  {
+    id: 'cand_03', title: 'Tost s jajem i rajčicom', slot: 'dorucak', minutes: 8, servings: 2, source: 'kuhaj_sad', imageHint: 'tost',
+    why: 'Brz doručak za dane kad jedeš u prolazu.', usesExpiring: [],
+    ingredients: [ing('kruh', 4, 'kom'), ing('jaja', 2, 'kom', true), ing('rajčica', 1, 'kom'), ing('maslac', 15, 'g'), ing('sol i papar', 1, 'g', true)],
+    steps: ['Tostiraj kruh i namaži maslacem.', 'Ispeci jaja na oko, 3 minute.', 'Nareži rajčicu na ploške, složi na tost, jaje na vrh.'],
+    nutrition: { kcal: 360, protein: 15, carbs: 38, fat: 16 },
+  },
+  {
+    id: 'cand_04', title: 'Piletina s rižom i povrćem', slot: 'rucak', minutes: 35, servings: 4, source: 'kuhaj_sad', imageHint: 'piletina riža',
+    why: 'Pileći file je na akciji, a mrkvu treba potrošiti.', usesExpiring: ['mrkva'],
+    ingredients: [ing('pileći file', 500, 'g'), ing('riža', 300, 'g'), ing('mrkva', 200, 'g', true, true), ing('paprika', 1, 'kom'), ing('luk', 1, 'kom'), ing('maslinovo ulje', 20, 'ml', true)],
+    steps: ['Nareži piletinu na kockice i začini.', 'Prodinstaj luk, dodaj mrkvu i papriku na kockice, 5 minuta.', 'Dodaj piletinu i peci dok ne porumeni, oko 8 minuta.', 'Dodaj rižu i 600 ml vode, poklopi i kuhaj 18 minuta na laganom.'],
+    nutrition: { kcal: 520, protein: 38, carbs: 62, fat: 11 },
+  },
+  {
+    id: 'cand_05', title: 'Varivo od leće', slot: 'rucak', minutes: 30, servings: 4, source: 'kuhaj_sad', imageHint: 'leća',
+    why: 'Leća je najjeftiniji protein u katalogu, a mrkva ide u varivo.', usesExpiring: ['mrkva'],
+    ingredients: [ing('leća', 300, 'g'), ing('mrkva', 100, 'g', true, true), ing('luk', 1, 'kom'), ing('češnjak', 2, 'kom'), ing('pelati', 400, 'g'), ing('lovor', 1, 'kom')],
+    steps: ['Prodinstaj luk i češnjak na ulju.', 'Dodaj mrkvu na kockice i leću, promiješaj.', 'Ulij pelate i 800 ml vode, dodaj lovor.', 'Kuhaj 25 minuta dok leća ne omekša, posoli na kraju.'],
+    nutrition: { kcal: 390, protein: 22, carbs: 58, fat: 6 },
+  },
+  {
+    id: 'cand_06', title: 'Svinjski file s tikvicama', slot: 'rucak', minutes: 25, servings: 2, source: 'kuhaj_sad', imageHint: 'svinjetina',
+    why: 'Svinjski file je -30 % ovaj tjedan.', usesExpiring: [],
+    ingredients: [ing('svinjski file', 400, 'g'), ing('tikvice', 2, 'kom'), ing('češnjak', 2, 'kom'), ing('maslinovo ulje', 20, 'ml', true), ing('ružmarin', 1, 'g')],
+    steps: ['Nareži file na medaljone i začini soli, paprom i ružmarinom.', 'Peci na vrućoj tavi 3 minute sa svake strane.', 'U istoj tavi ispeci tikvice na ploške s češnjakom, 6 minuta.'],
+    nutrition: { kcal: 460, protein: 44, carbs: 8, fat: 27 },
+  },
+  {
+    id: 'cand_07', title: 'Tjestenina s tikvicama', slot: 'rucak', minutes: 20, servings: 2, source: 'kuhaj_sad', imageHint: 'tjestenina',
+    why: 'Tikvice su na akciji, a sir gauda već čeka u frižideru.', usesExpiring: [],
+    ingredients: [ing('tjestenina', 250, 'g'), ing('tikvice', 2, 'kom'), ing('sir gauda', 60, 'g', true), ing('češnjak', 1, 'kom'), ing('maslinovo ulje', 20, 'ml', true)],
+    steps: ['Stavi tjesteninu kuhati po uputama.', 'Tikvice naribaj i prodinstaj s češnjakom na ulju, 6 minuta.', 'Umiješaj tjesteninu i naribani sir, dodaj malo vode od kuhanja.'],
+    nutrition: { kcal: 540, protein: 20, carbs: 82, fat: 15 },
+  },
+  {
+    id: 'cand_08', title: 'Salata od kupusa s jajem', slot: 'vecera', minutes: 10, servings: 2, source: 'kuhaj_sad', imageHint: 'salata',
+    why: 'Pola kupusa ti stoji u frižideru već tjedan.', usesExpiring: ['kupus'],
+    ingredients: [ing('kupus', 300, 'g', true, true), ing('jaja', 2, 'kom', true), ing('mrkva', 50, 'g', true), ing('ocat', 15, 'ml', true), ing('suncokretovo ulje', 20, 'ml', true)],
+    steps: ['Skuhaj jaja tvrdo, 9 minuta.', 'Kupus i mrkvu nareži tanko, posoli i izgnječi rukama.', 'Začini octom i uljem, dodaj jaja na četvrtine.'],
+    nutrition: { kcal: 240, protein: 12, carbs: 14, fat: 15 },
+  },
+  {
+    id: 'cand_09', title: 'Pečeni krumpir s jogurt-umakom', slot: 'vecera', minutes: 35, servings: 2, source: 'kuhaj_sad', imageHint: 'krumpir',
+    why: 'Krumpir je tvoj staple, a jogurt mora otići.', usesExpiring: ['jogurt'],
+    ingredients: [ing('krumpir', 600, 'g'), ing('jogurt', 150, 'g', true, true), ing('češnjak', 1, 'kom'), ing('maslinovo ulje', 20, 'ml', true), ing('peršin', 5, 'g')],
+    steps: ['Krumpir nareži na četvrtine, začini i pomiješaj s uljem.', 'Peci na 220 °C 30 minuta, okreni na pola.', 'Jogurt pomiješaj s nasjeckanim češnjakom i peršinom.'],
+    nutrition: { kcal: 420, protein: 10, carbs: 68, fat: 12 },
+  },
+  {
+    id: 'cand_10', title: 'Wok s piletinom', slot: 'vecera', minutes: 20, servings: 2, source: 'kuhaj_sad', imageHint: 'wok',
+    why: 'Rekao si da voliš azijsku kuhinju.', usesExpiring: [],
+    ingredients: [ing('pileći file', 300, 'g'), ing('paprika', 1, 'kom'), ing('kupus', 150, 'g', true), ing('soja umak', 30, 'ml'), ing('đumbir', 10, 'g'), ing('riža', 150, 'g')],
+    steps: ['Stavi rižu kuhati.', 'Piletinu nareži na trakice i peci na jakoj vatri 4 minute.', 'Dodaj povrće i đumbir, miješaj 4 minute.', 'Ulij soja umak, promiješaj i posluži na riži.'],
+    nutrition: { kcal: 480, protein: 34, carbs: 54, fat: 12 },
+  },
+]
+
 export const mock = {
   async session() { await wait(150); return { sessionId: 'ses_mock' } },
   async putProfile() { await wait(250); return { ok: true } },
@@ -167,6 +245,8 @@ export const mock = {
     const meal = await mock.swap(victim.id)
     return { replacedMealId: victim.id, meal }
   },
+  async candidates(): Promise<{ cards: TasteCard[] }> { await wait(1800); return { cards: CANDIDATES } },
+  async taste() { await wait(300); return { ok: true as const } },
   async cart(): Promise<Cart> {
     await wait(900)
     const budget = currentPlan?.budgetEur ?? 60

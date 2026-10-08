@@ -6,16 +6,20 @@ interface State {
   profile: Profile | null
   plan: Plan | null
   pantry: PantryItem[]
+  // "Što ti se jede?": naslovi jela (ne id-evi kandidata), šalju se backendu prije generiranja plana.
+  taste: { liked: string[]; disliked: string[] }
 }
+
+const EMPTY_TASTE = { liked: [] as string[], disliked: [] as string[] }
 
 const KEY = 'kuhai.state'
 
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return { pantry: [], ...JSON.parse(raw) } as State
+    if (raw) return { pantry: [], taste: EMPTY_TASTE, ...JSON.parse(raw) } as State
   } catch { /* nema storagea */ }
-  return { profile: null, plan: null, pantry: [] }
+  return { profile: null, plan: null, pantry: [], taste: EMPTY_TASTE }
 }
 
 let state = load()

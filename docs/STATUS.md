@@ -135,3 +135,19 @@ usporedba s dostavom. Sve to radi.
   Na demu mobilni podaci.
 - Playwright MCP browser je zauzet drugom sesijom; za browser testove koristi
   `scripts/e2e.mjs` (Playwright iz `KuhAI/video/node_modules`).
+
+## Četvrti krug (14:00–15:00): frontend u repo, F6, swipe kartice (backend), upis broja obroka
+
+- **Frontend je u repou kao `web/`** (commit 43c04f7, Leon potvrdio F7). Stari folder
+  `Documents\KuhAI\app` preimenovan u `app-OLD-sad-je-u-SHAKER-web`. Dev: `cd web && npx vite --port 5180 --strictPort --host`.
+- **F6.1 + F6.2 gotovi** (commit 1506bae): sken otkriva namirnice jednu po jednu; shake/swap
+  imaju vibraciju, flip kartice, toast i `swapFailed` poruku.
+- **Swipe kartice, backend live** (commit bacdc63, `api!:`): `POST /api/taste/candidates`
+  (10 kartica, 2 paralelna AI poziva, izmjereno 41 s) i `POST /api/taste` (liked/disliked naslovi
+  u `profiles.likes/dislikes`). Planer dijeli odabrana jela po 4 dijela tjedna i stavlja ih
+  doslovno; lokalno 3/3 odabrana u planu, 0/2 odbijenih. Spec: `docs/SWIPE.md`, kontrakt API.md §14–15.
+  Testovi: `backend-tests.mjs` sekcija F (12 provjera, ukupno 111). Frontend ekran `/biram` radi agent (14:35–).
+- **Onboarding: broj obroka se može upisati** (Leon 14:40), granice 2–5 iz API.md, poruka ako je izvan.
+- **Railway servis `kuhai-web`** kreiran (VITE_API_URL postavljen), `web/package.json` ima `start`
+  (`vite preview`), `vite.config.ts` `preview.allowedHosts`. Prvi deploy čeka da swipe ekran bude gotov.
+- Poznato: plan na 60 € izašao 83,97 € u taste testu (D13 budžet, +40 %).

@@ -9,11 +9,13 @@ import Landing from './pages/Landing'
 import Meal from './pages/Meal'
 import Onboarding from './pages/Onboarding'
 import Plan from './pages/Plan'
+import Swipe from './pages/Swipe'
 
 const router = createBrowserRouter([
   { path: '/', element: <Landing /> },
   { path: '/onboarding', element: <Onboarding /> },
   { path: '/frizider', element: <Fridge /> },
+  { path: '/biram', element: <Swipe /> },
   { path: '/plan', element: <Plan /> },
   { path: '/obrok/:id', element: <Meal /> },
   { path: '/kosarica', element: <Cart /> },

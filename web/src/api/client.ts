@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import { mock } from './mock'
-import type { Answer, Cart, MealDetail, PantryItem, Plan, Profile, Question, ScanResult } from './types'
+import type { Answer, Cart, MealDetail, PantryItem, Plan, Profile, Question, ScanResult, TasteCard } from './types'
 
 const BASE = import.meta.env.VITE_API_URL as string | undefined
 export const usingMock = !BASE
@@ -80,4 +80,7 @@ export const api = {
   swap: (id: string, reason?: string) => safe(() => req<MealDetail>('POST', `/api/meal/${id}/swap`, reason ? { reason } : {}, true, 60000), () => mock.swap(id)),
   shake: (planId: string) => safe(() => req<{ replacedMealId: string; meal: MealDetail }>('POST', `/api/plan/${planId}/shake`, undefined, true, 60000), mock.shake),
   cart: (planId: string) => safe(() => req<Cart>('GET', `/api/plan/${planId}/cart`), mock.cart),
+  // "Što ti se jede?": kandidati su AI poziv (25–45 s izmjereno), ukus je kratak upis.
+  candidates: () => safe(() => req<{ cards: TasteCard[] }>('POST', '/api/taste/candidates', {}, true, 90000), mock.candidates),
+  taste: (liked: string[], disliked: string[]) => safe(() => req<{ ok: true }>('POST', '/api/taste', { liked, disliked }, true, 20000), mock.taste),
 }

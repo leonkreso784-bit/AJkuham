@@ -76,7 +76,7 @@ export default function Fridge() {
       const pantry = items.filter((r) => r.name.trim()).map(({ name, quantity, unit, expiresInDays }) => ({ name: name.trim(), quantity, unit, expiresInDays }))
       await api.putPantry(pantry)
       setState({ plan: null, pantry })
-      nav('/plan')
+      nav('/biram')
     } catch (e) {
       setErr((e as Error).message)
     } finally { setBusy(false) }

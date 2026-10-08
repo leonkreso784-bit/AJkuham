@@ -262,9 +262,11 @@ Responzivno provjereno na 375 / 390 / 768 / 1024 / 1440 px, bez horizontalnog sc
 
 ## F6. Sljedeće, po vrijednosti za demo / vremenu
 
-0. **NOVO (Leon, 14:25): swipe kartice kvačica / X s flipom na recept.** Spec, odluke
-   i plan za frontend + backend u **`docs/SWIPE.md`**. Čeka Leonov odgovor na
-   odluke 1–2 (gdje u toku, odakle kartice); Faza 2 traži `api!:` commit.
+0. **Swipe kartice kvačica / X s flipom na recept (Leon, 14:25).** Odluka: tok A (prije
+   plana, nove rute), samo gumbi. **Backend live** (bacdc63, API.md §14–15, `docs/SWIPE.md`).
+   Frontend: ruta `/biram` (`pages/Swipe.tsx`), Fridge → `/biram` → `/plan`.
+   Leonov okvir: do 18:48 još puni testovi + deploy svega da ekipa vidi.
+0b. **Onboarding: broj obroka upisiv** (Leon, 14:40), granice 2–5 iz API.md. Gotovo.
 1. ~~Sken "živi"~~ **Gotovo 14:45:** odgovor se otkriva namirnicu po namirnicu
    (230 ms) s ilustracijom i rokom, brojač "3 / 7" na fotki, pa review (`Fridge.tsx`, `FoundRow`).
 2. ~~Shake feedback~~ **Gotovo 14:45:** `buzz()` (vibrate), kartica `animate-flip`,

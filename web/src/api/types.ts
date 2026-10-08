@@ -119,3 +119,6 @@ export interface Cart {
   unmatched: { name: string; quantity: number; unit: Unit }[]
   deepLink: string
 }
+
+// Kandidat za "Što ti se jede?" (POST /api/taste/candidates). Nije obrok iz plana: nema GET /api/meal/:id za njega.
+export type TasteCard = MealDetail & { imageHint: string }
