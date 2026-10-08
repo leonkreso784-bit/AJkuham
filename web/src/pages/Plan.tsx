@@ -318,7 +318,7 @@ function MealCard({ m, flash }: { m: PlanMeal; flash: boolean }) {
     <Link to={`/obrok/${m.id}`} id={`meal-${m.id}`}
       className={cx('flex items-center gap-3.5 rounded-2xl border border-line bg-white p-3 transition-colors hover:border-[#E6D3BF] active:translate-y-px lg:flex-col lg:items-stretch lg:gap-0 lg:overflow-hidden lg:p-0',
         flash && 'animate-flip ring-2 ring-brand/40')}>
-      <MealImage title={m.title} className="size-16 shrink-0 rounded-xl lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-none" artClassName="size-3/4 lg:size-1/2" />
+      <MealImage title={m.title} hint={m.imageHint} className="size-16 shrink-0 rounded-xl lg:aspect-[4/3] lg:h-auto lg:w-full lg:rounded-none" artClassName="size-3/4 lg:size-1/2" />
       <span className="min-w-0 flex-1 lg:px-4 lg:pt-3 lg:pb-4">
         <span className="block text-sm text-muted">{SLOT_LABEL[m.slot]}</span>
         <b className="block truncate leading-tight font-extrabold lg:text-[17px] lg:whitespace-normal">{m.title}</b>

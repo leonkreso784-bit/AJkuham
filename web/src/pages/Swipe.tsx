@@ -106,17 +106,24 @@ export default function Swipe() {
   }
 
   const total = cards.length
+  // Dva gumba jasno odvojena, svaki sa svojom oznakom ispod (Leon 15:50: "šašavo spojeni").
   const noBtn = (cls?: string) => (
-    <button onClick={() => answer('left')} aria-label="Ne bih ovo"
-      className={cx('grid size-16 shrink-0 place-items-center rounded-full border border-line bg-white shadow-card transition-[transform,border-color] hover:border-[#E6D3BF] active:translate-y-px', cls)}>
-      <Art name="iks" className="size-9" />
-    </button>
+    <div className={cx('flex flex-col items-center gap-1.5', cls)}>
+      <button onClick={() => answer('left')} aria-label="Ne bih ovo"
+        className="grid size-[4.5rem] shrink-0 place-items-center rounded-full border-2 border-line bg-white shadow-card transition-[transform,border-color] hover:border-[#E6D3BF] active:translate-y-px">
+        <Art name="iks" className="size-10" />
+      </button>
+      <span className="text-sm font-extrabold text-muted">Ne bih</span>
+    </div>
   )
   const yesBtn = (cls?: string) => (
-    <button onClick={() => answer('right')} aria-label="Bih ovo"
-      className={cx('grid size-16 shrink-0 place-items-center rounded-full bg-brand shadow-cta transition-[transform,background-color] hover:bg-brand-dark active:translate-y-px', cls)}>
-      <Art name="kvacica" className="size-9" />
-    </button>
+    <div className={cx('flex flex-col items-center gap-1.5', cls)}>
+      <button onClick={() => answer('right')} aria-label="Bih ovo"
+        className="grid size-[4.5rem] shrink-0 place-items-center rounded-full bg-brand shadow-cta transition-[transform,background-color] hover:bg-brand-dark active:translate-y-px">
+        <Art name="kvacica" className="size-10" />
+      </button>
+      <span className="text-sm font-extrabold text-brand">Bih</span>
+    </div>
   )
 
   return (
@@ -126,11 +133,11 @@ export default function Swipe() {
 
         <p className="mb-3 text-center text-sm font-bold text-muted tabular-nums" aria-live="polite">{Math.min(idx + 1, total)} / {total}</p>
 
-        <div className="lg:flex lg:items-center lg:justify-center lg:gap-10">
-          {noBtn('hidden lg:grid')}
+        <div className="lg:flex lg:items-center lg:justify-center lg:gap-14">
+          {noBtn('hidden lg:flex')}
 
           {/* stog: gornja + dvije ispod; renderiramo od najdonje da gornja bude zadnja u DOM-u */}
-          <div className="relative mx-auto h-[25rem] w-full max-w-sm lg:h-[32rem] lg:w-[26rem] lg:max-w-none">
+          <div className="relative mx-auto h-[23rem] w-full max-w-sm lg:h-[32rem] lg:w-[26rem] lg:max-w-none">
             {[2, 1, 0].map((k) => {
               const card = cards[idx + k]
               if (!card) return null
@@ -143,15 +150,16 @@ export default function Swipe() {
             })}
           </div>
 
-          {yesBtn('hidden lg:grid')}
+          {yesBtn('hidden lg:flex')}
         </div>
 
-        <div className="mt-4 flex items-center justify-center gap-10 lg:hidden">
+        {/* mobitel: gumbi ispod stoga, razmaknuti; stog ima 2 kartice ispod gornje pa treba zraka */}
+        <div className="mt-7 flex items-start justify-center gap-20 lg:hidden">
           {noBtn()}
           {yesBtn()}
         </div>
 
-        <div className="mx-auto mt-3 flex max-w-sm flex-col gap-1 lg:mt-8 lg:gap-2">
+        <div className="mx-auto mt-5 flex max-w-sm flex-col gap-1 lg:mt-8 lg:gap-2">
           <Button variant="ink" className="w-full" onClick={finish}>Dosta mi je, složi tjedan</Button>
           <Button variant="ghost" className="w-full" onClick={() => nav('/plan')}>Preskoči</Button>
         </div>
@@ -178,7 +186,7 @@ function Card({ card, depth, flipped, leaving, onFlip }: { card: TasteCard; dept
         {/* prednja strana */}
         <button type="button" onClick={onFlip} tabIndex={depth === 0 ? 0 : -1}
           className={cx(face, 'flex flex-col text-left')} aria-label={`${card.title}, tapni za recept`}>
-          <MealImage title={card.title} className="h-[52%] w-full shrink-0 lg:h-[55%]" artClassName="size-1/2" />
+          <MealImage title={card.title} hint={card.imageHint} className="h-[52%] w-full shrink-0 lg:h-[55%]" artClassName="size-1/2" />
           <span className="flex min-h-0 flex-1 flex-col px-5 pt-3 pb-3 lg:pt-4 lg:pb-4">
             <span className="block text-[22px] leading-tight font-black tracking-tight text-balance">{card.title}</span>
             <span className="mt-1 block text-sm text-muted">{card.minutes} min · {porcije(card.servings)}</span>

@@ -4,9 +4,9 @@ import { Art, mealArt } from '../illustrations'
 import { cx, foodTint } from './ui'
 
 // Fotka jela; bez fotke (ili ako se ne učita) pada na ilustraciju u pastelnoj pločici.
-export function MealImage({ title, className, artClassName = 'size-3/4' }: { title: string; className?: string; artClassName?: string }) {
+export function MealImage({ title, hint, className, artClassName = 'size-3/4' }: { title: string; hint?: string | null; className?: string; artClassName?: string }) {
   const [failed, setFailed] = useState(false)
-  const src = failed ? null : mealPhoto(title)
+  const src = failed ? null : mealPhoto(title, hint)
   if (src) {
     return <img src={src} alt="" loading="lazy" onError={() => setFailed(true)} className={cx('object-cover', className)} />
   }
