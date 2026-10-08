@@ -1,0 +1,358 @@
+# AJkuham — API kontrakt
+
+**ZAMRZNUTO.** Frontend radi protiv ovoga. Promjena samo uz Leonovu potvrdu i commit čiji naslov počinje s `api!:`.
+
+Base URL (dev): `http://localhost:3000`
+Base URL (prod): Railway URL — dopisati kad deploy prođe.
+
+Sve je JSON (`Content-Type: application/json`) osim `/api/fridge/scan`.
+Autentikacija: **nema je**. Umjesto nje `sessionId` koji se dobije na početku i šalje u headeru `x-session-id` na svim ostalim rutama.
+
+Greške su uvijek:
+
+```json
+{ "error": { "code": "VALIDATION_ERROR", "message": "ljudski opis" } }
+```
+
+Kodovi: `VALIDATION_ERROR` (400), `NOT_FOUND` (404), `AI_ERROR` (502), `SERVER_ERROR` (500).
+
+---
+
+## 1. POST /api/session
+
+Kreira anonimnu sesiju. Frontend zove jednom i sprema `sessionId` u localStorage.
+
+**Request:** prazan body
+
+**Response 200**
+
+```json
+{ "sessionId": "ses_a1b2c3d4" }
+```
+
+---
+
+## 2. PUT /api/profile
+
+Sprema odgovore iz tap-onboardinga. Idempotentno.
+
+**Request**
+
+```json
+{
+  "mealsPerDay": 3,
+  "householdSize": 2,
+  "cookingStyle": "meal_prep",
+  "minutesPerMeal": 30,
+  "diet": "sve",
+  "allergies": ["orasi"],
+  "cuisines": ["domaca", "talijanska", "azijska"],
+  "adventurousness": 3,
+  "budgetLevel": "srednje",
+  "budgetPerWeekEur": 60
+}
+```
+
+| polje | tip | dopuštene vrijednosti |
+|---|---|---|
+| `mealsPerDay` | int | 2, 3, 4, 5 |
+| `householdSize` | int | 1–8 |
+| `cookingStyle` | enum | `svaki_dan`, `meal_prep` |
+| `minutesPerMeal` | int | 15, 30, 45 |
+| `diet` | enum | `sve`, `bez_mesa`, `vegan`, `bez_svinjetine`, `bez_laktoze`, `bez_glutena` |
+| `allergies` | string[] | slobodno, može biti prazno |
+| `cuisines` | string[] | `domaca`, `talijanska`, `azijska`, `meksicka`, `mediteranska`, `bliskoistocna`, `indijska`, `comfort` |
+| `adventurousness` | int | 1–5 (1 = sigurno, 5 = eksperimentalno) |
+| `budgetLevel` | enum | `labavo`, `srednje`, `strogo` |
+| `budgetPerWeekEur` | number | opcionalno |
+
+**Response 200**
+
+```json
+{ "ok": true }
+```
+
+---
+
+## 3. POST /api/questions
+
+Vraća adaptivna pitanja generirana iz profila. Zvati nakon PUT /api/profile.
+
+**Request:** prazan body
+
+**Response 200**
+
+```json
+{
+  "questions": [
+    {
+      "id": "q_staple",
+      "text": "Što od ovoga jedeš najčešće?",
+      "type": "multi",
+      "options": ["krumpir", "riža", "tjestenina", "kruh"]
+    },
+    {
+      "id": "q_breakfast",
+      "text": "Jedeš li doručak?",
+      "type": "single",
+      "options": ["uvijek", "ponekad", "nikad"]
+    },
+    {
+      "id": "q_yesterday",
+      "text": "Što si jeo jučer?",
+      "type": "text",
+      "options": []
+    }
+  ]
+}
+```
+
+`type`: `single` (jedan odabir), `multi` (više), `text` (slobodan unos).
+Vraća 3–5 pitanja. `id` je stabilan string koji frontend vraća natrag.
+
+---
+
+## 4. POST /api/questions/answers
+
+**Request**
+
+```json
+{
+  "answers": [
+    { "id": "q_staple", "value": ["krumpir", "tjestenina"] },
+    { "id": "q_breakfast", "value": "ponekad" },
+    { "id": "q_yesterday", "value": "burger i pomfrit" }
+  ]
+}
+```
+
+`value` je string ili string[].
+
+**Response 200**
+
+```json
+{ "ok": true }
+```
+
+---
+
+## 5. POST /api/fridge/scan
+
+Fotka frižidera/ostave u prepoznate namirnice. **Fotka se ne čuva.**
+
+**Request:** `multipart/form-data`, polje `image` (jpeg/png/webp, max 8 MB).
+Može se pozvati više puta (frižider, zamrzivač, ostava).
+
+**Response 200**
+
+```json
+{
+  "items": [
+    { "name": "jaja", "quantity": 6, "unit": "kom", "confidence": 0.93 },
+    { "name": "jogurt", "quantity": 400, "unit": "g", "confidence": 0.71 },
+    { "name": "kupus", "quantity": 0.5, "unit": "kom", "confidence": 0.55 }
+  ],
+  "followUpQuestions": [
+    "Koliko ti je riže ostalo, pola kile ili skoro ništa?"
+  ]
+}
+```
+
+`confidence` je 0–1. Frontend prikaže sve, a ispod 0.6 vizualno označi kao nesigurno. Lista je **editabilna** — ništa se ne sprema dok se ne pozove PUT /api/pantry.
+
+---
+
+## 6. PUT /api/pantry
+
+Sprema potvrđenu listu. Zamjenjuje cijeli pantry (ne dodaje na postojeći).
+
+**Request**
+
+```json
+{
+  "items": [
+    { "name": "jaja", "quantity": 6, "unit": "kom" },
+    { "name": "jogurt", "quantity": 400, "unit": "g" }
+  ]
+}
+```
+
+`unit`: `g`, `ml`, `kom`.
+
+**Response 200**
+
+```json
+{ "ok": true, "count": 2 }
+```
+
+---
+
+## 7. GET /api/pantry
+
+**Response 200**
+
+```json
+{
+  "items": [
+    { "id": "pi_1", "name": "jaja", "quantity": 6, "unit": "kom" }
+  ]
+}
+```
+
+---
+
+## 8. POST /api/plan/generate
+
+Generira tjedni plan. **Najdulji poziv — računaj 20–60 s.** Frontend MORA pokazati progress stanje.
+
+**Request:** prazan body
+
+**Response 200**
+
+```json
+{
+  "planId": "pl_x1y2",
+  "weekStart": "2026-10-12",
+  "prepBlocks": [
+    {
+      "id": "pb_1",
+      "day": "nedjelja",
+      "startHint": "18:00",
+      "minutes": 70,
+      "title": "Veliki prep",
+      "covers": ["ponedjeljak", "utorak", "srijeda"],
+      "mealIds": ["m_1", "m_4", "m_7"]
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-10-12",
+      "dayName": "ponedjeljak",
+      "meals": [
+        {
+          "id": "m_1",
+          "slot": "dorucak",
+          "title": "Kajgana s kupusom",
+          "minutes": 12,
+          "source": "kuhaj_sad",
+          "prepBlockId": null,
+          "servings": 2,
+          "imageHint": "kajgana u tavi"
+        }
+      ]
+    }
+  ]
+}
+```
+
+`slot`: `dorucak`, `rucak`, `vecera`, `snack1`, `snack2`.
+`source`: `kuhaj_sad` ili `iz_prepa`.
+`days` ima točno 7 elemenata. Broj obroka po danu = `mealsPerDay` iz profila.
+`imageHint` je kratki opis za placeholder ili generiranje slike — frontend ga smije ignorirati.
+
+---
+
+## 9. GET /api/plan/:planId
+
+Isti oblik kao odgovor na POST /api/plan/generate.
+
+---
+
+## 10. GET /api/meal/:mealId
+
+**Response 200**
+
+```json
+{
+  "id": "m_1",
+  "title": "Kajgana s kupusom",
+  "slot": "dorucak",
+  "minutes": 12,
+  "servings": 2,
+  "source": "kuhaj_sad",
+  "steps": [
+    "Nasjeckaj kupus na tanke rezance.",
+    "Zagrij tavu, dodaj ulje i kupus, pirjaj 5 min.",
+    "Razmuti jaja, ulij, posoli i miješaj 2 min."
+  ],
+  "ingredients": [
+    { "name": "jaja", "quantity": 4, "unit": "kom", "inPantry": true },
+    { "name": "kupus", "quantity": 200, "unit": "g", "inPantry": false }
+  ],
+  "nutrition": { "kcal": 420, "protein": 28, "carbs": 12, "fat": 29 }
+}
+```
+
+`nutrition` je **opcionalno** i može biti `null`. Frontend ne smije pasti ako ga nema.
+
+---
+
+## 11. POST /api/meal/:mealId/swap
+
+Zamjenjuje jedan obrok drugim, čuvajući profil i približnu cijenu.
+
+**Request**
+
+```json
+{ "reason": "ne jede mi se kupus" }
+```
+
+`reason` je opcionalan.
+
+**Response 200:** isti oblik kao GET /api/meal/:mealId, ali s **novim `id`**. Frontend zamijeni obrok na tom mjestu u danu.
+
+---
+
+## 12. GET /api/plan/:planId/cart
+
+**Response 200**
+
+```json
+{
+  "currency": "EUR",
+  "totalEur": 58.4,
+  "savedFromPantryEur": 9.2,
+  "perMealEur": 2.78,
+  "lines": [
+    {
+      "productId": "p_142",
+      "productName": "Pileći file 1 kg",
+      "category": "meso",
+      "packageSize": 1000,
+      "packageUnit": "g",
+      "quantity": 1,
+      "unitPriceEur": 7.99,
+      "lineTotalEur": 7.99,
+      "onSale": true,
+      "neededAmount": 820,
+      "leftoverAmount": 180,
+      "matchedIngredients": ["pileći file"],
+      "matchQuality": "exact"
+    }
+  ],
+  "unmatched": [
+    { "name": "šafran", "quantity": 1, "unit": "g" }
+  ],
+  "deepLink": "https://www.konzum.hr/..."
+}
+```
+
+`matchQuality`: `exact`, `fuzzy`, `generic`.
+`unmatched` su sastojci za koje nema proizvoda — frontend ih prikaže kao "dokupi sam". Košarica nikad nije prazna zbog neuspjelog matcha.
+
+---
+
+## Red poziva (happy path za frontend)
+
+```
+POST /api/session
+PUT  /api/profile
+POST /api/questions            -> prikaži pitanja
+POST /api/questions/answers
+POST /api/fridge/scan          -> prikaži listu za potvrdu
+PUT  /api/pantry
+POST /api/plan/generate        -> progress, pa tjedni prikaz
+GET  /api/plan/:id/cart        -> košarica
+```
+
+Fotka frižidera se smije **preskočiti** — tada se pozove PUT /api/pantry s `items: []`.
