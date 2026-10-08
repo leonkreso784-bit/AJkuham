@@ -107,3 +107,31 @@ pod starim imenom).
 
 Vision s rokovima, rescue-first plan, budžet kao ulaz, logika pakiranja,
 usporedba s dostavom. Sve to radi.
+
+## Treći krug (13:00–14:00): integracija, backend testovi, kreditni incident
+
+- **Frontend spojen na produkciju.** App je u `C:\Users\leonk\Documents\KuhAI\app`
+  (nije git). `app/.env.local` ima `VITE_API_URL`. Happy path u headless Chromiumu
+  protiv produkcije prošao u 133 s: questions 4,6 s, scan 10,6 s, generate 69 s,
+  shake 21 s, swap 12 s, cart 0,2 s. U `client.ts` dodan `useFallback()` i oznaka
+  "Demo podaci" u headeru kad klijent padne na mock; generate timeout 150 s.
+- **Backend testovi** (`scripts/backend-tests.mjs`, 99 provjera): validacija i greške,
+  vegan + alergije + 25 €, obitelj 4 osobe × 5 obroka bez glutena + alergija jaja,
+  dva generatea paralelno (35 € i 80 €), izolacija sesija, invarijante košarice,
+  swap/shake zadržavaju dijetu. Zadnji prolaz 13:58: **98/99**. Jedini fail: plan na
+  35 € izašao 64,37 € (ranije 49,81 €); poznati D13 problem, ali ovo je 84 % preko.
+  Kandidat za "tighten" prolaz ako bude vremena.
+- **Anthropic kredit pao na nulu ~13:20.** Simptomi: planer "2/4 uspjela" pa
+  statični obroci, shake/swap vraćaju stari obrok sa `swapFailed: true`, questions
+  visio 70 s. Backend ne pada i vraća 200, pa frontend NE pokazuje "Demo podaci".
+  Jedini pouzdan znak je `railway logs`: "credit balance is too low". U 13:50 opet
+  radi (Leon: isti ključ).
+- **Preklopnik providera** `src/ai/model.ts`: `AI_PROVIDER=google` +
+  `GOOGLE_GENERATIVE_AI_API_KEY` šalje svih 6 AI poziva na Gemini
+  (`GOOGLE_MODEL`, default `gemini-2.5-flash`). Default ostaje Claude; lokalno
+  provjereno da server diže i pitanja prolaze s `provider=anthropic`. **Gemini put
+  nije testiran s pravim ključem** i **nije deployan** (čeka sljedeći `railway up`).
+- `ECONNRESET` usred jednog generatea s hackathon Wi-Fi-ja (10.90.x). Jednom od ~10.
+  Na demu mobilni podaci.
+- Playwright MCP browser je zauzet drugom sesijom; za browser testove koristi
+  `scripts/e2e.mjs` (Playwright iz `KuhAI/video/node_modules`).

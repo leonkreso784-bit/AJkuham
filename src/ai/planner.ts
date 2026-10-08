@@ -1,5 +1,5 @@
 import { generateObject } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
+import { aiModel } from './model.js'
 import { z } from 'zod'
 import {
   PlannedMeal,
@@ -703,7 +703,7 @@ type DayOutput = z.infer<typeof DayOutput>
 
 async function callWholeWeek(input: PlannerInput): Promise<PlannerOutput> {
   const { object } = await generateObject({
-    model: anthropic(MODEL_ID),
+    model: aiModel(MODEL_ID),
     schema: PlannerOutput,
     schemaName: 'tjedni_plan',
     maxRetries: MAX_RETRIES,
@@ -732,7 +732,7 @@ U ovom načinu nema prep blokova: svaki obrok je \`source: "kuhaj_sad"\` i
 dana 2; ako je ovo dan 1 ili 2, iskoristi ih sada i navedi u \`usesExpiring\`.`
 
   const { object } = await generateObject({
-    model: anthropic(MODEL_ID),
+    model: aiModel(MODEL_ID),
     schema: DayOutput,
     schemaName: 'jedan_dan',
     maxRetries: MAX_RETRIES,
@@ -873,7 +873,7 @@ ${prepRule}
 
 async function callChunk(input: PlannerInput, chunkIdx: number, anchors: SaleProduct[]): Promise<ChunkOutput> {
   const { object } = await generateObject({
-    model: anthropic(MODEL_ID),
+    model: aiModel(MODEL_ID),
     schema: ChunkOutput,
     schemaName: 'dio_tjedna',
     maxRetries: MAX_RETRIES,
@@ -1134,7 +1134,7 @@ Daj jedan novi obrok.${extraLine ? `\n${extraLine}` : ''}`
 
 async function callSingleMeal(ctx: SwapContext, extraLine?: string): Promise<PlannedMeal> {
   const { object } = await generateObject({
-    model: anthropic(MODEL_ID),
+    model: aiModel(MODEL_ID),
     schema: SingleMealOutput,
     schemaName: 'novi_obrok',
     maxRetries: MAX_RETRIES,

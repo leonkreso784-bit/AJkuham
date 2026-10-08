@@ -1,5 +1,5 @@
 import { generateObject } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
+import { aiModel } from './model.js'
 import '../env.js' // validira ANTHROPIC_API_KEY pri importu; provider ga cita iz process.env
 import { FridgeScanOutput, type ScannedItem, type Urgency } from '../schemas/index.js'
 
@@ -176,7 +176,7 @@ export async function scanFridge(
 
   try {
     const { object } = await generateObject({
-      model: anthropic(MODEL),
+      model: aiModel(MODEL),
       schema: FridgeScanOutput,
       maxRetries: 2,
       system: SYSTEM,

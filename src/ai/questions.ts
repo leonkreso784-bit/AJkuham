@@ -1,5 +1,5 @@
 import { generateObject } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
+import { aiModel } from './model.js'
 import { QuestionsOutput, type ProfileInput, type Question } from '../schemas/index.js'
 
 /**
@@ -109,7 +109,7 @@ export function profileToText(p: ProfileInput): string {
 export async function generateQuestions(profile: ProfileInput): Promise<Question[]> {
   try {
     const { object } = await generateObject({
-      model: anthropic('claude-sonnet-5-5'),
+      model: aiModel('claude-sonnet-5-5'),
       schema: QuestionsOutput,
       maxRetries: 2,
       abortSignal: AbortSignal.timeout(30_000),
