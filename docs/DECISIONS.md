@@ -61,13 +61,74 @@ Hackathon. Grane i PR-ovi su režija koja ne donosi ništa u 9 sati.
 Ista shema validira API input i služi kao structured-output shema za AI SDK.
 TypeScript tipovi se izvode s `z.infer`, ne pišu ručno.
 
+### D13 — Budžet je ulaz u planer, ne izračun na kraju
+`POST /api/plan/generate` prima `budgetEur` kao **tvrdo ograničenje**. Obrnuti
+tok ("složi plan, pa vidi cijenu") daje plan koji korisnik odbaci jer ga ne može
+platiti, i onda nema što s njim. Ovako je pitanje "imam 35 €, daj mi najbolji
+tjedan" — a slider koji ponovno generira tjedan je jedini moment u demu u kojem
+publika vidi proizvod kako **misli**. Ako plan ne stane, `withinBudget: false` i
+vidljiva razlika; tihi fail je gori od lošeg plana.
+
+### D14 — Vision procjenjuje rok, i taj rok diktira plan
+`expiresInDays` + izvedeni `urgency` nisu dodatno polje nego **svrha scana**.
+Inventar bez roka može samo odbiti stvari od računa; inventar s rokom može
+planirati oko njih. Hrvatsko domaćinstvo baci 70–80 kg hrane godišnje, i to ne
+jer je nitko ne želi, nego jer nitko ne zna da ide. Rok procjenjuje model (broj),
+kategoriju presuđuje kod (`umire` ≤2 / `skoro` 3–7 / `ok` 8+) — ne dajemo modelu
+da izmišlja granice. Pogrešna procjena nije rizik jer je rok polje u editabilnoj
+listi, isto kao količina.
+
+### D15 — Plan se gradi rescue-first, u fiksnom redu
+Red u promptu je eksplicitan: `umire` → `skoro` → `onSale` → ostatak. Bez
+propisanog reda model raspodijeli špinat u četvrtak, a tada je špinat već u
+smeću — plan koji "koristi pantry" nije isto što i plan koji **spašava** pantry.
+`rescue.savedEur` postoji da se ta razlika vidi na ekranu, jer inače je
+nevidljiva.
+
+### D16 — Akcije iz kataloga ulaze u planer prompt
+`onSale` lista ide u prompt isto kao pantry. Ljudi ne planiraju pa kupuju — vide
+što je na akciji pa smisle tjedan, i nijedan planer to ne radi. Cijena izmjene je
+jedna rečenica prompta i jedno polje u odgovoru (`saleDriven`); cijena
+izostavljanja je da smo još jedan generator recepata s cjenikom. Zato katalog
+mora imati realno raspoređen `onSale` već u seedu (D9), ne random flag.
+
+### D17 — Prep blok je paralelni timeline, ne lista koraka
+`prepBlocks[].timeline` ima trake (`pecnica`, `stednjak`, `ti`, …) s
+`startMinute` i `durationMinutes`. Recepti su linearni jer su knjige linearne;
+prava kuhinja je paralelna i linearni koraci **sakriju** da ti od 70 minuta bloka
+stojiš 25. Ta brojka je argument za meal prep, a traka na ekranu je jedini vizual
+u kategoriji koji nitko ne radi. Padne li timeline, frontend ima linearne
+`steps` — degradacija je predviđena, ali nije default.
+
+### D18 — Jedna brojka na kraju: usporedba s dostavom
+`deliveryComparison` u košarici. Publika ne pamti feature liste, pamti "58 € vs
+310 €". `assumption` je **obavezan i ide na ekran**: brojka bez pretpostavke je
+marketing, brojka s pretpostavkom je argument, i ako se netko ne slaže, neka se
+ne slaže s pretpostavkom. Brojka je množenje u `cart.ts`, nikad procjena modela —
+vrijedi D6.
+
+### D19 — Shake ostaje, ali je prvi na rezu
+Natjecanje se zove SHAKER; `POST /api/plan/:id/shake` je ~10 linija koje zovu
+istu swap funkciju, pa ga nema smisla ne imati. Ali nije nosiv: ako kasnimo, pada
+prvi, prije nutritivnih podataka i prije timelinea. Gimmick koji dijeli kod s
+pravom funkcijom je besplatan; gimmick koji traži vlastiti kod se ne radi.
+
 ---
 
 ## Otvoreno
 
-- **`ANTHROPIC_API_KEY`** — treba potvrditi da postoji API kredit (ne Claude
-  Code pretplata). Ako ne, ide AI Gateway ili OpenRouter: isti kod, druga env
-  varijabla.
+- **Hosting i baza** — **jedino što blokira kod.** Railway je plaćen ali CLI i
+  dalje javlja istekao trial; vjerojatno plan nije na workspaceu
+  `LeonKreso's Projects`. Rezerva je Neon preko Vercela, besplatan, zaustavljen
+  na prihvaćanju uvjeta u browseru. Točne komande za oba puta su u
+  `docs/STATUS.md`. `postgres.js` je izabran upravo zato što radi s oba — mijenja
+  se samo `DATABASE_URL`.
 - **Dizajn i logo** — ekipa radi, dolazi kasnije. Backend ne blokira.
-- **Postojeći Railway projekti** — Leon je tražio brisanje; čeka se lista i
-  njegova potvrda prije ikakvog brisanja.
+
+## Zatvoreno nakon pripremne sesije
+
+- `ANTHROPIC_API_KEY` **radi** — testiran pravim pozivom, HTTP 200,
+  `claude-sonnet-5-5`. Nije u repou, živi u `.env`.
+- Stari Railway projekti obrisani (zakazano za 2026-10-10) nakon Leonove
+  potvrde.
+- Klara610 pozvana na repo s write pristupom.
