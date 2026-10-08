@@ -160,3 +160,7 @@ usporedba s dostavom. Sve to radi.
   u `.playwright-mcp/e2e-live/`. `scripts/e2e.mjs` zna za korak `/biram`.
 - **Frižider (Leon 15:05):** gumb "Odaberi iz galerije" uz kameru; "Upiši ručno" otvara "Brzo dodaj"
   čipove (20 čestih namirnica s tipičnom količinom, tap dodaje/miče).
+- **Košarica, naručivanje u appu (Leon 15:15):** "Naruči namirnice" otvara sheet: Dostava doma /
+  Preuzmi u trgovini + termin, potvrda s brojem narudžbe (KUH-…) ostaje na ekranu, "Kopiraj popis",
+  "Podijeli popis" (Web Share, fallback kopiranje). Konzum deep link je samo mali link u dnu sheeta.
+  Demo narudžba, ne šalje se trgovini (piše na ekranu). Backend nedirnut.

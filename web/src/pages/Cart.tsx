@@ -2,16 +2,29 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { api } from '../api/client'
 import type { Cart as CartT } from '../api/types'
-import { Button, CountUp, Pill, Shell, Spinner, Title, cx, eur } from '../components/ui'
+import { Button, Chip, CountUp, Pill, Shell, Spinner, Title, Toast, buzz, cx, eur, useToast } from '../components/ui'
 import { useStore } from '../store'
 import { Art, categoryArt, ingredientArt } from '../illustrations'
 
+// Naručivanje ostaje u aplikaciji (Leon, 15:15): dostava ili preuzimanje s potvrdom,
+// kopiranje i dijeljenje popisa. Konzum link je samo sporedna opcija, ne izlaz iz appa.
+type OrderMode = 'dostava' | 'preuzimanje'
+const SLOTS: Record<OrderMode, string[]> = {
+  dostava: ['sutra 10–12 h', 'sutra 17–19 h', 'prekosutra 10–12 h'],
+  preuzimanje: ['danas od 18 h', 'sutra od 9 h', 'sutra od 16 h'],
+}
+const orderNo = (planId: string) => `KUH-${planId.replace(/^pl_/, '').slice(0, 6).toUpperCase()}`
 
 export default function Cart() {
   const nav = useNavigate()
   const planId = useStore((s) => s.plan?.planId)
   const [cart, setCart] = useState<CartT | null>(null)
   const [err, setErr] = useState<string | null>(null)
+  const [orderOpen, setOrderOpen] = useState(false)
+  const [mode, setMode] = useState<OrderMode>('dostava')
+  const [slot, setSlot] = useState(0)
+  const [order, setOrder] = useState<{ no: string; mode: OrderMode; slot: string } | null>(null)
+  const [toast, showToast] = useToast()
 
   useEffect(() => {
     if (!planId) return
@@ -42,16 +55,42 @@ export default function Cart() {
 
   const over = cart.budgetEur != null ? cart.totalEur - cart.budgetEur : 0
 
+  // Popis za kopiranje / dijeljenje: proizvodi s količinom i cijenom, ono što nema u katalogu, ukupno.
+  const listText = () => [
+    'KuhAI — popis za tjedan',
+    ...cart.lines.map((l) => `${l.quantity > 1 ? `${l.quantity}× ` : ''}${l.productName} — ${eur(l.lineTotalEur)}`),
+    ...(cart.unmatched.length ? ['Dokupi sam:', ...cart.unmatched.map((u) => `${u.name} (${u.quantity} ${u.unit})`)] : []),
+    `Ukupno: ${eur(cart.totalEur)}`,
+  ].join('\n')
+  const copyList = async () => {
+    try { await navigator.clipboard.writeText(listText()); buzz(40); showToast('Popis je kopiran.') }
+    catch { showToast('Ne mogu kopirati na ovom uređaju.', 'hot') }
+  }
+  const shareList = async () => {
+    if (!navigator.share) return copyList()
+    try { await navigator.share({ title: 'KuhAI popis', text: listText() }) } catch { /* korisnik odustao */ }
+  }
+  const confirmOrder = () => {
+    const o = { no: orderNo(planId), mode, slot: SLOTS[mode][slot]! }
+    setOrder(o); buzz([40, 60, 40])
+    showToast(mode === 'dostava' ? `Narudžba ${o.no} primljena, dostava ${o.slot}.` : `Narudžba ${o.no} spremna za preuzimanje ${o.slot}.`)
+  }
+
   const total = (
     <>
       <div className="mt-4 flex items-baseline justify-between border-t border-line pt-4 lg:mt-3 lg:border-t-0 lg:pt-1">
         <span className="text-lg font-black">Ukupno</span>
         <span className="text-2xl font-black tracking-tight tabular-nums">{eur(cart.totalEur)}</span>
       </div>
-      <a href={cart.deepLink} target="_blank" rel="noreferrer"
-        className="mt-5 flex min-h-14 w-full items-center justify-center rounded-2xl bg-brand px-5 text-base font-extrabold text-white shadow-cta transition-[transform,background-color] hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand active:translate-y-px lg:mt-4">
-        Naruči preko Konzuma
-      </a>
+      {order ? (
+        <div className="mt-5 rounded-2xl bg-fresh-bg p-4 text-fresh lg:mt-4">
+          <p className="font-extrabold">Narudžba {order.no} primljena</p>
+          <p className="mt-0.5 text-sm">{order.mode === 'dostava' ? 'Dostava' : 'Preuzimanje'} {order.slot} · {cart.lines.length} proizvoda · {eur(cart.totalEur)}</p>
+          <button className="mt-2 text-sm font-bold underline" onClick={() => setOrderOpen(true)}>Promijeni</button>
+        </div>
+      ) : (
+        <Button className="mt-5 w-full lg:mt-4" onClick={() => setOrderOpen(true)}>Naruči namirnice</Button>
+      )}
     </>
   )
 
@@ -131,6 +170,44 @@ export default function Cart() {
           <div className="lg:hidden">{total}</div>
         </div>
       </div>
+
+      <Toast msg={toast} />
+
+      {orderOpen && (
+        <div className="fixed inset-0 z-30 flex items-end justify-center bg-ink/40 lg:items-center lg:p-6" onClick={() => setOrderOpen(false)}>
+          <div role="dialog" aria-modal="true" aria-label="Naruči namirnice"
+            className="w-full max-w-xl animate-pop rounded-t-3xl bg-bg p-5 pb-[max(env(safe-area-inset-bottom),20px)] lg:max-w-md lg:rounded-3xl lg:p-6 lg:shadow-card" onClick={(e) => e.stopPropagation()}>
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-line lg:hidden" />
+            <h3 className="text-xl font-black tracking-tight">Kako ćeš do namirnica?</h3>
+            <p className="mb-4 text-muted">{cart.lines.length} proizvoda · {eur(cart.totalEur)}</p>
+
+            <div className="grid grid-cols-2 gap-2">
+              {(['dostava', 'preuzimanje'] as OrderMode[]).map((m) => (
+                <button key={m} onClick={() => { setMode(m); setSlot(0) }} aria-pressed={mode === m}
+                  className={cx('rounded-2xl border bg-white p-4 text-left transition-colors', mode === m ? 'border-ink ring-1 ring-ink' : 'border-line hover:border-[#E6D3BF]')}>
+                  <span className="flex items-center gap-2"><Art name={m === 'dostava' ? 'kosarica' : 'vrecica'} className="size-7" /><b className="font-extrabold">{m === 'dostava' ? 'Dostava doma' : 'Preuzmi u trgovini'}</b></span>
+                  <span className="mt-1 block text-sm text-muted">{m === 'dostava' ? 'Konzum dostava, sve iz košarice' : 'Spremno i spakirano'}</span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-4 mb-2 text-sm font-bold text-muted">Kad?</p>
+            <div className="flex flex-wrap gap-2">
+              {SLOTS[mode].map((s, i) => <Chip key={s} on={slot === i} onClick={() => setSlot(i)}>{s}</Chip>)}
+            </div>
+
+            <Button className="mt-5 w-full" onClick={() => { confirmOrder(); setOrderOpen(false) }}>
+              {mode === 'dostava' ? 'Potvrdi dostavu' : 'Potvrdi preuzimanje'}
+            </Button>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <Button variant="soft" className="min-h-12 text-[15px]" onClick={copyList}>Kopiraj popis</Button>
+              <Button variant="soft" className="min-h-12 text-[15px]" onClick={shareList}>Podijeli popis</Button>
+            </div>
+            <p className="mt-3 text-center text-xs text-muted">
+              Demo narudžba, ne šalje se trgovini. <a href={cart.deepLink} target="_blank" rel="noreferrer" className="font-bold underline">Otvori u Konzumu</a>
+            </p>
+          </div>
+        </div>
+      )}
     </Shell>
   )
 }
