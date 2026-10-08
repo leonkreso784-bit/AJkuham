@@ -148,6 +148,10 @@ usporedba s dostavom. Sve to radi.
   doslovno; lokalno 3/3 odabrana u planu, 0/2 odbijenih. Spec: `docs/SWIPE.md`, kontrakt API.md §14–15.
   Testovi: `backend-tests.mjs` sekcija F (12 provjera, ukupno 111). Frontend ekran `/biram` radi agent (14:35–).
 - **Onboarding: broj obroka se može upisati** (Leon 14:40), granice 2–5 iz API.md, poruka ako je izvan.
-- **Railway servis `kuhai-web`** kreiran (VITE_API_URL postavljen), `web/package.json` ima `start`
-  (`vite preview`), `vite.config.ts` `preview.allowedHosts`. Prvi deploy čeka da swipe ekran bude gotov.
+- **Frontend LIVE: https://kuhai-web-production.up.railway.app** (Railway servis `kuhai-web`,
+  `vite preview`, VITE_API_URL ugrađen u bundle). Deploy isključivo `bash scripts/deploy-web.sh`:
+  `railway up` iz `web/` uploada cijeli repo i servis padne na "Env nije u redu" (viđeno 14:50).
+- **Swipe frontend gotov** (commit 95ecb11): `/biram`, provjereno protiv produkcije (kartice 41 s,
+  3 kvačice spremljene, `Dosta mi je` → `/plan`).
+- **Peti krug testova na produkciji 14:35: 114/114 PASS** (uključuje sekciju F, candidates 45 s, generate 47 s).
 - Poznato: plan na 60 € izašao 83,97 € u taste testu (D13 budžet, +40 %).

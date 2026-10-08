@@ -18,6 +18,9 @@ Backend:  korijen repoa, live na Railwayu
           https://kuhai-api-production.up.railway.app  (/health)
 Frontend: web/ u istom repou  (Vite 8 + React 19 + TS + Tailwind v4
           + react-router 8 + gsap). U gitu od 2026-10-08 ~14:10 (F7 riješeno).
+          LIVE: https://kuhai-web-production.up.railway.app  (Railway servis kuhai-web)
+          Deploy SAMO preko: bash scripts/deploy-web.sh  (railway up iz web/ uploada
+          cijeli repo i servis padne — zato skripta kopira web/ izvan repoa).
 
 Pročitaj prvo, u ovom redu:
   docs/NEXT-SESSION.md      oba dijela: BACKEND (§0–7) i FRONTEND (F0–F8)
