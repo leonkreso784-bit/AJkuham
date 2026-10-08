@@ -15,3 +15,7 @@ coverage/
 drizzle/meta/
 tmp/
 scratch/
+
+.vercel
+.env*
+!.env.example

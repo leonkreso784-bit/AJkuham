@@ -31,6 +31,7 @@ TypeScript · Node 24 · Hono · Postgres (Railway) · Drizzle · Zod · AI SDK 
 
 | file | što je unutra |
 |---|---|
+| [`docs/STATUS.md`](docs/STATUS.md) | **počni ovdje** — gdje smo, što je blokirano, prvi koraci |
 | [`CLAUDE.md`](CLAUDE.md) | pravila rada u repou, struktura, što se ne smije |
 | [`docs/SPEC.md`](docs/SPEC.md) | što gradimo, što je IN/OUT za demo, rizici |
 | [`docs/API.md`](docs/API.md) | **zamrznuti kontrakt** — 12 ruta |

@@ -65,6 +65,7 @@ src/
 data/
   konzum-products.json
 docs/
+  STATUS.md         POČNI OVDJE — stanje, blokade, prvi koraci
   SPEC.md           što gradimo i što ne
   API.md            ZAMRZNUTI kontrakt za frontend
   DATA-MODEL.md     tablice i jedinice
